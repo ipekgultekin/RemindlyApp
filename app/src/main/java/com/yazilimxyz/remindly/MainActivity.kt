@@ -164,7 +164,6 @@ fun BottomSheetContent() {
     }
 }
 
-// Navigation items data
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
     object Home : BottomNavItem("home", "Home", Icons.Default.Home)
     object Reminders : BottomNavItem("reminders", "Reminders", Icons.Default.Notifications)
