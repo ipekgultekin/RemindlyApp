@@ -1,4 +1,4 @@
-package com.yazilimxyz.grup_g.ui.theme
+package com.yazilimxyz.remindly.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Grup_gTheme(
+fun RemindlyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

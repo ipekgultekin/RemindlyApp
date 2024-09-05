@@ -1,4 +1,4 @@
-package com.yazilimxyz.grup_g
+package com.yazilimxyz.remindly
 
 import org.junit.Test
 

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.yazilimxyz.grup_g"
+    namespace = "com.yazilimxyz.remindly"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yazilimxyz.grup_g"
+        applicationId = "com.yazilimxyz.remindly"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "grup_g"
+rootProject.name = "remindly"
 include(":app")
+ 
