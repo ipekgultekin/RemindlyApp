@@ -26,7 +26,10 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -157,14 +160,14 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifi
 @Composable
 fun HomeScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Home Screen")
+        Text(text = "Home Screen", style = MaterialTheme.typography.headlineLarge)
     }
 }
 
 @Composable
 fun SettingsScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Settings Screen")
+        Text(text = "Settings Screen", style = MaterialTheme.typography.headlineLarge)
     }
 }
 
@@ -203,10 +206,10 @@ fun AddMeetingSheet() {
 
         item {
             Row {
-                Icon(imageVector = Icons.Default.Info, contentDescription = "meeting icon")
+                Icon(imageVector = Icons.Filled.Person, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Set a meeting", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Meeting Title", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -218,7 +221,7 @@ fun AddMeetingSheet() {
                 onValueChange = {},
                 label = {
                     Text(
-                        "Meeting Name", style = TextStyle(
+                        "Enter a name for your meeting", style = TextStyle(
                             color = Color.Black.copy(alpha = 0.4f), fontSize = 18.sp
                         )
                     )
@@ -243,7 +246,7 @@ fun AddMeetingSheet() {
                 Icon(imageVector = Icons.Default.Info, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Set a description", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Description Title", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -255,7 +258,7 @@ fun AddMeetingSheet() {
                 onValueChange = {},
                 label = {
                     Text(
-                        "Description", style = TextStyle(
+                        "Enter a description for your meeting", style = TextStyle(
                             color = Color.Black.copy(alpha = 0.4f), fontSize = 18.sp
                         )
                     )
@@ -277,10 +280,10 @@ fun AddMeetingSheet() {
 
         item {
             Row {
-                Icon(imageVector = Icons.Default.Info, contentDescription = "meeting icon")
+                Icon(imageVector = Icons.Default.Send, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Meeting Time", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -288,6 +291,25 @@ fun AddMeetingSheet() {
             Spacer(modifier = Modifier.height(5.dp))
 
             SelectTimeButton {
+                // Handle time selection logic here
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+
+        item {
+            Row {
+                Icon(imageVector = Icons.Default.Star, contentDescription = "meeting icon")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
+                        color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+
+            SelectPriorityButton {
                 // Handle time selection logic here
             }
 
@@ -363,6 +385,26 @@ fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit)
 }
 
 
+@Composable
+fun SelectPriorityButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .padding(horizontal = 8.dp),
+        shape = MaterialTheme.shapes.medium, // Add rounded corners
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        Text(
+            text = "Select Priority", style = TextStyle(
+                color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp
+            )
+        )
+    }
+}
 
 @Composable
 fun SelectTimeButton(onClick: () -> Unit) {
@@ -405,7 +447,6 @@ fun MeetingButton(title:String, color:Color, onClick: () -> Unit) {
         )
     }
 }
-
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
     object Home : BottomNavItem("home", "Home", Icons.Default.Home)
