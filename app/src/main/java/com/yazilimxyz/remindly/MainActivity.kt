@@ -149,7 +149,7 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifi
             HomeScreen()
         }
         composable(BottomNavItem.Settings.route) {
-            SettingsScreen()
+            SettingsScreenContent()
         }
     }
 }
