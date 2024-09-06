@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Face
@@ -33,6 +32,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -135,8 +135,7 @@ fun BottomNavigationBar(
                             launchSingleTop = true
                         }
                     }
-                }
-            )
+                })
         }
     }
 }
@@ -216,8 +215,7 @@ fun AddMeetingSheet() {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            TextField(
-                value = "",
+            TextField(value = "",
                 onValueChange = {},
                 label = {
                     Text(
@@ -253,8 +251,7 @@ fun AddMeetingSheet() {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            TextField(
-                value = "",
+            TextField(value = "",
                 onValueChange = {},
                 label = {
                     Text(
@@ -333,19 +330,31 @@ fun AddMeetingSheet() {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
-                AvatarImage(avatar = R.drawable.avatar1, content = "avatar 1") {
+                AvatarImage(avatar = R.drawable.avatar1, content = "Admin") {
                     // Handle avatar click here
                 }
-                AvatarImage(avatar = R.drawable.avatar2, content = "avatar 2") {
+                AvatarImage(avatar = R.drawable.avatar2, content = "Asistan") {
                     // Handle avatar click here
                 }
-                AvatarImage(avatar = R.drawable.avatar3, content = "avatar 3") {
+                AvatarImage(avatar = R.drawable.avatar3, content = "Yönetim Kurulu") {
                     // Handle avatar click here
                 }
-                AvatarImage(avatar = R.drawable.avatar4, content = "avatar 4") {
+                AvatarImage(avatar = R.drawable.avatar4, content = "Ekip Lideri") {
+                    // Handle avatar click here
+                }
+                AvatarImage(avatar = R.drawable.avatar5, content = "Çalışan") {
                     // Handle avatar click here
                 }
             }
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+
+        item {
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 40.dp),
+                color = Color.Black.copy(alpha = 0.5f),
+                thickness = 2.dp
+            )
             Spacer(modifier = Modifier.height(30.dp))
         }
 
@@ -367,8 +376,7 @@ fun AddMeetingSheet() {
 @Composable
 fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = avatar),
@@ -380,7 +388,10 @@ fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit)
                 .clickable(onClick = onClick), // Add clickable behavior
             contentScale = ContentScale.Crop
         )
-        Text(text = content ?: "", style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = content ?: "", style = MaterialTheme.typography.labelLarge,
+            color = Color.Black, fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -428,7 +439,7 @@ fun SelectTimeButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun MeetingButton(title:String, color:Color, onClick: () -> Unit) {
+fun MeetingButton(title: String, color: Color, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = Modifier
