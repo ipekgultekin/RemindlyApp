@@ -2,20 +2,25 @@ package com.yazilimxyz.remindly.screens
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
@@ -37,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -102,8 +108,6 @@ fun addField(
     spacer1()
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMeetingSheet() {
 
@@ -114,9 +118,11 @@ fun AddMeetingSheet() {
         R.drawable.avatar1,
         R.drawable.avatar2,
         R.drawable.avatar3,
-        R.drawable.avatar5,
-        R.drawable.avatar6
+        R.drawable.avatar4,
+        R.drawable.avatar5
     )
+
+    val avatarLabels = listOf("Admin", "Asistan", "Ekip Lideri", "Yönetim Kurulu", "Çalışan")
 
     LazyColumn(
         modifier = Modifier
@@ -126,16 +132,16 @@ fun AddMeetingSheet() {
     ) {
         item {
             Text(
-                text = "Create\nNew Meeting", style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.SemiBold, // Set text bold
-                    fontSize = 40.sp // Set custom font size
+                text = "Create\nNew Meeting",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 40.sp
                 )
             )
-            spacer1()
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
-
             addField(
                 icon = Icons.Default.Person,
                 title = "Meeting Title",
@@ -144,7 +150,6 @@ fun AddMeetingSheet() {
             ) {
                 // Handle text field value change here
             }
-
         }
 
         item {
@@ -159,11 +164,13 @@ fun AddMeetingSheet() {
         }
 
         item {
+            // Date & Time selection logic
             Row {
                 Icon(imageVector = Icons.Default.Send, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Date & Time",
+                    style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -178,11 +185,13 @@ fun AddMeetingSheet() {
         }
 
         item {
+            // Priority section
             Row {
                 Image(Lucide.Star, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Priority",
+                    style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -195,11 +204,13 @@ fun AddMeetingSheet() {
         }
 
         item {
+            // Assigned For section with selectable avatars
             Row {
                 Icon(imageVector = Icons.Default.Face, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Assigned For", style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Assigned For",
+                    style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -210,15 +221,21 @@ fun AddMeetingSheet() {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
-                AvatarImage(avatar = R.drawable.avatar1, content = "Admin") {}
-                AvatarImage(avatar = R.drawable.avatar2, content = "Asistan") {}
-                AvatarImage(avatar = R.drawable.avatar3, content = "Yönetim Kurulu") {}
-                AvatarImage(avatar = R.drawable.avatar4, content = "Ekip Lideri") {}
-                AvatarImage(avatar = R.drawable.avatar5, content = "Çalışan") {}
+                avatars.forEachIndexed { index, avatar ->
+                    AvatarImage(
+                        avatar = avatar,
+                        content = avatarLabels[index], // Assign the respective label
+                                                isSelected = selectedAvatarIndex == index,
+                        onClick = {
+                            selectedAvatarIndex = index // Update the selected avatar
+                        }
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(30.dp))
         }
 
+        // Other items such as the divider and buttons
         item {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 40.dp),
@@ -230,41 +247,58 @@ fun AddMeetingSheet() {
 
         item {
             CustomButton(title = "Create Meeting", color = Color(0xDD191919)) {
-                // Handle time selection logic here
+                // Handle meeting creation
             }
-
             Spacer(modifier = Modifier.height(10.dp))
-
             CustomButton(title = "Clear Fields", color = Color(0xDD191919)) {
-                // Handle time selection logic here
+                // Handle clearing fields
             }
         }
     }
 }
-
 @Composable
-fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit) {
+fun AvatarImage(
+    avatar: Int,
+    content: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onClick() }
     ) {
-        Image(
-            painter = painterResource(id = avatar),
-            contentDescription = content,
+        // Box containing the image with border
+        Box(
             modifier = Modifier
-                .width(120.dp)
-                .height(120.dp)
-                .padding(10.dp)
-                .clickable(onClick = onClick),
-            contentScale = ContentScale.Crop
-        )
+                .size(90.dp)
+                .clip(CircleShape)
+                .border(
+                    width = 4.dp,
+                    color = if (isSelected) Color.Green else Color.Transparent, // Green border if selected
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = avatar),
+                contentDescription = content,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp)) // Space between image and text
         Text(
-            text = content ?: "",
+            text = content,
             style = MaterialTheme.typography.labelLarge,
             color = Color(0xFF191919),
             fontWeight = FontWeight.Bold
         )
     }
 }
+
+
 
 
 @Composable
