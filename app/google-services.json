@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "620848596639",
+    "project_id": "remindly-513c8",
+    "storage_bucket": "remindly-513c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620848596639:android:03b064edbefc6a92c504aa",
+        "android_client_info": {
+          "package_name": "com.yazilimxyz.remindly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQKcd7Iidw_omzaMmjR_fAugYdP7phOvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

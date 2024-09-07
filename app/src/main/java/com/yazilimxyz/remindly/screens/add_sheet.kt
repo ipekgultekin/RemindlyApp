@@ -136,7 +136,7 @@ fun AddMeetingSheet(context: Context) {
                     fontWeight = FontWeight.SemiBold, fontSize = 40.sp
                 )
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            spacer1()
         }
 
         item {
@@ -176,7 +176,6 @@ fun AddMeetingSheet(context: Context) {
 
             CustomButton(title = "Select Date & Time", color = Color(0xDD191919)) {
                 // Handle time selection logic here
-
             }
 
             Spacer(modifier = Modifier.height(30.dp))

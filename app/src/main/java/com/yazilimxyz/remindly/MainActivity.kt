@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.FirebaseApp
 import com.yazilimxyz.remindly.screens.AddMeetingSheet
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
 import com.yazilimxyz.remindly.utilities.BottomNavigationBar
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        FirebaseApp.initializeApp(this)
         setContent {
             RemindlyTheme {
                 MainScreen()
