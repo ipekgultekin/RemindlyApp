@@ -1,6 +1,7 @@
 package com.yazilimxyz.remindly.screens
 
-import androidx.annotation.DrawableRes
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,7 +27,6 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -46,17 +46,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yazilimxyz.remindly.R
-import com.yazilimxyz.remindly.utilities.CustomButton
-import com.composables.icons.lucide.HeartPulse
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Star
+import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.utilities.CustomButton
 
 @Composable
 fun spacer1() {
@@ -109,7 +109,7 @@ fun addField(
 }
 
 @Composable
-fun AddMeetingSheet() {
+fun AddMeetingSheet(context: Context) {
 
     var selectedAvatarIndex by remember { mutableStateOf(0) }
 
@@ -132,10 +132,8 @@ fun AddMeetingSheet() {
     ) {
         item {
             Text(
-                text = "Create\nNew Meeting",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 40.sp
+                text = "Create\nNew Meeting", style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.SemiBold, fontSize = 40.sp
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -169,8 +167,7 @@ fun AddMeetingSheet() {
                 Icon(imageVector = Icons.Default.Send, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Date & Time",
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -179,6 +176,7 @@ fun AddMeetingSheet() {
 
             CustomButton(title = "Select Date & Time", color = Color(0xDD191919)) {
                 // Handle time selection logic here
+
             }
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -190,15 +188,14 @@ fun AddMeetingSheet() {
                 Image(Lucide.Star, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Priority",
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            StarRatingSample()
+            priorityBar(LocalContext.current)
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -209,8 +206,7 @@ fun AddMeetingSheet() {
                 Icon(imageVector = Icons.Default.Face, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Assigned For",
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    text = "Assigned For", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
@@ -222,17 +218,16 @@ fun AddMeetingSheet() {
                 modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
                 avatars.forEachIndexed { index, avatar ->
-                    AvatarImage(
-                        avatar = avatar,
-                        content = avatarLabels[index], // Assign the respective label
-                                                isSelected = selectedAvatarIndex == index,
+                    AvatarImage(avatar = avatar,
+                        content = avatarLabels[index],
+                        isSelected = selectedAvatarIndex == index,
                         onClick = {
                             selectedAvatarIndex = index // Update the selected avatar
-                        }
-                    )
+                            Toast.makeText(context, "Selected: ${avatarLabels[index]} with $selectedAvatarIndex", Toast.LENGTH_SHORT).show()
+                        })
                 }
             }
-            Spacer(modifier = Modifier.height(30.dp))
+            spacer1()
         }
 
         // Other items such as the divider and buttons
@@ -256,30 +251,29 @@ fun AddMeetingSheet() {
         }
     }
 }
+
 @Composable
 fun AvatarImage(
-    avatar: Int,
-    content: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
+    avatar: Int, content: String, isSelected: Boolean, onClick: () -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClick() }
-    ) {
+            .clickable { onClick() }) {
         // Box containing the image with border
         Box(
             modifier = Modifier
                 .size(90.dp)
                 .clip(CircleShape)
                 .border(
-                    width = 4.dp,
-                    color = if (isSelected) Color.Green else Color.Transparent, // Green border if selected
+                    width = 5.dp,
+                    color = if (isSelected) Color.Green.copy(
+                        blue = 0.4f,
+                        red = 0.7f,
+                        green = 0.8f
+                    ) else Color.Transparent, // Green border if selected
                     shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+                ), contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = avatar),
@@ -288,7 +282,9 @@ fun AvatarImage(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        Spacer(modifier = Modifier.height(4.dp)) // Space between image and text
+        spacer2()
+        spacer2()
+        spacer2()
         Text(
             text = content,
             style = MaterialTheme.typography.labelLarge,
@@ -297,8 +293,6 @@ fun AvatarImage(
         )
     }
 }
-
-
 
 
 @Composable
@@ -336,10 +330,11 @@ fun StarRatingBar(
 }
 
 @Composable
-fun StarRatingSample() {
-    var rating by remember { mutableStateOf(1f) } //default rating will be 1
+fun priorityBar(context:Context) {
+    var selectedPriority by remember { mutableStateOf(1f) } //default rating will be 1
 
-    StarRatingBar(maxStars = 5, rating = rating, onRatingChanged = {
-        rating = it
+    StarRatingBar(maxStars = 5, rating = selectedPriority, onRatingChanged = {
+        selectedPriority = it
+        Toast.makeText(context, "Selected Priority: $selectedPriority", Toast.LENGTH_SHORT).show()
     })
 }
