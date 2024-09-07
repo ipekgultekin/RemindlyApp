@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,7 +48,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.utilities.CustomButton
-
+import com.composables.icons.lucide.HeartPulse
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Star
 
 @Composable
 fun spacer1() {
@@ -70,7 +76,7 @@ fun addField(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = title, style = MaterialTheme.typography.labelMedium.copy(
-                color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
             )
         )
     }
@@ -80,7 +86,7 @@ fun addField(
         value = "", onValueChange = onValueChange, label = {
             Text(
                 fieldTitle, style = TextStyle(
-                    color = Color.Black.copy(alpha = 0.4f), fontSize = 18.sp
+                    color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 18.sp
                 )
             )
         }, colors = TextFieldDefaults.textFieldColors(
@@ -112,7 +118,6 @@ fun AddMeetingSheet() {
         R.drawable.avatar6
     )
 
-    // Use LazyColumn for scrollable content
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -159,13 +164,13 @@ fun AddMeetingSheet() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            CustomButton(title = "Select Date & Time", color = Color.Black) {
+            CustomButton(title = "Select Date & Time", color = Color(0xDD191919)) {
                 // Handle time selection logic here
             }
 
@@ -174,17 +179,17 @@ fun AddMeetingSheet() {
 
         item {
             Row {
-                Icon(imageVector = Icons.Default.Star, contentDescription = "meeting icon")
+                Image(Lucide.Star, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-
+            StarRatingSample()
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -195,7 +200,7 @@ fun AddMeetingSheet() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Assigned For", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
@@ -217,26 +222,25 @@ fun AddMeetingSheet() {
         item {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 40.dp),
-                color = Color.Black.copy(alpha = 0.5f),
+                color = Color(0xDD191919).copy(alpha = 0.5f),
                 thickness = 2.dp
             )
             Spacer(modifier = Modifier.height(30.dp))
         }
 
         item {
-            CustomButton(title = "Create Meeting", color = Color.Black) {
+            CustomButton(title = "Create Meeting", color = Color(0xDD191919)) {
                 // Handle time selection logic here
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            CustomButton(title = "Clear Fields", color = Color.Black) {
+            CustomButton(title = "Clear Fields", color = Color(0xDD191919)) {
                 // Handle time selection logic here
             }
         }
     }
 }
-
 
 @Composable
 fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit) {
@@ -256,9 +260,52 @@ fun AvatarImage(@DrawableRes avatar: Int, content: String?, onClick: () -> Unit)
         Text(
             text = content ?: "",
             style = MaterialTheme.typography.labelLarge,
-            color = Color.Black,
+            color = Color(0xFF191919),
             fontWeight = FontWeight.Bold
         )
     }
 }
 
+
+@Composable
+fun StarRatingBar(
+    maxStars: Int = 5, rating: Float, onRatingChanged: (Float) -> Unit
+) {
+    val density = LocalDensity.current.density
+    val starSize = (40f * density).dp
+    val starSpacing = (0.5f * density).dp
+
+    Row(
+        modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 1..maxStars) {
+            val isSelected = i <= rating
+            val icon = if (isSelected) Icons.Rounded.Star else Icons.Rounded.Star
+            val iconTintColor = if (isSelected) Color(0xFFF2B1B1) else Color(0xF191919)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = iconTintColor,
+                modifier = Modifier
+                    .selectable(selected = isSelected, onClick = {
+                        onRatingChanged(i.toFloat())
+                    })
+                    .width(starSize)
+                    .height(starSize)
+            )
+
+            if (i < maxStars) {
+                Spacer(modifier = Modifier.width(starSpacing))
+            }
+        }
+    }
+}
+
+@Composable
+fun StarRatingSample() {
+    var rating by remember { mutableStateOf(1f) } //default rating will be 1
+
+    StarRatingBar(maxStars = 5, rating = rating, onRatingChanged = {
+        rating = it
+    })
+}
