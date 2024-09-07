@@ -1,4 +1,4 @@
-package com.yazilimxyz.remindly
+package com.yazilimxyz.remindly.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,11 +9,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,19 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-
+import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun SettingsScreenContent() {
+fun SettingsScreen() {
     // Define colors
     val themeColor = Color(0xFFF2B1B1) // Background color for bars
     val expandedBackgroundColor = Color(0xFFB0BEC5) // Color for expanded options
-    val signOutColor = Color(0xFF86BFD3)
     val textColor = Color(0xFFFFFFFF) // Text color
 
     val scrollState = rememberScrollState()
@@ -80,24 +74,24 @@ fun SettingsScreenContent() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             SettingsBar(
-                title = "Tema",
+                title = "Theme",
                 color = themeColor,
-                options = listOf("Açık Tema", "Koyu Tema"),
+                options = listOf("Dark Theme", "Light Theme"),
                 isExpanded = isThemeExpanded,
                 onClick = { isThemeExpanded = !isThemeExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
                 textColor = textColor
             )
             SettingsBar(
-                title = "Dil",
+                title = "Language",
                 color = themeColor,
-                options = listOf("Türkçe", "İngilizce"),
+                options = listOf("Türkçe", "English"),
                 isExpanded = isLanguageExpanded,
                 onClick = { isLanguageExpanded = !isLanguageExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
                 textColor = textColor
             )
-            NotificationSettingsBar(title = "Bildirim Ayarları", color = themeColor, textColor = textColor)
+            NotificationSettingsBar(title = "Notification Settings", color = themeColor, textColor = textColor)
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -108,12 +102,12 @@ fun SettingsScreenContent() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = signOutColor),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.6f)),
             shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Çıkış Yap",
+                text = "Sign Out",
                 style = TextStyle(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
