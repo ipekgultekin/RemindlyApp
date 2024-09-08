@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,10 +26,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -48,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -57,8 +53,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Star
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.utilities.CustomButton
 import java.util.Calendar
@@ -76,7 +70,7 @@ fun spacer2() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun addField(
-    icon: ImageVector,
+    icon: Int,
     title: String,
     fieldTitle: String,
     description: String?,
@@ -84,15 +78,24 @@ fun addField(
     onValueChange: (String) -> Unit
 ) {
     Column {
-        Row {
-            Icon(imageVector = icon, contentDescription = description)
-            Spacer(modifier = Modifier.width(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(icon),
+                contentDescription = description,
+                modifier = Modifier
+                    .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
+                    .aspectRatio(1f) // Ensures the image remains square
+            )
+            Spacer(modifier = Modifier.width(15.dp))
             Text(
                 text = title, style = MaterialTheme.typography.labelMedium.copy(
                     color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                 )
             )
         }
+
+        spacer2()
+        spacer2()
         spacer2()
 
         TextField(value = textState.value, // Controlled by textState
@@ -103,7 +106,7 @@ fun addField(
             label = {
                 Text(
                     fieldTitle, style = TextStyle(
-                        color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 18.sp
+                        color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
                     )
                 )
             },
@@ -163,7 +166,7 @@ fun AddMeetingSheet(context: Context) {
 
         item {
             addField(
-                icon = Icons.Default.Person,
+                icon = R.drawable.title,
                 title = "Meeting Title",
                 fieldTitle = "Enter a title for your meeting",
                 description = "meeting",
@@ -176,7 +179,7 @@ fun AddMeetingSheet(context: Context) {
 
         item {
             addField(
-                icon = Icons.Default.Info,
+                icon = R.drawable.description,
                 title = "Description",
                 fieldTitle = "Enter a description for your meeting",
                 description = "description",
@@ -188,36 +191,40 @@ fun AddMeetingSheet(context: Context) {
         }
 
         item {
-            Row {
-                Icon(imageVector = Icons.Default.Send, contentDescription = "meeting icon")
-                Spacer(modifier = Modifier.width(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.date),
+                    contentDescription = "date icon",
+                    modifier = Modifier
+                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
+                        .aspectRatio(1f) // Ensures the image remains square
+                )
+                Spacer(modifier = Modifier.width(15.dp))
                 Text(
                     text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(5.dp))
+
+            spacer2()
+            spacer2()
+            spacer2()
 
             CustomButton(title = dateTimeText, color = Color(0xDD191919)) {
-                // Open Date Picker
                 DatePickerDialog(
                     context,
                     { _, year, month, dayOfMonth ->
-                        // Set selected date
                         calendar.set(Calendar.YEAR, year)
                         calendar.set(Calendar.MONTH, month)
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                        // After selecting date, open Time Picker
                         TimePickerDialog(
                             context,
                             { _, hourOfDay, minute ->
-                                // Set selected time
                                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                                 calendar.set(Calendar.MINUTE, minute)
 
-                                // Update selectedDateTime with formatted date & time
                                 selectedDateTime =
                                     "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
                                 Toast.makeText(
@@ -236,7 +243,6 @@ fun AddMeetingSheet(context: Context) {
                 ).show()
             }
 
-            // Display the selected date & time if available
             if (selectedDateTime.isNotEmpty()) {
                 dateTimeText = selectedDateTime
             }
@@ -245,9 +251,15 @@ fun AddMeetingSheet(context: Context) {
         }
 
         item {
-            Row {
-                Image(Lucide.Star, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.priority),
+                    contentDescription = "priority icon",
+                    modifier = Modifier
+                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
+                        .aspectRatio(1f) // Ensures the image remains square
+                )
+                Spacer(modifier = Modifier.width(15.dp))
                 Text(
                     text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
@@ -262,9 +274,15 @@ fun AddMeetingSheet(context: Context) {
         }
 
         item {
-            Row {
-                Icon(imageVector = Icons.Default.Face, contentDescription = "meeting icon")
-                Spacer(modifier = Modifier.width(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.assigned),
+                    contentDescription = "assigned icon",
+                    modifier = Modifier
+                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
+                        .aspectRatio(1f) // Ensures the image remains square
+                )
+                Spacer(modifier = Modifier.width(15.dp))
                 Text(
                     text = "Assigned For", style = MaterialTheme.typography.labelMedium.copy(
                         color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
@@ -332,9 +350,9 @@ fun AvatarImage(
                 .size(90.dp)
                 .clip(CircleShape)
                 .border(
-                    width = 5.dp, color = if (isSelected) Color.Green.copy(
-                        blue = 0.4f, red = 0.7f, green = 0.8f
-                    ) else Color.Transparent, shape = CircleShape
+                    width = 6.dp,
+                    color = if (isSelected) Color(0xDD191919).copy(alpha = 0.8f) else Color.Transparent,
+                    shape = CircleShape
                 ), contentAlignment = Alignment.Center
         ) {
             Image(
@@ -371,7 +389,7 @@ fun StarRatingBar(
         for (i in 1..maxStars) {
             val isSelected = i <= rating
             val icon = if (isSelected) Icons.Rounded.Star else Icons.Rounded.Star
-            val iconTintColor = if (isSelected) Color(0xFFF2B1B1) else Color(0xF191919)
+            val iconTintColor = if (isSelected) Color(0xFFF2B1B1) else Color(0x44191919)
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -394,9 +412,9 @@ fun StarRatingBar(
 
 @Composable
 fun PriorityBar(context: Context, selectedPriority: MutableState<Float>) {
-
     StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
         selectedPriority.value = it
-        Toast.makeText(context, "Selected Priority: $selectedPriority", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Selected Priority: ${selectedPriority.value}", Toast.LENGTH_SHORT)
+            .show()
     })
 }

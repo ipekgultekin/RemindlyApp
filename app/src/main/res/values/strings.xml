@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">remindly</string>
+    <string name="new_meeting">Create\nNew Meeting</string>
 </resources>
