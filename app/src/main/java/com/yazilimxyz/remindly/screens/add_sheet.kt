@@ -240,7 +240,11 @@ fun AddMeetingSheet(context: Context) {
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)
-                ).show()
+                ).apply {
+                    // Disable previous dates by setting the minimum date
+                    datePicker.minDate =
+                        System.currentTimeMillis() // Sets the minimum date to today
+                }.show()
             }
 
             if (selectedDateTime.isNotEmpty()) {
@@ -326,7 +330,7 @@ fun AddMeetingSheet(context: Context) {
                 // Handle meeting creation
             }
             Spacer(modifier = Modifier.height(10.dp))
-            CustomButton(title = "Clear Fields", color = Color(0xDD191919)) {
+            CustomButton(title = "Clear Fields", color = Color(0xFFF2B1B1)) {
                 selectedAvatarIndex = 0
                 selectedDateTime = ""
                 dateTimeText = "Select Date & Time"

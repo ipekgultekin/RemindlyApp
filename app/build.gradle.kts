@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    id ("com.google.gms.google-services") // Add this line
+    id("org.jetbrains.kotlin.kapt") // Add this line
 }
 
 android {
@@ -50,6 +50,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation(libs.composables.icons.lucide)
@@ -57,6 +58,13 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation (libs.firebase.auth)
     implementation (libs.firebase.firestore)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // For ViewModels
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    kapt(libs.androidx.hilt.compiler)
 
     implementation (libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
