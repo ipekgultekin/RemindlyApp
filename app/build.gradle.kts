@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("com.google.gms.google-services") // Add this line
+//    id ("com.google.gms.google-services") // Add this line
 }
 
 android {
@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.composables.icons.lucide)
 
+    implementation(platform(libs.firebase.bom))
     implementation (libs.firebase.auth)
     implementation (libs.firebase.firestore)
 

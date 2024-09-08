@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+firebaseBom = "33.2.0"
 iconsLucideVersion = "1.0.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -17,6 +18,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucideVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

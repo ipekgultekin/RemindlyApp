@@ -1,5 +1,7 @@
 package com.yazilimxyz.remindly.screens
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -36,7 +38,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,6 +61,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Star
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.utilities.CustomButton
+import java.util.Calendar
 
 @Composable
 fun spacer1() {
@@ -75,45 +80,60 @@ fun addField(
     title: String,
     fieldTitle: String,
     description: String?,
+    textState: MutableState<String>, // Added textState parameter to control TextField
     onValueChange: (String) -> Unit
 ) {
-    Row {
-        Icon(imageVector = icon, contentDescription = description)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = title, style = MaterialTheme.typography.labelMedium.copy(
-                color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
-            )
-        )
-    }
-    spacer2()
-
-    TextField(
-        value = "", onValueChange = onValueChange, label = {
+    Column {
+        Row {
+            Icon(imageVector = icon, contentDescription = description)
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
-                fieldTitle, style = TextStyle(
-                    color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 18.sp
+                text = title, style = MaterialTheme.typography.labelMedium.copy(
+                    color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
                 )
             )
-        }, colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-            focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-            unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-            cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
-        ), modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp) // Adjust height for better appearance
-            .padding(horizontal = 8.dp), shape = MaterialTheme.shapes.medium // Add rounded corners
-    )
-    spacer1()
+        }
+        spacer2()
+
+        TextField(value = textState.value, // Controlled by textState
+            onValueChange = {
+                textState.value = it // Update the state
+                onValueChange(it) // Call the onValueChange lambda
+            },
+            label = {
+                Text(
+                    fieldTitle, style = TextStyle(
+                        color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 18.sp
+                    )
+                )
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
+                focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
+                unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
+                cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp) // Adjust height for better appearance
+                .padding(horizontal = 8.dp),
+            shape = MaterialTheme.shapes.medium // Add rounded corners
+        )
+        spacer1()
+    }
 }
 
 @Composable
 fun AddMeetingSheet(context: Context) {
 
-    var selectedAvatarIndex by remember { mutableStateOf(0) }
+    var selectedAvatarIndex by remember { mutableIntStateOf(0) }
+    var selectedDateTime by remember { mutableStateOf("") }
+    var dateTimeText by remember { mutableStateOf("Select Date & Time") }
+    var selectedPriority = remember { mutableStateOf(3f) } // Default rating value
 
-    // List of avatars (replace these with actual resource IDs or URLs)
+    var meetingTitleState = remember { mutableStateOf("") }
+    var meetingDescriptionState = remember { mutableStateOf("") }
+
     val avatars = listOf(
         R.drawable.avatar1,
         R.drawable.avatar2,
@@ -123,6 +143,8 @@ fun AddMeetingSheet(context: Context) {
     )
 
     val avatarLabels = listOf("Admin", "Asistan", "Ekip Lideri", "Yönetim Kurulu", "Çalışan")
+
+    val calendar = Calendar.getInstance()
 
     LazyColumn(
         modifier = Modifier
@@ -144,9 +166,11 @@ fun AddMeetingSheet(context: Context) {
                 icon = Icons.Default.Person,
                 title = "Meeting Title",
                 fieldTitle = "Enter a title for your meeting",
-                description = "meeting"
-            ) {
-                // Handle text field value change here
+                description = "meeting",
+                textState = meetingTitleState
+            ) { newValue ->
+                println("it is: $newValue")
+
             }
         }
 
@@ -155,14 +179,15 @@ fun AddMeetingSheet(context: Context) {
                 icon = Icons.Default.Info,
                 title = "Description",
                 fieldTitle = "Enter a description for your meeting",
-                description = "description"
-            ) {
-                // Handle text field value change here
+                description = "description",
+                textState = meetingDescriptionState
+            ) { newValue ->
+                println("it is: $newValue")
+
             }
         }
 
         item {
-            // Date & Time selection logic
             Row {
                 Icon(imageVector = Icons.Default.Send, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
@@ -174,15 +199,52 @@ fun AddMeetingSheet(context: Context) {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            CustomButton(title = "Select Date & Time", color = Color(0xDD191919)) {
-                // Handle time selection logic here
+            CustomButton(title = dateTimeText, color = Color(0xDD191919)) {
+                // Open Date Picker
+                DatePickerDialog(
+                    context,
+                    { _, year, month, dayOfMonth ->
+                        // Set selected date
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, month)
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                        // After selecting date, open Time Picker
+                        TimePickerDialog(
+                            context,
+                            { _, hourOfDay, minute ->
+                                // Set selected time
+                                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                                calendar.set(Calendar.MINUTE, minute)
+
+                                // Update selectedDateTime with formatted date & time
+                                selectedDateTime =
+                                    "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
+                                Toast.makeText(
+                                    context, "Selected: $selectedDateTime", Toast.LENGTH_SHORT
+                                ).show()
+
+                            },
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            true
+                        ).show()
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                ).show()
+            }
+
+            // Display the selected date & time if available
+            if (selectedDateTime.isNotEmpty()) {
+                dateTimeText = selectedDateTime
             }
 
             Spacer(modifier = Modifier.height(30.dp))
         }
 
         item {
-            // Priority section
             Row {
                 Image(Lucide.Star, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -194,13 +256,12 @@ fun AddMeetingSheet(context: Context) {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            priorityBar(LocalContext.current)
+            PriorityBar(LocalContext.current, selectedPriority)
 
             Spacer(modifier = Modifier.height(30.dp))
         }
 
         item {
-            // Assigned For section with selectable avatars
             Row {
                 Icon(imageVector = Icons.Default.Face, contentDescription = "meeting icon")
                 Spacer(modifier = Modifier.width(8.dp))
@@ -222,14 +283,17 @@ fun AddMeetingSheet(context: Context) {
                         isSelected = selectedAvatarIndex == index,
                         onClick = {
                             selectedAvatarIndex = index // Update the selected avatar
-                            Toast.makeText(context, "Selected: ${avatarLabels[index]} with $selectedAvatarIndex", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Selected: ${avatarLabels[index]} with $selectedAvatarIndex",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         })
                 }
             }
             spacer1()
         }
 
-        // Other items such as the divider and buttons
         item {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 40.dp),
@@ -245,7 +309,10 @@ fun AddMeetingSheet(context: Context) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             CustomButton(title = "Clear Fields", color = Color(0xDD191919)) {
-                // Handle clearing fields
+                selectedAvatarIndex = 0
+                selectedDateTime = ""
+                dateTimeText = "Select Date & Time"
+                selectedPriority.value = 0f
             }
         }
     }
@@ -265,13 +332,9 @@ fun AvatarImage(
                 .size(90.dp)
                 .clip(CircleShape)
                 .border(
-                    width = 5.dp,
-                    color = if (isSelected) Color.Green.copy(
-                        blue = 0.4f,
-                        red = 0.7f,
-                        green = 0.8f
-                    ) else Color.Transparent, // Green border if selected
-                    shape = CircleShape
+                    width = 5.dp, color = if (isSelected) Color.Green.copy(
+                        blue = 0.4f, red = 0.7f, green = 0.8f
+                    ) else Color.Transparent, shape = CircleShape
                 ), contentAlignment = Alignment.Center
         ) {
             Image(
@@ -328,12 +391,12 @@ fun StarRatingBar(
     }
 }
 
-@Composable
-fun priorityBar(context:Context) {
-    var selectedPriority by remember { mutableStateOf(1f) } //default rating will be 1
 
-    StarRatingBar(maxStars = 5, rating = selectedPriority, onRatingChanged = {
-        selectedPriority = it
+@Composable
+fun PriorityBar(context: Context, selectedPriority: MutableState<Float>) {
+
+    StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
+        selectedPriority.value = it
         Toast.makeText(context, "Selected Priority: $selectedPriority", Toast.LENGTH_SHORT).show()
     })
 }
