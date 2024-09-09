@@ -1,6 +1,8 @@
 package com.yazilimxyz.remindly
 
+import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,17 +19,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.screens.AddMeetingSheet
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
 import com.yazilimxyz.remindly.utilities.BottomNavigationBar
 import com.yazilimxyz.remindly.utilities.NavigationHost
 import kotlinx.coroutines.launch
 
+class RemindlyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(this)
+        FirebaseFirestore.setLoggingEnabled(true)  // Enables Firestore logging
+        Log.d("mesaj", "Firebase initialized")
+    }
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         FirebaseApp.initializeApp(this)
+
+        enableEdgeToEdge()
         setContent {
             RemindlyTheme {
                 MainScreen()
@@ -35,6 +50,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

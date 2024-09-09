@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.kapt") // Add this line
+    id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services") // Use the new plugins DSL to include google-services plugin
 }
 
 android {
@@ -50,15 +51,12 @@ android {
     }
 }
 
-
 dependencies {
-
     implementation(libs.composables.icons.lucide)
 
-    implementation(platform(libs.firebase.bom))
-    implementation (libs.firebase.auth)
-    implementation (libs.firebase.firestore)
-
+    implementation(platform(libs.firebase.bom.v3200)) // Firebase BOM
+    implementation(libs.google.firebase.firestore.ktx)
+    implementation(libs.firebase.analytics.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
@@ -66,7 +64,7 @@ dependencies {
     implementation(libs.androidx.hilt.lifecycle.viewmodel)
     kapt(libs.androidx.hilt.compiler)
 
-    implementation (libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -76,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.common.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

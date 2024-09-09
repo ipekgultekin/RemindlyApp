@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+/*
 
-class MeetingViewModel(private val repository: MeetingRepository) : ViewModel() {
+class MeetingViewModel() : ViewModel() {
 
     private val _isMeetingSaved = MutableStateFlow<Boolean>(false)
     val isMeetingSaved = _isMeetingSaved.asStateFlow()
@@ -32,3 +33,4 @@ class MeetingViewModel(private val repository: MeetingRepository) : ViewModel() 
         }
     }
 }
+*/

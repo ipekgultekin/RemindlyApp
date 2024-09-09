@@ -3,6 +3,7 @@ package com.yazilimxyz.remindly.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -53,7 +54,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yazilimxyz.remindly.MeetingModel
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.saveMeetingToFirestore
 import com.yazilimxyz.remindly.utilities.CustomButton
 import java.util.Calendar
 
@@ -326,9 +329,26 @@ fun AddMeetingSheet(context: Context) {
         }
 
         item {
+
             CustomButton(title = "Create Meeting", color = Color(0xDD191919)) {
-                // Handle meeting creation
+                val meetingModel = MeetingModel(
+                    meetingTitle = meetingTitleState.value,
+                    meetingDescription = meetingDescriptionState.value,
+                    meetingDateTime = selectedDateTime,
+                    priority = selectedPriority.value,
+                    assignedIndex = selectedAvatarIndex
+                )
+
+                if (meetingModel.meetingTitle.isNotEmpty() && meetingModel.meetingDateTime.isNotEmpty()) {
+                    Log.d("mesaj", "girdi")
+                    saveMeetingToFirestore(meetingModel, context)
+                } else {
+                    Toast.makeText(
+                        context, "Please fill in all required fields..", Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
+
             Spacer(modifier = Modifier.height(10.dp))
             CustomButton(title = "Clear Fields", color = Color(0xFFF2B1B1)) {
                 selectedAvatarIndex = 0
@@ -384,8 +404,8 @@ fun StarRatingBar(
     maxStars: Int = 5, rating: Float, onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (40f * density).dp
-    val starSpacing = (0.5f * density).dp
+    val starSize = (30f * density).dp
+    val starSpacing = (0.1f * density).dp
 
     Row(
         modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically
@@ -412,7 +432,6 @@ fun StarRatingBar(
         }
     }
 }
-
 
 @Composable
 fun PriorityBar(context: Context, selectedPriority: MutableState<Float>) {
