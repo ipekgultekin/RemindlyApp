@@ -340,7 +340,6 @@ fun AddMeetingSheet(context: Context) {
                 )
 
                 if (meetingModel.meetingTitle.isNotEmpty() && meetingModel.meetingDateTime.isNotEmpty()) {
-                    Log.d("mesaj", "girdi")
                     saveMeetingToFirestore(meetingModel, context)
                 } else {
                     Toast.makeText(
