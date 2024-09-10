@@ -135,8 +135,8 @@ fun AddMeetingSheet(context: Context) {
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
     var selectedDateTime by remember { mutableStateOf("") }
     var dateTimeText by remember { mutableStateOf("Select Date & Time") }
-    var selectedPriority = remember { mutableStateOf(3f) } // Default rating value
 
+    var selectedPriority = remember { mutableStateOf(3f) } // Default rating value
     var meetingTitleState = remember { mutableStateOf("") }
     var meetingDescriptionState = remember { mutableStateOf("") }
 
@@ -391,7 +391,6 @@ fun AvatarImage(
         )
     }
 }
-
 
 @Composable
 fun StarRatingBar(
