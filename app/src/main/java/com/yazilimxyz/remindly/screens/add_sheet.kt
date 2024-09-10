@@ -230,9 +230,8 @@ fun AddMeetingSheet(context: Context) {
 
                                 selectedDateTime =
                                     "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
-                                Toast.makeText(
-                                    context, "Selected: $selectedDateTime", Toast.LENGTH_SHORT
-                                ).show()
+
+
 
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
@@ -308,11 +307,7 @@ fun AddMeetingSheet(context: Context) {
                         isSelected = selectedAvatarIndex == index,
                         onClick = {
                             selectedAvatarIndex = index // Update the selected avatar
-                            Toast.makeText(
-                                context,
-                                "Selected: ${avatarLabels[index]} with $selectedAvatarIndex",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
                         })
                 }
             }
@@ -436,7 +431,6 @@ fun StarRatingBar(
 fun PriorityBar(context: Context, selectedPriority: MutableState<Float>) {
     StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
         selectedPriority.value = it
-        Toast.makeText(context, "Selected Priority: ${selectedPriority.value}", Toast.LENGTH_SHORT)
-            .show()
+
     })
 }

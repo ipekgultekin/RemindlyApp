@@ -29,6 +29,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucideVersion" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-bom-v3200 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }

@@ -26,8 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -57,6 +56,7 @@ dependencies {
     implementation(platform(libs.firebase.bom.v3200)) // Firebase BOM
     implementation(libs.google.firebase.firestore.ktx)
     implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
