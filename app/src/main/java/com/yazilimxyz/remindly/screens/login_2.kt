@@ -1,13 +1,29 @@
 package com.yazilimxyz.remindly.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +37,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginPage(navController: NavController) {
@@ -29,18 +51,14 @@ fun LoginPage(navController: NavController) {
     val backgroundImage: Painter = painterResource(id = R.drawable.arkaplan)
 
     var email by remember { mutableStateOf("") }
-    val isEmailValid = remember(email) { email.contains("@") && email.endsWith(".com") }
     var password by remember { mutableStateOf("") }
+    val isEmailValid = remember(email) { email.contains("@") && email.endsWith(".com") }
     var passwordVisible by remember { mutableStateOf(false) }
     val buttonColor = Color(0xFFFFB8B8)
 
 
-
-
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
 
         Image(
@@ -60,23 +78,17 @@ fun LoginPage(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "REMINDLY",
-                style = TextStyle(
-                    color = Color(0xFFB5AA36),
-                    fontSize = 48.sp,
-                    fontFamily = FontFamily.Cursive
-                ),
-                modifier = Modifier.padding(bottom = 32.dp)
+                text = "REMINDLY", style = TextStyle(
+                    color = Color(0xFFB5AA36), fontSize = 48.sp, fontFamily = FontFamily.Cursive
+                ), modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            OutlinedTextField(
-                value = email,
+            OutlinedTextField(value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
                 leadingIcon = {
                     Icon(
-                        Icons.Outlined.Email,
-                        contentDescription = "Email Icon"
+                        Icons.Outlined.Email, contentDescription = "Email Icon"
                     )
                 },
                 trailingIcon = {
@@ -100,8 +112,7 @@ fun LoginPage(navController: NavController) {
                 label = { Text("Password") },
                 leadingIcon = {
                     Icon(
-                        Icons.Default.Lock,
-                        contentDescription = "Password Icon"
+                        Icons.Default.Lock, contentDescription = "Password Icon"
                     )
                 },
                 trailingIcon = {
@@ -126,20 +137,68 @@ fun LoginPage(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {   },
+                onClick = {
+                    signinFirebase(email = "admin@gmail.com", password = "admin123", onSuccess = {
+                        // Navigate to main screen
+                        Log.d("mesaj", "başarili1")
+                        navController.navigate("mainScreen")
+                        Log.d("mesaj", "başarili2")
+                    }, onError = { errorMessage ->
+                        // Show error message
+                        Log.d("mesaj", errorMessage)
+//                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                    })
+
+
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(50.dp)
             ) {
 
-                Text(text = "GİRİŞ YAP",
-                    style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp
-                    ) )
+                Text(
+                    text = "GİRİŞ YAP", style = TextStyle(
+                        color = Color.Black, fontSize = 20.sp
+                    )
+                )
             }
         }
     }
 }
 
+
+fun signinFirebase(
+    email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit
+) {
+    if (email.isEmpty()) {
+        onError("Email is required")
+        return
+    }
+
+    if (password.isEmpty()) {
+        onError("Password is required")
+        return
+    }
+
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
+
+            // Switch to the main thread to update UI
+            withContext(Dispatchers.Main) {
+                onSuccess()
+            }
+        } catch (e: Exception) {
+            // Switch to the main thread to update UI
+            withContext(Dispatchers.Main) {
+                val errorMessage = when (e) {
+                    is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> "Invalid credentials. Please check your email and password."
+                    is com.google.firebase.auth.FirebaseAuthInvalidUserException -> "User not found. Please register."
+                    else -> e.message ?: "An unknown error occurred"
+                }
+                onError(errorMessage)
+            }
+        }
+    }
+}

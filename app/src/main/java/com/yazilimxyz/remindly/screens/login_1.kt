@@ -72,7 +72,7 @@ fun LoginbyroleScreeen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = {  navController.navigate("login")},
+                onClick = {  navController.navigate("loginScreen")},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)

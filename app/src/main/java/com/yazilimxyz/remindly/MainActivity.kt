@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.screens.AddMeetingSheet
+import com.yazilimxyz.remindly.screens.LoginPage
+import com.yazilimxyz.remindly.screens.LoginbyroleScreeen
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
 import com.yazilimxyz.remindly.utilities.BottomNavigationBar
 import com.yazilimxyz.remindly.utilities.NavigationHost
@@ -45,7 +48,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RemindlyTheme {
-                MainScreen()
+                val navController = rememberNavController()
+
+                // Set up the NavHost with routes
+                NavHost(navController = navController, startDestination = "loginByRolesScreen") {
+                    composable("loginByRolesScreen") { LoginbyroleScreeen(navController) }
+                    composable("loginScreen") { LoginPage(navController) }
+                    composable("mainScreen") { MainScreen(navController) }
+                }
             }
         }
     }
@@ -54,17 +64,14 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     val navController = rememberNavController()
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        bottomBar = {
-        BottomNavigationBar(
-            navController = navController,
-            onAddMeetingClick = { scope.launch { sheetState.show() } }
-        )
+    Scaffold(bottomBar = {
+        BottomNavigationBar(navController = navController,
+            onAddMeetingClick = { scope.launch { sheetState.show() } })
     }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
 
