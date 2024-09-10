@@ -76,7 +76,7 @@ fun LoginbyroleScreeen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = buttoncolor)
             ) {
                 Text(
