@@ -23,8 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.screens.AddMeetingSheet
-import com.yazilimxyz.remindly.screens.LoginPage
-import com.yazilimxyz.remindly.screens.LoginbyroleScreeen
+import com.yazilimxyz.remindly.screens.LoginScreen
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
 import com.yazilimxyz.remindly.utilities.BottomNavigationBar
 import com.yazilimxyz.remindly.utilities.NavigationHost
@@ -51,9 +50,8 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 // Set up the NavHost with routes
-                NavHost(navController = navController, startDestination = "loginByRolesScreen") {
-                    composable("loginByRolesScreen") { LoginbyroleScreeen(navController) }
-                    composable("loginScreen") { LoginPage(navController) }
+                NavHost(navController = navController, startDestination = "loginScreen") {
+                    composable("loginScreen") { LoginScreen(navController) }
                     composable("mainScreen") { MainScreen(navController) }
                 }
             }

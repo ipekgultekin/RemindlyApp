@@ -17,7 +17,6 @@ import com.yazilimxyz.remindly.screens.HomeScreen
 import com.yazilimxyz.remindly.screens.ProfileScreen
 import com.yazilimxyz.remindly.screens.SettingsScreen
 
-
 @Composable
 fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
@@ -39,8 +38,6 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifi
         }
     }
 }
-
-
 
 sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
     object Home : BottomNavItem("home", "Home", Icons.Default.Home)
