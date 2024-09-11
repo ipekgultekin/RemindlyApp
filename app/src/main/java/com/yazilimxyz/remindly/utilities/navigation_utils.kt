@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.utilities
 
+import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Call
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.screens.CalendarScreen
 import com.yazilimxyz.remindly.screens.HomeScreen
 import com.yazilimxyz.remindly.screens.ProfileScreen
@@ -28,10 +30,12 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifi
             HomeScreen()
         }
         composable(BottomNavItem.Calendar.route) {
-            CalendarScreen()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                CalendarScreen()
+            }
         }
         composable(BottomNavItem.Profile.route) {
-            ProfileScreen()
+            ProfileScreen("Asistan", R.drawable.avatar1, emptyList(), emptyList())
         }
         composable(BottomNavItem.Settings.route) {
             SettingsScreen()

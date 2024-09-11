@@ -307,7 +307,6 @@ fun AddMeetingSheet(context: Context) {
                         isSelected = selectedAvatarIndex == index,
                         onClick = {
                             selectedAvatarIndex = index // Update the selected avatar
-
                         })
                 }
             }
@@ -385,9 +384,10 @@ fun AvatarImage(
         spacer2()
         Text(
             text = content,
-            style = MaterialTheme.typography.labelLarge,
-            color = Color(0xFF191919),
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.labelLarge.copy(
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                color = Color(0xFF191919)
+            )
         )
     }
 }

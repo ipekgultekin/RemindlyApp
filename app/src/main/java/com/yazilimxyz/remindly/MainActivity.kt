@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.screens.AddMeetingSheet
 import com.yazilimxyz.remindly.screens.LoginScreen
@@ -33,24 +34,33 @@ class RemindlyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        FirebaseFirestore.setLoggingEnabled(true)  // Enables Firestore logging
-        Log.d("mesaj", "Firebase initialized")
+        FirebaseFirestore.setLoggingEnabled(true)
     }
 }
 
 class MainActivity : ComponentActivity() {
+
+    val user = FirebaseAuth.getInstance().currentUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FirebaseApp.initializeApp(this)
+//        FirebaseApp.initializeApp(this)
 
         enableEdgeToEdge()
         setContent {
             RemindlyTheme {
                 val navController = rememberNavController()
 
-                // Set up the NavHost with routes
-                NavHost(navController = navController, startDestination = "loginScreen") {
+                var startDes : String = "loginScreen"
+
+                if (user == null) {
+                    startDes = "loginScreen"
+                } else {
+                    startDes = "mainScreen"
+                }
+
+                NavHost(navController = navController, startDestination = startDes) {
                     composable("loginScreen") { LoginScreen(navController) }
                     composable("mainScreen") { MainScreen(navController) }
                 }

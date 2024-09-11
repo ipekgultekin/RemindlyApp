@@ -62,7 +62,6 @@ fun LoginScreen(navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
-
         Image(
             painter = backgroundImage,
             contentDescription = "Arka Plan Resmi",

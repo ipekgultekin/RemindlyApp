@@ -3,14 +3,18 @@ package com.yazilimxyz.remindly.screens
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,20 +22,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+val buttonColor = Color(0xFFFFB8B8)
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen() {
     val months = remember { generateMonths() }
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp)) {
         itemsIndexed(months) { _, month ->
             MonthView(month = month)
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
@@ -39,7 +48,14 @@ fun CalendarScreen() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MonthView(month: LocalDate) {
-    Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .border(
+            width = 2.dp,  // Border thickness
+            color = Color.Gray,  // Border color
+            shape = MaterialTheme.shapes.medium  // Shape of the border, can customize the corner radius here
+        )
+        .padding(16.dp)) {
         Text(
             text = month.format(DateTimeFormatter.ofPattern("MMMM yyyy")),
             style = MaterialTheme.typography.titleLarge,
@@ -50,10 +66,18 @@ fun MonthView(month: LocalDate) {
         DaysOfWeekHeader()
 
         CalendarGrid(month)
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp, vertical = 16.dp),
+            color = Color.Gray,
+            thickness = 2.dp,
+
+        )
     }
 }
 
-val buttonColor = Color(0xFFFFB8B8)
 
 @Composable
 fun DaysOfWeekHeader() {
@@ -64,10 +88,16 @@ fun DaysOfWeekHeader() {
                 modifier = Modifier
                     .weight(1f)
                     .padding(4.dp)
-                    .background(buttonColor),
+                    .background(buttonColor.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = day)
+                Text(
+                    text = day,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black,
+                    modifier = Modifier.padding(4.dp),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }
@@ -87,7 +117,8 @@ fun CalendarGrid(month: LocalDate) {
         weeks.forEach { week ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 week.forEach { day ->
-                    val isToday = day == LocalDate.now().dayOfMonth && month.month == LocalDate.now().month && month.year == LocalDate.now().year
+                    val isToday =
+                        day == LocalDate.now().dayOfMonth && month.month == LocalDate.now().month && month.year == LocalDate.now().year
                     val isWeekend = day?.let {
                         val dayOfWeek = (startDayOfWeek - 1 + it) % 7
                         dayOfWeek == 0 || dayOfWeek == 6
@@ -99,17 +130,14 @@ fun CalendarGrid(month: LocalDate) {
                             .padding(4.dp)
                             .background(
                                 when {
-                                    isToday -> Color.Red
+                                    isToday -> Color.Black.copy(alpha = 0.8f)
                                     isWeekend -> Color.LightGray
                                     else -> Color.Transparent
-                                },
-                                shape = MaterialTheme.shapes.small
-                            ),
-                        contentAlignment = Alignment.Center
+                                }, shape = MaterialTheme.shapes.small
+                            ), contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = day?.toString() ?: "",
-                            color = when {
+                            text = day?.toString() ?: "", color = when {
                                 isToday -> Color.White
                                 else -> Color.Black
                             }
@@ -132,10 +160,8 @@ fun generateMonths(): List<LocalDate> {
         months.add(current)
         current = current.plusMonths(1)
     }
-
     return months
 }
-
 
 fun generateCalendarWeeks(startDayOfWeek: Int, daysInMonth: Int): List<List<Int?>> {
     val weeks = mutableListOf<List<Int?>>()
