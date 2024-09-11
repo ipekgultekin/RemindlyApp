@@ -105,7 +105,7 @@ fun LoginScreen(navController: NavController) {
                         )
                     }
                 },
-                singleLine = true, // Şifreyi tek satırda tut
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 isError = !isEmailValid && email.isNotEmpty()
             )
