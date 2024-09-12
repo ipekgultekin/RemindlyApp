@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.screens.AvatarImage
 
 @Composable
@@ -123,15 +123,14 @@ fun adminPanel(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-
             TextField(
-                value = email, // Controlled by textState
+                value = RoleCredentialsRepository.adminEmail, // Controlled by textState
                 onValueChange = {
                     email = it // Update the state
                 },
                 label = {
                     Text(
-                        "Email", style = TextStyle(
+                       "Email", style = TextStyle(
                             color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
                         )
                     )
@@ -153,7 +152,7 @@ fun adminPanel(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = password, // Controlled by textState
+                value = RoleCredentialsRepository.adminPassword, // Controlled by textState
                 onValueChange = {
                     password = it // Update the state
                 },
@@ -187,22 +186,6 @@ fun adminPanel(navController: NavController) {
                     .align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /* Add meeting logic */ }) {
-                Text(text = "Schedule Meeting")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /* Add meeting logic */ }) {
-                Text(text = "Schedule Meeting")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /* Add meeting logic */ }) {
-                Text(text = "Schedule Meeting")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /* Add meeting logic */ }) {
-                Text(text = "Schedule Meeting")
-            }
         }
     }
 }
