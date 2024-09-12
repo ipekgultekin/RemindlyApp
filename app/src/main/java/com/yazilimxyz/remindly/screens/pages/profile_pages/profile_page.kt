@@ -18,35 +18,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.getRoleCredentials
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.adminProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.adminProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.asistanProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.calisanProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.ekipLideriProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.yonetimKuruluProfilePage
 
-
-@Composable
-fun adminPanel(navController: NavController) {
-    // Define the UI for the Admin Panel here
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Admin Panel page",
-            style = TextStyle(
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
-        )
-        Button(onClick = { navController.navigate("admin") }) {
-            Text(text="go back")
-        }
-        // Add more UI components for AdminPanel here
-    }
-}
 
 @Composable
 fun ProfilePage(navController: NavController) {
