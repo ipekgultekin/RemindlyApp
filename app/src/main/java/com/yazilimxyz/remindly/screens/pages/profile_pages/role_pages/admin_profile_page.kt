@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Surface
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,7 +31,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yazilimxyz.remindly.AddCredentialsScreen
 import com.yazilimxyz.remindly.R
 
 @Composable
@@ -45,18 +45,23 @@ fun adminProfilePage() {
     ) {
 
         if (isShowEditRolesDialog) {
-            showEditRolesDialog()
+            showAdminPanel()
         }
 
 
-        Image(
-            painter = painterResource(id = R.drawable.avatar2),
-            contentDescription = null,
-            modifier = Modifier
-                .size(130.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
+        Surface(
+            modifier = Modifier.size(130.dp),
+            shape = CircleShape,              // Apply CircleShape to the Surface
+            elevation = 8.dp                  // Set elevation for shadow effect
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.avatar2),
+                contentDescription = null,
+                modifier = Modifier.clip(CircleShape), // Apply clipping inside the surface
+                contentScale = ContentScale.Crop
+            )
+        }
+
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -73,68 +78,70 @@ fun adminProfilePage() {
 
         Button(
             modifier = Modifier.width(300.dp),
+            elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
             onClick = {
                 isShowEditRolesDialog = true
-            }, colors = ButtonDefaults.buttonColors(
+            },
+            colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFF2B1B1)
-            ), shape = MaterialTheme.shapes.small // Apply custom shape
+            ),
+            shape = MaterialTheme.shapes.small // Apply custom shape
         ) {
-            Text("Edit Roles", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            , modifier = Modifier.padding(12.dp))
+            Text(
+                "Admin Panel",
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                modifier = Modifier.padding(12.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier.width(300.dp),
+            elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
             onClick = {
 
-            }, colors = ButtonDefaults.buttonColors(
+            },
+            colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFF2B1B1)
-            ), shape = MaterialTheme.shapes.small
+            ),
+            shape = MaterialTheme.shapes.small
         ) {
-            Text("Schedule Meetings", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                , modifier = Modifier.padding(12.dp))        }
+            Text(
+                "Schedule Meetings",
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                modifier = Modifier.padding(12.dp)
+            )
+        }
 
 
     }
 }
 
 @Composable
-fun showEditRolesDialog() {
-    // State to control whether the dialog is shown or not
+fun showAdminPanel() {
     var openDialog by remember { mutableStateOf(true) }
 
     if (openDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                openDialog = false // Close dialog when touched outside or back press
-            },
-            title = {
-                Text(text = "Edit Roles")
-            },
-            text = {
-                Text("Here you can edit roles.") // Main dialog content
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        // Perform the role editing logic here
-                        openDialog = false // Close the dialog after action
-                    }
-                ) {
-                    Text("Confirm")
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        openDialog = false // Close dialog without taking action
-                    }
-                ) {
-                    Text("Cancel")
-                }
+        AlertDialog(onDismissRequest = {
+            openDialog = false
+        }, title = {
+            Text(text = "Edit Roless")
+        }, text = {
+            Text("Here you can edit roles.") // Main dialog content
+        }, confirmButton = {
+            Button(onClick = {
+                // Perform the role editing logic here
+                openDialog = false // Close the dialog after action
+            }) {
+                Text("Confirm")
             }
-        )
+        }, dismissButton = {
+            Button(onClick = {
+                openDialog = false // Close dialog without taking action
+            }) {
+                Text("Cancel")
+            }
+        })
     }
 }
