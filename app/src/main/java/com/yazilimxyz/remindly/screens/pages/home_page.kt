@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,17 +47,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yazilimxyz.remindly.R
 
-@Composable
-fun HomePage() {
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yazilimxyz.remindly.models.HomeViewModel
 
+@Composable
+fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
     var searchText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf("All") }
-    val taskList = listOf(
-        TaskItem("Projeyi bitir", "17 hours left", Color(0xFFD60303), "Red"),
-        TaskItem("T1", "Deadline Passed!", Color(0xFF2196F3), "Blue"),
-        TaskItem("Test", "10 hours left", Color(0xFF4CAF50), "Green")
-    )
+
+    // ViewModel'deki görev listesine erişiyoruz
+    val taskList by homeViewModel.meetings.collectAsState()
 
     Column(
         modifier = Modifier
@@ -69,20 +70,18 @@ fun HomePage() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
-
         )
-
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        //metin
+        // Metin
         Text(text = "Search & Sort", style = TextStyle(fontSize = 20.sp, color = Color.Gray))
         Spacer(modifier = Modifier.height(8.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             SearchBar(
                 searchText = searchText,
                 onSearchTextChanged = { searchText = it },
@@ -90,7 +89,6 @@ fun HomePage() {
             )
 
             Spacer(modifier = Modifier.width(8.dp))
-
 
             Icon(
                 imageVector = Icons.Sharp.Menu,
@@ -111,14 +109,12 @@ fun HomePage() {
                     text = { Text("Tarihe Göre") },
                     onClick = {
                         expanded = false
-
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("Renge Göre") },
                     onClick = {
                         expanded = false
-
                     }
                 )
             }
@@ -148,11 +144,11 @@ fun HomePage() {
                 }
             }
         }
-
-
     }
-
 }
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -230,4 +226,5 @@ fun CategoryButton(
             fontSize = 18.sp)
     }
 }
+
 data class TaskItem(val title: String, val timeLeft: String, val color: Color, val colorName: String)
