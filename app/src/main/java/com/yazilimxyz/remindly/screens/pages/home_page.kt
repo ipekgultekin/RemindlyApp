@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,21 +44,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yazilimxyz.remindly.R
 
-@Composable
-fun HomePage() {
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yazilimxyz.remindly.models.HomeViewModel
 
+@Composable
+fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
     var searchText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf("All") }
-    val taskList = listOf(
-        TaskItem("Projeyi bitir", "17 hours left", Color(0xFFD60303), "Red"),
-        TaskItem("T1", "Deadline Passed!", Color(0xFF2196F3), "Blue"),
-        TaskItem("Test", "10 hours left", Color(0xFF4CAF50), "Green")
-    )
+
+    // ViewModel'deki görev listesine erişiyoruz
+    val taskList by homeViewModel.meetings.collectAsState()
 
     Column(
         modifier = Modifier
@@ -73,14 +76,14 @@ fun HomePage() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        //metin
+        // Metin
         Text(text = "Search & Sort", style = TextStyle(fontSize = 20.sp, color = Color.Gray))
         Spacer(modifier = Modifier.height(8.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             SearchBar(
                 searchText = searchText,
                 onSearchTextChanged = { searchText = it },
@@ -88,7 +91,6 @@ fun HomePage() {
             )
 
             Spacer(modifier = Modifier.width(8.dp))
-
 
             Icon(
                 imageVector = Icons.Sharp.Menu,
@@ -109,14 +111,12 @@ fun HomePage() {
                     text = { Text("Tarihe Göre") },
                     onClick = {
                         expanded = false
-
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("Renge Göre") },
                     onClick = {
                         expanded = false
-
                     }
                 )
             }
@@ -146,11 +146,11 @@ fun HomePage() {
                 }
             }
         }
-
-
     }
-
 }
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -173,39 +173,55 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
     )
 }
 
-// Görev kartı
 @Composable
 fun TaskCard(task: TaskItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
+            .heightIn(min = 100.dp) // Minimum yüksekliği artırarak açıklama alanı ekliyoruz
+            .padding(8.dp), // Kartın etrafına biraz boşluk ekliyoruz
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, task.color)
     ) {
-        Row(
-            modifier = Modifier.padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(
-                    modifier = Modifier
-                        .width(10.dp)
-                        .height(40.dp)
-                        .background(task.color)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = task.title, fontSize = 16.sp, color = Color.Black)
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(10.dp)
+                            .height(40.dp)
+                            .background(task.color)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = task.title, fontSize = 16.sp, color = Color.Black)
+                }
+                Text(text = task.timeLeft, color = Color.Gray)
             }
-            Text(text = task.timeLeft, color = Color.Gray)
+            Spacer(modifier = Modifier.height(4.dp)) // Başlık ve açıklama arasında boşluk
+            Text(
+                text = task.description,
+                fontSize = 14.sp,
+                color = Color.DarkGray,
+                maxLines = 2, // Açıklamanın fazla uzun olmaması için sınır koyabiliriz
+                overflow = TextOverflow.Ellipsis // Uzun açıklamalar için kesme işareti
+            )
         }
     }
 }
+
 
 // Kategori
 @Composable
@@ -228,4 +244,12 @@ fun CategoryButton(
             fontSize = 18.sp)
     }
 }
-data class TaskItem(val title: String, val timeLeft: String, val color: Color, val colorName: String)
+
+data class TaskItem(
+    val title: String,
+    val timeLeft: String,
+    val color: Color,
+    val colorName: String,
+    val description: String // Yeni açıklama alanı
+)
+
