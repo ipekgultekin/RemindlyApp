@@ -27,8 +27,8 @@ import com.yazilimxyz.remindly.screens.CalendarPage
 import com.yazilimxyz.remindly.screens.SettingsPage
 import com.yazilimxyz.remindly.screens.pages.HomePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.ProfilePage
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.adminPanel
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.adminProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.AdminPanel
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.AdminProfilePage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -93,8 +93,8 @@ fun MainScreen() {
         ) {
             composable("home") { HomePage() }
             composable("calendar") { CalendarPage() }
-            composable("adminProfilePage") { adminProfilePage(navController) }
-            composable("adminPanel") { adminPanel(navController) }
+            composable("adminProfilePage") { AdminProfilePage(navController) }
+            composable("adminPanel") { AdminPanel(navController) }
             composable("add") { AddPage( LocalContext.current) }
             composable("profile") { ProfilePage(navController) }
             composable("settings") {

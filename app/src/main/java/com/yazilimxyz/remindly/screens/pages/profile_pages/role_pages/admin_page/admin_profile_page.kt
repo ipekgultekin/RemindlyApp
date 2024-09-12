@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 
 @Composable
-fun adminProfilePage(navController: NavController) {
+fun AdminProfilePage(navController: NavController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),

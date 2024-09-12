@@ -27,7 +27,7 @@ import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun asistanProfilePage() {
+fun AsistanProfilePage() {
 
     Box(
         modifier = Modifier

@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +42,7 @@ import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.screens.AvatarImage
 
 @Composable
-fun adminPanel(navController: NavController) {
+fun AdminPanel(navController: NavController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -60,7 +63,7 @@ fun adminPanel(navController: NavController) {
         Text(
             text = "Admin Panel",
             modifier = Modifier
-                .padding(top = 26.dp)
+                .padding(top = 25.dp)
                 .align(Alignment.TopCenter),
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp)
 
@@ -82,7 +85,7 @@ fun adminPanel(navController: NavController) {
                     .align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(26.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(start = 16.dp)
@@ -147,7 +150,7 @@ fun adminPanel(navController: NavController) {
                     3 -> RoleCredentialsRepository.yonetimKuruluEmail
                     4 -> RoleCredentialsRepository.calisanEmail
                     else -> ""
-                }, // Controlled by textState
+                },
                 onValueChange = {
                     email = it // Update the state
                 },
@@ -160,7 +163,6 @@ fun adminPanel(navController: NavController) {
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-//                    containerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
                     focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
                     unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
                     cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
@@ -206,16 +208,24 @@ fun adminPanel(navController: NavController) {
                 shape = MaterialTheme.shapes.medium // Add rounded corners
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(70.dp))
 
-            Text(
-                text = "Meetings",
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
+            Button(
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .align(Alignment.Start)
-            )
-
+                    .width(400.dp)
+                    .padding(horizontal = 10.dp)
+                    .align(Alignment.CenterHorizontally), onClick = {
+                    navController.navigate("adminPanel")
+                }, colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red.copy(alpha = 0.5f)
+                ), shape = MaterialTheme.shapes.large // Apply custom shape
+            ) {
+                Text(
+                    "Delete Role",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
         }
     }
 }

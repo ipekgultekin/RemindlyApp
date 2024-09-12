@@ -27,7 +27,7 @@ import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun yonetimKuruluProfilePage() {
+fun YonetimKuruluProfilePage() {
 
     Box(
         modifier = Modifier

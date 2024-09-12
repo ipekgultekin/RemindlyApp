@@ -1,29 +1,15 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.RoleCredentialsRepository
-import com.yazilimxyz.remindly.getRoleCredentials
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.adminProfilePage
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.asistanProfilePage
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.calisanProfilePage
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.ekipLideriProfilePage
-import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.yonetimKuruluProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page.AdminProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.AsistanProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.CalisanProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.EkipLideriProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.YonetimKuruluProfilePage
 
 
 @Composable
@@ -36,19 +22,19 @@ fun ProfilePage(navController: NavController) {
 
     when (userEmail) {
         RoleCredentialsRepository.adminEmail -> {
-            adminProfilePage(navController)
+            AdminProfilePage(navController)
         }
         RoleCredentialsRepository.asistanEmail -> {
-            asistanProfilePage()
+            AsistanProfilePage()
         }
         RoleCredentialsRepository.ekipLideriEmail -> {
-            ekipLideriProfilePage()
+            EkipLideriProfilePage()
         }
         RoleCredentialsRepository.yonetimKuruluEmail -> {
-            yonetimKuruluProfilePage()
+            YonetimKuruluProfilePage()
         }
         RoleCredentialsRepository.calisanEmail -> {
-            calisanProfilePage()
+            CalisanProfilePage()
         }
     }
 }

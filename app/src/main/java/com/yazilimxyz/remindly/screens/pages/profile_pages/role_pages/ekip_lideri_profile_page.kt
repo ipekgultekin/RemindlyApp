@@ -27,7 +27,7 @@ import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun ekipLideriProfilePage() {
+fun EkipLideriProfilePage() {
 
     Box(
         modifier = Modifier

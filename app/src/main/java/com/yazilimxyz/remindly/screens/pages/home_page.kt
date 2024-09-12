@@ -69,9 +69,7 @@ fun HomePage() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
-
         )
-
 
         Spacer(modifier = Modifier.height(32.dp))
 
