@@ -60,18 +60,18 @@ class HomeViewModel : ViewModel() {
     // Önceliğe göre sabit renkler belirleyen yardımcı fonksiyonlar
     private fun getPriorityColor(priority: Float): Color {
         return when (priority) {
-            0f -> Color.Red
-            1f -> Color.Yellow
-            2f -> Color.Green
+            1f -> Color(0xFFa40000)
+            2f -> Color(0xFF008b00)
+            3f -> Color(0xFF0961B6)
             else -> Color.Gray
         }
     }
 
     private fun getPriorityColorName(priority: Float): String {
         return when (priority) {
-            0f -> "Red"
-            1f -> "Yellow"
+            1f -> "Red"
             2f -> "Green"
+            3f -> "Blue"
             else -> "Gray"
         }
     }
