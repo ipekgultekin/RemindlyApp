@@ -31,23 +31,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 
 @Composable
-fun adminProfilePage() {
-
-    var isShowEditRolesDialog by remember { mutableStateOf(false) }
+fun adminProfilePage(navController: NavController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        if (isShowEditRolesDialog) {
-            showAdminPanel()
-        }
-
 
         Surface(
             modifier = Modifier.size(130.dp),
@@ -80,7 +74,7 @@ fun adminProfilePage() {
             modifier = Modifier.width(300.dp),
             elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
             onClick = {
-                isShowEditRolesDialog = true
+                navController.navigate("adminPanel")
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFF2B1B1)
@@ -115,33 +109,5 @@ fun adminProfilePage() {
         }
 
 
-    }
-}
-
-@Composable
-fun showAdminPanel() {
-    var openDialog by remember { mutableStateOf(true) }
-
-    if (openDialog) {
-        AlertDialog(onDismissRequest = {
-            openDialog = false
-        }, title = {
-            Text(text = "Edit Roless")
-        }, text = {
-            Text("Here you can edit roles.") // Main dialog content
-        }, confirmButton = {
-            Button(onClick = {
-                // Perform the role editing logic here
-                openDialog = false // Close the dialog after action
-            }) {
-                Text("Confirm")
-            }
-        }, dismissButton = {
-            Button(onClick = {
-                openDialog = false // Close dialog without taking action
-            }) {
-                Text("Cancel")
-            }
-        })
     }
 }
