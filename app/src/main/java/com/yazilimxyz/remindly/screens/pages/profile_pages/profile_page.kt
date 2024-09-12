@@ -59,5 +59,4 @@ fun ProfilePage() {
     } else if (isCalisan) {
         calisanProfilePage()
     }
-
 }
