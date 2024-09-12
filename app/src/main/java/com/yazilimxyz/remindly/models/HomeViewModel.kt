@@ -31,7 +31,8 @@ class HomeViewModel : ViewModel() {
                     title = meeting.meetingTitle,
                     timeLeft = meeting.meetingDateTime, // Zamanı buradan çekiyoruz bunu daha estetik yaz
                     color = getPriorityColor(meeting.priority), // Sabit renk belirleme
-                    colorName = getPriorityColorName(meeting.priority) // Sabit renk adı
+                    colorName = getPriorityColorName(meeting.priority), // Sabit renk adı
+                    description = meeting.meetingDescription
                 )
             }
             _meetings.value = meetingList
