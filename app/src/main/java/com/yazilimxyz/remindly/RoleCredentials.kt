@@ -30,21 +30,18 @@ fun saveRoleCredentials(role: String, email: String, password: String) {
         }
 }
 
-fun getRoleCredentials(onSuccess: (String) -> Unit) {
+fun getRoleCredentials(documentCredentials:String, roleEmail:String, onSuccess: (String) -> Unit) {
     val db = FirebaseFirestore.getInstance()
 
-    // Fetch the document with the fixed ID "admin_credentials"
-    db.collection("credentials").document("admin_credentials").get().addOnSuccessListener { document ->
+    db.collection("credentials").document(documentCredentials).get().addOnSuccessListener { document ->
         if (document != null) {
-            // Extract the admin email field from the document
-            val adminEmail = document.getString("adminEmail")
-            Log.d("mesaj", "Admin Email: $adminEmail")
-            if (adminEmail != null) {
-                onSuccess(adminEmail) // Return the adminEmail to the caller
+            val fetchedEmail = document.getString(roleEmail)
+            if (fetchedEmail != null) {
+                onSuccess(fetchedEmail)
             }
         }
     }.addOnFailureListener { e ->
-        Log.e("mesaj", "Error getting admin credentials: $e")
+        Log.e("mesaj", "Error getting credentials: $e")
     }
 }
 
@@ -62,25 +59,5 @@ fun AddCredentialsScreen() {
         Button(onClick = { saveRoleCredentials(role, email, password) }) {
             Text("Save Credentials")
         }
-    }
-}
-
-@Composable
-fun ShowCredentialsScreen(role: String) {
-    var credentials by remember { mutableStateOf<RoleCredentials?>(null) }
-
-//    LaunchedEffect(role) {
-//        getRoleCredentials(role) { retrievedCredentials ->
-//            credentials = retrievedCredentials
-//        }
-//    }
-
-    if (credentials != null) {
-        Column {
-            Text("Email: ${credentials?.email}")
-            Text("Password: ${credentials?.password}")
-        }
-    } else {
-        Text("Loading...")
     }
 }

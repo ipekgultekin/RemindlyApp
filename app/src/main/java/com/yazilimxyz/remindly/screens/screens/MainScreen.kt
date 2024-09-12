@@ -26,7 +26,7 @@ import com.yazilimxyz.remindly.screens.AddPage
 import com.yazilimxyz.remindly.screens.CalendarPage
 import com.yazilimxyz.remindly.screens.SettingsPage
 import com.yazilimxyz.remindly.screens.pages.HomePage
-import com.yazilimxyz.remindly.screens.pages.ProfilePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.ProfilePage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
