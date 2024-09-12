@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -22,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,11 +43,11 @@ fun adminPanel(navController: NavController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var selectedAvatarIndex by remember { mutableIntStateOf(0) }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Back arrow at the top left
         IconButton(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -90,17 +91,26 @@ fun adminPanel(navController: NavController) {
                     R.drawable.avatar2,
                     "Admin",
                     true,
-                ) {}
+                ) {
+                    selectedAvatarIndex = 0
+                    Log.d("mesaj", "admin seçildi")
+                }
                 AvatarImage(
                     R.drawable.avatar1,
                     "Asistan",
                     false,
-                ) {}
+                ) {
+                    selectedAvatarIndex = 1
+                    Log.d("mesaj", "asistan seçildi")
+                }
                 AvatarImage(
                     R.drawable.avatar3,
                     "Ekip Lideri",
                     false,
-                ) {}
+                ) {
+                    selectedAvatarIndex = 2
+                    Log.d("mesaj", "ekip lideriseçildi")
+                }
             }
 
             Row(
@@ -113,24 +123,37 @@ fun adminPanel(navController: NavController) {
                     R.drawable.avatar4,
                     "Yönetim Kurulu",
                     false,
-                ) {}
+                ) {
+                    selectedAvatarIndex = 3
+                    Log.d("mesaj", "yönetim kurulu seçildi")
+                }
                 AvatarImage(
                     R.drawable.avatar5,
                     "Çalışan",
                     false,
-                ) {}
+                ) {
+                    selectedAvatarIndex = 4
+                    Log.d("mesaj", "çalışan seçildi")
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             TextField(
-                value = RoleCredentialsRepository.adminEmail, // Controlled by textState
+                value = when (selectedAvatarIndex) {
+                    0 -> RoleCredentialsRepository.adminEmail
+                    1 -> RoleCredentialsRepository.asistanEmail
+                    2 -> RoleCredentialsRepository.ekipLideriEmail
+                    3 -> RoleCredentialsRepository.yonetimKuruluEmail
+                    4 -> RoleCredentialsRepository.calisanEmail
+                    else -> ""
+                }, // Controlled by textState
                 onValueChange = {
                     email = it // Update the state
                 },
                 label = {
                     Text(
-                       "Email", style = TextStyle(
+                        "Email", style = TextStyle(
                             color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
                         )
                     )
@@ -152,9 +175,16 @@ fun adminPanel(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = RoleCredentialsRepository.adminPassword, // Controlled by textState
+                value = when (selectedAvatarIndex) {
+                    0 -> RoleCredentialsRepository.adminPassword
+                    1 -> RoleCredentialsRepository.asistanPassword
+                    2 -> RoleCredentialsRepository.ekipLideriPassword
+                    3 -> RoleCredentialsRepository.yonetimKuruluPassword
+                    4 -> RoleCredentialsRepository.calisanPassword
+                    else -> ""
+                },
                 onValueChange = {
-                    password = it // Update the state
+                    password = it
                 },
                 label = {
                     Text(

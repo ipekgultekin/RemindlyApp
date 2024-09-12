@@ -95,11 +95,7 @@ fun MainScreen() {
             composable("calendar") { CalendarPage() }
             composable("adminProfilePage") { adminProfilePage(navController) }
             composable("adminPanel") { adminPanel(navController) }
-            composable("add") {
-                AddPage(
-                    LocalContext.current
-                )
-            }
+            composable("add") { AddPage( LocalContext.current) }
             composable("profile") { ProfilePage(navController) }
             composable("settings") {
                 SettingsPage()
