@@ -1,6 +1,7 @@
 package com.yazilimxyz.remindly.screens
 
-import android.util.Log
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,12 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.yazilimxyz.remindly.AdminViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
-import com.yazilimxyz.remindly.RoleCredentialsRepository.adminEmail
-import com.yazilimxyz.remindly.RoleCredentialsRepository.adminPassword
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
 
@@ -122,8 +119,8 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
         Button(
             onClick = {
 
-//                Log.d("mesaj", "admin email: ${adminEmail}")
-//                Log.d("mesaj", "admin password: ${adminPassword}")
+                FirebaseAuth.getInstance().signOut()
+                restartApp(navController.context)
 
             },
             modifier = Modifier
@@ -187,6 +184,15 @@ fun SettingsBar(
                 }
             }
         }
+    }
+}
+
+fun restartApp(context: Context) {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    intent?.let {
+        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(it)
+        Runtime.getRuntime().exit(0)
     }
 }
 

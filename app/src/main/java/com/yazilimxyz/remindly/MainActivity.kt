@@ -49,7 +49,6 @@ class MainActivity : ComponentActivity() {
         NavHost(navController, startDestination = if (user == null) "login" else "main") {
             composable("login") { LoginScreen(navController, themeViewModel) }
             composable("main") { MainScreen(themeViewModel) }
-            composable("SettingsPage") { SettingsPage(navController, themeViewModel) }
         }
     }
 }

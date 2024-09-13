@@ -484,7 +484,6 @@ fun CredentialsDisplay(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Email Section
         Text(
             text = "Email",
             style = TextStyle(
@@ -500,7 +499,6 @@ fun CredentialsDisplay(
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(bottom = 16.dp),
-//            elevation = 4.dp,
             shape = RoundedCornerShape(8.dp)
         ) {
             Box(
