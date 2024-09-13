@@ -1,6 +1,5 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,17 +14,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,16 +35,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
-import com.yazilimxyz.remindly.getRoleCredentials
 import com.yazilimxyz.remindly.screens.AvatarImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -56,8 +55,6 @@ fun AdminPanel(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
     var showRoleDialog by remember { mutableStateOf(false) }
-
-
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -188,9 +185,9 @@ fun AdminPanel(navController: NavController) {
                 else -> ""
             }
 
-            if (currentEmail.isNullOrEmpty()) {
+            if (currentEmail.isEmpty()) {
                 Text(
-                    text = "No role assigned for this user",
+                    text = "No such role.",
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
                     modifier = Modifier
                         .padding(16.dp)
@@ -198,8 +195,7 @@ fun AdminPanel(navController: NavController) {
                 )
             } else {
 
-                TextField(
-                    value = currentEmail,
+                TextField(value = currentEmail,
                     onValueChange = {
                         email = it
                     },
@@ -225,8 +221,7 @@ fun AdminPanel(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TextField(
-                    value = currentPassword,
+                TextField(value = currentPassword,
                     onValueChange = {
                         password = it
                     },
@@ -265,12 +260,11 @@ fun AdminPanel(navController: NavController) {
                 modifier = Modifier
                     .width(400.dp)
                     .padding(horizontal = 10.dp)
-                    .align(Alignment.CenterHorizontally),
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black.copy(alpha = 0.5f)
-                ),
-                shape = MaterialTheme.shapes.large // Apply custom shape
+                    .align(Alignment.CenterHorizontally), onClick = {
+                    showRoleDialog = true
+                }, colors = buttonColors(
+                    containerColor = Color.Black.copy(alpha = 0.6f)
+                ), shape = MaterialTheme.shapes.large // Apply custom shape
             ) {
                 Text(
                     "Add / Edit Role",
@@ -284,32 +278,103 @@ fun AdminPanel(navController: NavController) {
             DeleteRoleButton(selectedAvatarIndex)
         }
     }
+    if (showRoleDialog) {
+        AlertDialog(onDismissRequest = { showRoleDialog = false }, properties = DialogProperties(
+            dismissOnBackPress = true, // Dismiss dialog on back press
+            dismissOnClickOutside = true // Dismiss dialog on outside tap
+        ), title = {
+            Text(
+                text = "Edit or Add a role", style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+            )
+        }, text = {
+            Column {
+                OutlinedTextField(value = email, onValueChange = {})
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(value = email, onValueChange = {})
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(value = email, onValueChange = {})
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(value = email, onValueChange = {})
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }, confirmButton = {
+            Button(colors = buttonColors(
+                contentColor = Color.White,
+                containerColor = Color.Red.copy(alpha = 0.5f),
+            ), onClick = {
+
+            }) {
+                Text("Confirm")
+            }
+        }, dismissButton = {
+            Button(colors = buttonColors(
+                contentColor = Color.White,
+                containerColor = Color.Black.copy(alpha = 0.6f),
+            ), onClick = { showRoleDialog = false }) {
+                Text("Cancel")
+            }
+        })
+    }
 }
 
 
 @Composable
 fun DeleteRoleButton(selectedAvatarIndex: Int) {
     val scope = rememberCoroutineScope()
+    var showDialog by remember { mutableStateOf(false) }
 
     Button(
         modifier = Modifier
             .width(400.dp)
-            .padding(horizontal = 10.dp),
-        onClick = {
-            scope.launch {
-                deleteRole(selectedAvatarIndex)
-            }
-        },
-        colors = ButtonDefaults.buttonColors(
+            .padding(horizontal = 10.dp), onClick = {
+            showDialog = true
+        }, colors = buttonColors(
             containerColor = Color.Red.copy(alpha = 0.5f)
-        ),
-        shape = MaterialTheme.shapes.large // Apply custom shape
+        ), shape = MaterialTheme.shapes.large // Apply custom shape
     ) {
         Text(
             "Delete Role",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
             modifier = Modifier.padding(12.dp)
         )
+    }
+    if (showDialog) {
+        AlertDialog(onDismissRequest = { showDialog = false }, title = {
+            Text(
+                "Confirm Delete", style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                )
+            )
+        }, text = {
+            Text(
+                "Are you sure you want to delete this role?", style = TextStyle(
+                    fontSize = 16.sp,
+                )
+            )
+        }, confirmButton = {
+            Button(colors = buttonColors(
+                contentColor = Color.White,
+                containerColor = Color.Red.copy(alpha = 0.5f),
+            ), onClick = {
+                scope.launch {
+                    deleteRole(selectedAvatarIndex)
+                    showDialog = false
+                }
+            }) {
+                Text("Confirm")
+            }
+        }, dismissButton = {
+            Button(colors = buttonColors(
+                contentColor = Color.White,
+                containerColor = Color.Black.copy(alpha = 0.6f),
+            ), onClick = { showDialog = false }) {
+                Text("Cancel")
+            }
+        })
     }
 }
 
@@ -318,18 +383,19 @@ suspend fun deleteRole(avatarIndex: Int) {
         0 -> {
             println("You cannot delete admin.")
         }
+
         1 -> deleteRoleAndHandleResult("asistan_credentials")
         2 -> deleteRoleAndHandleResult("ekip_lideri_credentials")
         3 -> deleteRoleAndHandleResult("yonetim_kurulu_credentials")
         4 -> deleteRoleAndHandleResult("calisan_credentials")
     }
-//    RoleCredentialsRepository.loadRoleEmails()
 }
 
 suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
     val db = FirebaseFirestore.getInstance()
     try {
-        val documentSnapshot = db.collection("credentials").document(documentCredentials).get().await()
+        val documentSnapshot =
+            db.collection("credentials").document(documentCredentials).get().await()
         val email = documentSnapshot.getString("email")
         if (email.isNullOrEmpty()) {
             println("There is no such role.")
