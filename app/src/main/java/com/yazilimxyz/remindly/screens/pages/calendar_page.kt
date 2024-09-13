@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,12 +34,13 @@ val buttonColor = Color(0xFFFFB8B8)
 @Composable
 fun CalendarPage() {
     val months = remember { generateMonths() }
+    val colorScheme = MaterialTheme.colorScheme
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)) {
         itemsIndexed(months) { _, month ->
-            MonthView(month = month)
+            MonthView(month = month, colorScheme = colorScheme)
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
@@ -47,33 +48,32 @@ fun CalendarPage() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MonthView(month: LocalDate) {
+fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .border(
             width = 2.dp,  // Border thickness
-            color = Color.Gray,  // Border color
+            color = colorScheme.outline,  // Border color
             shape = MaterialTheme.shapes.medium  // Shape of the border, can customize the corner radius here
         )
         .padding(16.dp)) {
         Text(
             text = month.format(DateTimeFormatter.ofPattern("MMMM yyyy")),
             style = MaterialTheme.typography.titleLarge,
+            color = colorScheme.onBackground, // Update text color for dark mode
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
 
-        DaysOfWeekHeader()
+        DaysOfWeekHeader(colorScheme)
 
-        CalendarGrid(month)
-
-
+        CalendarGrid(month, colorScheme)
     }
 }
 
 
 @Composable
-fun DaysOfWeekHeader() {
+fun DaysOfWeekHeader(colorScheme: ColorScheme) {
     val daysOfWeek = listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
     Row(modifier = Modifier.fillMaxWidth()) {
         daysOfWeek.forEach { day ->
@@ -81,15 +81,15 @@ fun DaysOfWeekHeader() {
                 modifier = Modifier
                     .weight(1f)
                     .padding(4.dp)
-                    .background(buttonColor.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small),
+                    .background(colorScheme.primary.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = day,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black,
+                    color = colorScheme.onPrimary, // Update text color
                     modifier = Modifier.padding(4.dp),
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -98,7 +98,7 @@ fun DaysOfWeekHeader() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(month: LocalDate) {
+fun CalendarGrid(month: LocalDate, colorScheme: ColorScheme) {
     val daysInMonth = month.month.length(month.isLeapYear)
     val startDayOfWeek = month.withDayOfMonth(1).dayOfWeek.value
 
@@ -123,16 +123,17 @@ fun CalendarGrid(month: LocalDate) {
                             .padding(4.dp)
                             .background(
                                 when {
-                                    isToday -> Color.Black.copy(alpha = 0.8f)
-                                    isWeekend -> Color.LightGray
+                                    isToday -> colorScheme.primary.copy(alpha = 0.8f)
+                                    isWeekend -> colorScheme.surfaceVariant
                                     else -> Color.Transparent
                                 }, shape = MaterialTheme.shapes.small
                             ), contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = day?.toString() ?: "", color = when {
-                                isToday -> Color.White
-                                else -> Color.Black
+                            text = day?.toString() ?: "",
+                            color = when {
+                                isToday -> colorScheme.onPrimary
+                                else -> colorScheme.onSurface
                             }
                         )
                     }

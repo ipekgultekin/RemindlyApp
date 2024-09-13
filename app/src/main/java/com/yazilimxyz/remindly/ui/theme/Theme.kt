@@ -9,34 +9,39 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    background = Color(0xFF121212), // Koyu arka plan rengi
+    surface = Color(0xFF1E1E1E),   // Koyu yüzey rengi
+    onPrimary = Color.White,        // Ana rengi üzerine yazı rengi
+    onSecondary = Color.White,      // İkincil rengi üzerine yazı rengi
+    onTertiary = Color.White,       // Üçüncül rengi üzerine yazı rengi
+    onBackground = Color.White,     // Arka plan rengi üzerine yazı rengi
+    onSurface = Color.White         // Yüzey rengi üzerine yazı rengi
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiary = Pink40,
+    background = Color(0xFFFFFBFE), // Açık arka plan rengi
+    surface = Color(0xFFFFFFFF),     // Açık yüzey rengi
+    onPrimary = Color.Black,         // Ana rengi üzerine yazı rengi
+    onSecondary = Color.Black,       // İkincil rengi üzerine yazı rengi
+    onTertiary = Color.Black,        // Üçüncül rengi üzerine yazı rengi
+    onBackground = Color.Black,      // Arka plan rengi üzerine yazı rengi
+    onSurface = Color.Black          // Yüzey rengi üzerine yazı rengi
 )
+
 
 @Composable
 fun RemindlyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -56,3 +61,4 @@ fun RemindlyTheme(
         content = content
     )
 }
+

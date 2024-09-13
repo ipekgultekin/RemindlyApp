@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.screens.LoginScreen
 import com.yazilimxyz.remindly.screens.screens.MainScreen
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
+import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -28,24 +30,22 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            RemindlyTheme {
-                RemindlyApp()
+            val themeViewModel: ThemeViewModel = viewModel()
+            RemindlyTheme(darkTheme = themeViewModel.isDarkTheme) {
+                RemindlyApp(themeViewModel)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    fun RemindlyApp() {
+    fun RemindlyApp(themeViewModel: ThemeViewModel) {
         val navController = rememberNavController()
         val user by rememberUpdatedState(FirebaseAuth.getInstance().currentUser)
 
         NavHost(navController, startDestination = if (user == null) "login" else "main") {
-            composable("login") { LoginScreen(navController) }
-            composable("main") { MainScreen() }
+            composable("login") { LoginScreen(navController, themeViewModel) }
+            composable("main") { MainScreen(themeViewModel) } // `themeViewModel` eklenmeli
         }
     }
 }
-
-
-

@@ -38,21 +38,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
 
 @Composable
-fun SettingsPage() {
-    // Define colors
+fun SettingsPage(themeViewModel: ThemeViewModel) {
     val themeColor = Color(0xFFF2B1B1) // Background color for bars
     val expandedBackgroundColor = Color(0xFFB0BEC5) // Color for expanded options
     val textColor = Color(0xFFFFFFFF) // Text color
 
     val scrollState = rememberScrollState()
 
-    // State for managing expanded sections
     var isThemeExpanded by remember { mutableStateOf(false) }
     var isLanguageExpanded by remember { mutableStateOf(false) }
 
@@ -66,7 +66,6 @@ fun SettingsPage() {
     ) {
         Spacer(modifier = Modifier.height(100.dp))
 
-        // Profile Image at the top
         Image(
             painter = painterResource(id = R.drawable.settings),
             contentDescription = "Profile Image",
@@ -92,7 +91,10 @@ fun SettingsPage() {
                 isExpanded = isThemeExpanded,
                 onClick = { isThemeExpanded = !isThemeExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
-                textColor = textColor
+                textColor = textColor,
+                onOptionSelected = { selectedOption ->
+                    themeViewModel.isDarkTheme = selectedOption == "Dark Theme"
+                }
             )
             SettingsBar(
                 title = "Language",
@@ -115,7 +117,6 @@ fun SettingsPage() {
         Button(
             onClick = {
                 FirebaseAuth.getInstance().signOut()
-
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,9 +127,14 @@ fun SettingsPage() {
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Sign Out", style = TextStyle(
-                    color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp
-                ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
+                text = "Sign Out",
+                style = TextStyle(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -142,7 +148,8 @@ fun SettingsBar(
     isExpanded: Boolean = false,
     onClick: () -> Unit = {},
     expandedBackgroundColor: Color,
-    textColor: Color
+    textColor: Color,
+    onOptionSelected: (String) -> Unit = {} // Ensure this is defined
 ) {
     Column {
         Box(
@@ -154,8 +161,11 @@ fun SettingsBar(
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                text = title, style = TextStyle(
-                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = textColor
+                text = title,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = textColor
                 )
             )
         }
@@ -164,21 +174,27 @@ fun SettingsBar(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(expandedBackgroundColor) // Background color for expanded options
+                    .background(expandedBackgroundColor)
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 options.forEach { option ->
                     Text(
-                        text = option, style = TextStyle(
-                            fontSize = 16.sp, color = textColor
-                        )
+                        text = option,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = textColor
+                        ),
+                        modifier = Modifier.clickable {
+                            onOptionSelected(option) // Ensure this is called correctly
+                        }
                     )
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun NotificationSettingsBar(title: String, color: Color, textColor: Color) {
