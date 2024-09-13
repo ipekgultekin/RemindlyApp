@@ -17,35 +17,35 @@ object RoleCredentialsRepository {
     var calisanPassword: String = ""
 
     fun loadRoleEmails() {
-        getRoleCredentials("admin_credentials", "adminEmail") { fetchedEmail ->
+        getRoleCredentials("admin_credentials", "email") { fetchedEmail ->
             adminEmail = fetchedEmail
         }
-        getRoleCredentials("admin_credentials", "adminPassword") { fetchedEmail ->
-            adminPassword = fetchedEmail
+        getRoleCredentials("admin_credentials", "password") { fetchedPassword ->
+            adminPassword = fetchedPassword
         }
-        getRoleCredentials("yonetim_kurulu_credentials", "yonetimKuruluEmail") { fetchedEmail ->
+        getRoleCredentials("yonetim_kurulu_credentials", "email") { fetchedEmail ->
             yonetimKuruluEmail = fetchedEmail
         }
-        getRoleCredentials("yonetim_kurulu_credentials", "yonetimKuruluPassword") { fetchedEmail ->
-            yonetimKuruluPassword = fetchedEmail
+        getRoleCredentials("yonetim_kurulu_credentials", "password") { fetchedPassword ->
+            yonetimKuruluPassword = fetchedPassword
         }
-        getRoleCredentials("ekip_lideri_credentials", "ekipLideriEmail") { fetchedEmail ->
+        getRoleCredentials("ekip_lideri_credentials", "email") { fetchedEmail ->
             ekipLideriEmail = fetchedEmail
         }
-        getRoleCredentials("ekip_lideri_credentials", "ekipLideriPassword") { fetchedEmail ->
-            ekipLideriPassword = fetchedEmail
+        getRoleCredentials("ekip_lideri_credentials", "password") { fetchedPassword ->
+            ekipLideriPassword = fetchedPassword
         }
-        getRoleCredentials("asistan_credentials", "asistanEmail") { fetchedEmail ->
+        getRoleCredentials("asistan_credentials", "email") { fetchedEmail ->
             asistanEmail = fetchedEmail
         }
-        getRoleCredentials("asistan_credentials", "asistanPassword") { fetchedEmail ->
-            asistanPassword = fetchedEmail
+        getRoleCredentials("asistan_credentials", "password") { fetchedPassword ->
+            asistanPassword = fetchedPassword
         }
-        getRoleCredentials("calisan_credentials", "calisanEmail") { fetchedEmail ->
+        getRoleCredentials("calisan_credentials", "email") { fetchedEmail ->
             calisanEmail = fetchedEmail
         }
-        getRoleCredentials("calisan_credentials", "calisanPassword") { fetchedEmail ->
-            calisanPassword = fetchedEmail
+        getRoleCredentials("calisan_credentials", "password") { fetchedPassword ->
+            calisanPassword = fetchedPassword
         }
     }
 }

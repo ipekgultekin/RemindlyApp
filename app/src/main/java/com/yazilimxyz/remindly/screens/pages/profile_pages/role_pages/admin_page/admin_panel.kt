@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,22 +25,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
+import com.yazilimxyz.remindly.deleteFirestoreDocument
+import com.yazilimxyz.remindly.getRoleCredentials
 import com.yazilimxyz.remindly.screens.AvatarImage
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun AdminPanel(navController: NavController) {
@@ -47,6 +56,7 @@ fun AdminPanel(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
+    var showRoleDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -75,7 +85,7 @@ fun AdminPanel(navController: NavController) {
                 .padding(20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(38.dp))
 
             Text(
                 text = "Roles",
@@ -85,7 +95,8 @@ fun AdminPanel(navController: NavController) {
                     .align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(26.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(start = 16.dp)
@@ -274,24 +285,78 @@ fun AdminPanel(navController: NavController) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(horizontal = 10.dp)
-                    .align(Alignment.CenterHorizontally),
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red.copy(alpha = 0.5f)
-                ),
-                shape = MaterialTheme.shapes.large // Apply custom shape
-            ) {
-                Text(
-                    "Delete Role",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-                    modifier = Modifier.padding(12.dp)
-                )
-            }
+            DeleteRoleButton(selectedAvatarIndex)
         }
+    }
+}
+
+
+@Composable
+fun DeleteRoleButton(selectedAvatarIndex: Int) {
+    val scope = rememberCoroutineScope()
+
+    Button(
+        modifier = Modifier
+            .width(400.dp)
+            .padding(horizontal = 10.dp),
+        onClick = {
+            scope.launch {
+                deleteRole(selectedAvatarIndex)
+            }
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Red.copy(alpha = 0.5f)
+        ),
+        shape = MaterialTheme.shapes.large // Apply custom shape
+    ) {
+        Text(
+            "Delete Role",
+            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+            modifier = Modifier.padding(12.dp)
+        )
+    }
+}
+
+
+/*@Composable
+fun DeleteRole(avatarIndex: Int) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    when (avatarIndex) {
+
+    }
+    RoleCredentialsRepository.loadRoleEmails()
+}*/
+
+// Moved out from Composable context, handle logic here
+suspend fun deleteRole(avatarIndex: Int) {
+    when (avatarIndex) {
+        0 -> {
+            println("You cannot delete admin.")
+        }
+        1 -> deleteRoleAndHandleResult("asistan_credentials")
+        2 -> deleteRoleAndHandleResult("ekip_lideri_credentials")
+        3 -> deleteRoleAndHandleResult("yonetim_kurulu_credentials")
+        4 -> deleteRoleAndHandleResult("calisan_credentials")
+    }
+    RoleCredentialsRepository.loadRoleEmails()
+}
+
+
+suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
+    val db = FirebaseFirestore.getInstance()
+    try {
+        val documentSnapshot = db.collection("credentials").document(documentCredentials).get().await()
+        val email = documentSnapshot.getString("email")
+        if (email.isNullOrEmpty()) {
+            println("There is no such role.")
+        } else {
+            db.collection("credentials").document(documentCredentials).delete().await()
+            println("Role deleted successfully.")
+        }
+    } catch (e: Exception) {
+        println("Error deleting role: ${e.message}")
     }
 }
 
