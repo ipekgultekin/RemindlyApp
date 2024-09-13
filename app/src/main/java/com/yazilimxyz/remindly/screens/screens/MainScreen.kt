@@ -86,7 +86,7 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
             composable("adminPanel") { AdminPanel(navController) }
             composable("add") { AddPage(LocalContext.current) }
             composable("profile") { ProfilePage(navController) }
-            composable("settings") { SettingsPage(themeViewModel) } // `themeViewModel` eklenmeli
+            composable("settings") { SettingsPage(navController,themeViewModel) }
         }
     }
 }

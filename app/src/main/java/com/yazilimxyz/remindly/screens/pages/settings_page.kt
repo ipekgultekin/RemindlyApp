@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
@@ -46,10 +47,10 @@ import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
 
 @Composable
-fun SettingsPage(themeViewModel: ThemeViewModel) {
-    val themeColor = Color(0xFFF2B1B1) // Background color for bars
-    val expandedBackgroundColor = Color(0xFFB0BEC5) // Color for expanded options
-    val textColor = Color(0xFFFFFFFF) // Text color
+fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
+    val themeColor = Color(0xFFF2B1B1)
+    val expandedBackgroundColor = Color(0xFFB0BEC5)
+    val textColor = Color(0xFFFFFFFF)
 
     val scrollState = rememberScrollState()
 
@@ -117,6 +118,9 @@ fun SettingsPage(themeViewModel: ThemeViewModel) {
         Button(
             onClick = {
                 FirebaseAuth.getInstance().signOut()
+                navController.navigate("LoginScreen") {
+                    popUpTo("SettingsPage") { inclusive = true }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,7 +153,7 @@ fun SettingsBar(
     onClick: () -> Unit = {},
     expandedBackgroundColor: Color,
     textColor: Color,
-    onOptionSelected: (String) -> Unit = {} // Ensure this is defined
+    onOptionSelected: (String) -> Unit = {}
 ) {
     Column {
         Box(
@@ -186,7 +190,7 @@ fun SettingsBar(
                             color = textColor
                         ),
                         modifier = Modifier.clickable {
-                            onOptionSelected(option) // Ensure this is called correctly
+                            onOptionSelected(option)
                         }
                     )
                 }
@@ -211,7 +215,7 @@ fun NotificationSettingsBar(title: String, color: Color, textColor: Color) {
                 fontSize = 18.sp, fontWeight = FontWeight.Bold, color = textColor
             )
         )
-        Switch(checked = false, // Replace with your state
+        Switch(checked = false,
             onCheckedChange = { /* Handle switch state change */ })
     }
 }

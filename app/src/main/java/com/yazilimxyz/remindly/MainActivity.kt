@@ -19,6 +19,9 @@ import com.yazilimxyz.remindly.screens.screens.MainScreen
 import com.yazilimxyz.remindly.ui.theme.RemindlyTheme
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yazilimxyz.remindly.screens.SettingsPage
+import com.yazilimxyz.remindly.screens.pages.HomePage
+import com.yazilimxyz.remindly.screens.pages.profile_pages.ProfilePage
 
 class MainActivity : ComponentActivity() {
 
@@ -45,7 +48,8 @@ class MainActivity : ComponentActivity() {
 
         NavHost(navController, startDestination = if (user == null) "login" else "main") {
             composable("login") { LoginScreen(navController, themeViewModel) }
-            composable("main") { MainScreen(themeViewModel) } // `themeViewModel` eklenmeli
+            composable("main") { MainScreen(themeViewModel) }
+            composable("SettingsPage") { SettingsPage(navController, themeViewModel) }
         }
     }
 }
