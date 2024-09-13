@@ -1,6 +1,5 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +73,7 @@ fun AdminPanel(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
-                .verticalScroll(rememberScrollState()) // Enable vertical scrolling
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(48.dp))
 
@@ -91,28 +91,37 @@ fun AdminPanel(navController: NavController) {
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 AvatarImage(
-                    R.drawable.avatar2,
+                    avatar = if (!RoleCredentialsRepository.adminEmail.isNullOrEmpty()) {
+                        R.drawable.avatar2
+                    } else {
+                        R.drawable.avatar22
+                    },
                     "Admin",
-                    true,
+                    isSelected = selectedAvatarIndex == 0,
                 ) {
                     selectedAvatarIndex = 0
-                    Log.d("mesaj", "admin seçildi")
                 }
                 AvatarImage(
-                    R.drawable.avatar1,
+                    avatar = if (!RoleCredentialsRepository.asistanEmail.isNullOrEmpty()) {
+                        R.drawable.avatar1
+                    } else {
+                        R.drawable.avatar11
+                    },
                     "Asistan",
-                    false,
+                    isSelected = selectedAvatarIndex == 1,
                 ) {
                     selectedAvatarIndex = 1
-                    Log.d("mesaj", "asistan seçildi")
                 }
                 AvatarImage(
-                    R.drawable.avatar3,
+                    avatar = if (!RoleCredentialsRepository.ekipLideriEmail.isNullOrEmpty()) {
+                        R.drawable.avatar3
+                    } else {
+                        R.drawable.avatar33
+                    },
                     "Ekip Lideri",
-                    false,
+                    isSelected = selectedAvatarIndex == 2,
                 ) {
                     selectedAvatarIndex = 2
-                    Log.d("mesaj", "ekip lideriseçildi")
                 }
             }
 
@@ -123,102 +132,158 @@ fun AdminPanel(navController: NavController) {
                     .align(Alignment.CenterHorizontally)
             ) {
                 AvatarImage(
-                    R.drawable.avatar4,
+                    avatar = if (!RoleCredentialsRepository.yonetimKuruluEmail.isNullOrEmpty()) {
+                        R.drawable.avatar4
+                    } else {
+                        R.drawable.avatar44
+                    },
                     "Yönetim Kurulu",
-                    false,
+                    isSelected = selectedAvatarIndex == 3,
                 ) {
                     selectedAvatarIndex = 3
-                    Log.d("mesaj", "yönetim kurulu seçildi")
                 }
                 AvatarImage(
-                    R.drawable.avatar5,
+                    avatar = if (!RoleCredentialsRepository.calisanEmail.isNullOrEmpty()) {
+                        R.drawable.avatar5
+                    } else {
+                        R.drawable.avatar55
+                    },
                     "Çalışan",
-                    false,
+                    isSelected = selectedAvatarIndex == 4,
                 ) {
                     selectedAvatarIndex = 4
-                    Log.d("mesaj", "çalışan seçildi")
                 }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            TextField(
-                value = when (selectedAvatarIndex) {
-                    0 -> RoleCredentialsRepository.adminEmail
-                    1 -> RoleCredentialsRepository.asistanEmail
-                    2 -> RoleCredentialsRepository.ekipLideriEmail
-                    3 -> RoleCredentialsRepository.yonetimKuruluEmail
-                    4 -> RoleCredentialsRepository.calisanEmail
-                    else -> ""
-                },
-                onValueChange = {
-                    email = it // Update the state
-                },
-                label = {
-                    Text(
-                        "Email", style = TextStyle(
-                            color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
+            // Get email and password for the selected avatar
+            val currentEmail = when (selectedAvatarIndex) {
+                0 -> RoleCredentialsRepository.adminEmail
+                1 -> RoleCredentialsRepository.asistanEmail
+                2 -> RoleCredentialsRepository.ekipLideriEmail
+                3 -> RoleCredentialsRepository.yonetimKuruluEmail
+                4 -> RoleCredentialsRepository.calisanEmail
+                else -> ""
+            }
+
+            if (currentEmail.isNullOrEmpty()) {
+                Text(
+                    text = "No role assigned for this user",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            } else {
+
+                TextField(
+                    value = when (selectedAvatarIndex) {
+                        0 -> RoleCredentialsRepository.adminEmail
+                        1 -> RoleCredentialsRepository.asistanEmail
+                        2 -> RoleCredentialsRepository.ekipLideriEmail
+                        3 -> RoleCredentialsRepository.yonetimKuruluEmail
+                        4 -> RoleCredentialsRepository.calisanEmail
+                        else -> ""
+                    },
+                    onValueChange = {
+                        email = it
+                    },
+                    label = {
+                        Text(
+                            "Email", style = TextStyle(
+                                color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
+                            )
                         )
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-                    focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-                    unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-                    cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp) // Adjust height for better appearance
-                    .padding(horizontal = 8.dp),
-                shape = MaterialTheme.shapes.medium // Add rounded corners
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
+                        focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
+                        cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp) // Adjust height for better appearance
+                        .padding(horizontal = 8.dp),
+                    shape = MaterialTheme.shapes.medium // Add rounded corners
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextField(
+                    value = when (selectedAvatarIndex) {
+                        0 -> RoleCredentialsRepository.adminPassword
+                        1 -> RoleCredentialsRepository.asistanPassword
+                        2 -> RoleCredentialsRepository.ekipLideriPassword
+                        3 -> RoleCredentialsRepository.yonetimKuruluPassword
+                        4 -> RoleCredentialsRepository.calisanPassword
+                        else -> ""
+                    },
+                    onValueChange = {
+                        password = it
+                    },
+                    label = {
+                        Text(
+                            "Password", style = TextStyle(
+                                color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
+                        focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
+                        cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp) // Adjust height for better appearance
+                        .padding(horizontal = 8.dp),
+                    shape = MaterialTheme.shapes.medium // Add rounded corners
+                )
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 56.dp),
+                thickness = 2.dp,
+                color = Color.Gray
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = when (selectedAvatarIndex) {
-                    0 -> RoleCredentialsRepository.adminPassword
-                    1 -> RoleCredentialsRepository.asistanPassword
-                    2 -> RoleCredentialsRepository.ekipLideriPassword
-                    3 -> RoleCredentialsRepository.yonetimKuruluPassword
-                    4 -> RoleCredentialsRepository.calisanPassword
-                    else -> ""
-                },
-                onValueChange = {
-                    password = it
-                },
-                label = {
-                    Text(
-                        "Password", style = TextStyle(
-                            color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
-                        )
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-                    focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-                    unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-                    cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp) // Adjust height for better appearance
-                    .padding(horizontal = 8.dp),
-                shape = MaterialTheme.shapes.medium // Add rounded corners
-            )
-
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Button(
                 modifier = Modifier
                     .width(400.dp)
                     .padding(horizontal = 10.dp)
-                    .align(Alignment.CenterHorizontally), onClick = {
-                    navController.navigate("adminPanel")
-                }, colors = ButtonDefaults.buttonColors(
+                    .align(Alignment.CenterHorizontally),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Black.copy(alpha = 0.5f)
+                ),
+                shape = MaterialTheme.shapes.large // Apply custom shape
+            ) {
+                Text(
+                    "Add / Edit Role",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Button(
+                modifier = Modifier
+                    .width(400.dp)
+                    .padding(horizontal = 10.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Red.copy(alpha = 0.5f)
-                ), shape = MaterialTheme.shapes.large // Apply custom shape
+                ),
+                shape = MaterialTheme.shapes.large // Apply custom shape
             ) {
                 Text(
                     "Delete Role",
@@ -229,3 +294,4 @@ fun AdminPanel(navController: NavController) {
         }
     }
 }
+
