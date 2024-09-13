@@ -52,15 +52,15 @@ fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .border(
-            width = 2.dp,  // Border thickness
-            color = colorScheme.outline,  // Border color
-            shape = MaterialTheme.shapes.medium  // Shape of the border, can customize the corner radius here
+            width = 2.dp,
+            color = colorScheme.outline,
+            shape = MaterialTheme.shapes.medium
         )
         .padding(16.dp)) {
         Text(
             text = month.format(DateTimeFormatter.ofPattern("MMMM yyyy")),
             style = MaterialTheme.typography.titleLarge,
-            color = colorScheme.onBackground, // Update text color for dark mode
+            color = colorScheme.onBackground,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )

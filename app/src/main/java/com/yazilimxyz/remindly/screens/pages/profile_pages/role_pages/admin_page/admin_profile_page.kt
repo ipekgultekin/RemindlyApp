@@ -57,7 +57,7 @@ fun AdminProfilePage(navController: NavController) {
         Text(
             text = "Welcome, Admin!", // Displays the fetched email or "Loading..." initially
             style = TextStyle(
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize
             )
