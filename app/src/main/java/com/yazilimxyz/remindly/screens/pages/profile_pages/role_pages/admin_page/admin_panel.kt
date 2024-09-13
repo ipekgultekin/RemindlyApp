@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
+import com.yazilimxyz.remindly.editDialogueLottie
 import com.yazilimxyz.remindly.screens.AvatarImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -51,10 +53,13 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun AdminPanel(navController: NavController) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var currentEmail by remember { mutableStateOf("") }
+    var currentPassword by remember { mutableStateOf("") }
+
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
     var showRoleDialog by remember { mutableStateOf(false) }
+    var showAddButton by remember { mutableStateOf(false) }
+    var showEditButton by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -166,26 +171,37 @@ fun AdminPanel(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Get email and password for the selected avatar
-            val currentEmail = when (selectedAvatarIndex) {
-                0 -> RoleCredentialsRepository.adminEmail
-                1 -> RoleCredentialsRepository.asistanEmail
-                2 -> RoleCredentialsRepository.ekipLideriEmail
-                3 -> RoleCredentialsRepository.yonetimKuruluEmail
-                4 -> RoleCredentialsRepository.calisanEmail
-                else -> ""
+            LaunchedEffect(selectedAvatarIndex) {
+                currentEmail = when (selectedAvatarIndex) {
+                    0 -> RoleCredentialsRepository.adminEmail
+                    1 -> RoleCredentialsRepository.asistanEmail
+                    2 -> RoleCredentialsRepository.ekipLideriEmail
+                    3 -> RoleCredentialsRepository.yonetimKuruluEmail
+                    4 -> RoleCredentialsRepository.calisanEmail
+                    else -> ""
+                }
+
+                currentPassword = when (selectedAvatarIndex) {
+                    0 -> RoleCredentialsRepository.adminPassword
+                    1 -> RoleCredentialsRepository.asistanPassword
+                    2 -> RoleCredentialsRepository.ekipLideriPassword
+                    3 -> RoleCredentialsRepository.yonetimKuruluPassword
+                    4 -> RoleCredentialsRepository.calisanPassword
+                    else -> ""
+                }
             }
 
-            val currentPassword = when (selectedAvatarIndex) {
-                0 -> RoleCredentialsRepository.adminPassword
-                1 -> RoleCredentialsRepository.asistanPassword
-                2 -> RoleCredentialsRepository.ekipLideriPassword
-                3 -> RoleCredentialsRepository.yonetimKuruluPassword
-                4 -> RoleCredentialsRepository.calisanPassword
-                else -> ""
+            LaunchedEffect(currentEmail) {
+                showAddButton = currentEmail.isEmpty()
+                showEditButton = currentEmail.isNotEmpty()
             }
+
 
             if (currentEmail.isEmpty()) {
+
+//                showAddButton = true
+//                showEditButton = false
+
                 Text(
                     text = "No such role.",
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
@@ -193,11 +209,15 @@ fun AdminPanel(navController: NavController) {
                         .padding(16.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+
             } else {
+
+//                showEditButton = true
+//                showAddButton = false
 
                 TextField(value = currentEmail,
                     onValueChange = {
-                        email = it
+//                        email = it
                     },
                     label = {
                         Text(
@@ -223,7 +243,7 @@ fun AdminPanel(navController: NavController) {
 
                 TextField(value = currentPassword,
                     onValueChange = {
-                        password = it
+//                        password = it
                     },
                     label = {
                         Text(
@@ -256,22 +276,45 @@ fun AdminPanel(navController: NavController) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Button(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(horizontal = 10.dp)
-                    .align(Alignment.CenterHorizontally), onClick = {
-                    showRoleDialog = true
-                }, colors = buttonColors(
-                    containerColor = Color.Black.copy(alpha = 0.6f)
-                ), shape = MaterialTheme.shapes.large // Apply custom shape
-            ) {
-                Text(
-                    "Add / Edit Role",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-                    modifier = Modifier.padding(12.dp)
-                )
+            if (showAddButton) {
+                Button(
+                    modifier = Modifier
+                        .width(400.dp)
+                        .padding(horizontal = 10.dp)
+                        .align(Alignment.CenterHorizontally), onClick = {
+                        showRoleDialog = true
+                    }, colors = buttonColors(
+                        containerColor = Color(
+                            0xFF579c1f
+                        )
+                    ), shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        "Add Role",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            } else if (showEditButton) {
+                Button(
+                    modifier = Modifier
+                        .width(400.dp)
+                        .padding(horizontal = 10.dp)
+                        .align(Alignment.CenterHorizontally),
+                    onClick = {
+                        showRoleDialog = true
+                    },
+                    colors = buttonColors(containerColor = Color.Black.copy(alpha = 0.6f)),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Text(
+                        "Edit Role",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
             }
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -284,20 +327,35 @@ fun AdminPanel(navController: NavController) {
             dismissOnClickOutside = true // Dismiss dialog on outside tap
         ), title = {
             Text(
-                text = "Edit or Add a role", style = TextStyle(
+                text = if (showAddButton) "Add a role" else "Edit role", style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                 )
             )
         }, text = {
             Column {
-                OutlinedTextField(value = email, onValueChange = {})
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(value = email, onValueChange = {})
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(value = email, onValueChange = {})
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(value = email, onValueChange = {})
+                editDialogueLottie()
+                Text(
+                    text = "Email",
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+                OutlinedTextField(
+                    value = currentEmail,
+                    onValueChange = {},
+                    shape = MaterialTheme.shapes.small
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                Text(
+                    text = "Password",
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+                OutlinedTextField(
+                    value = currentPassword,
+                    onValueChange = {},
+                    shape = MaterialTheme.shapes.small
+                )
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }, confirmButton = {

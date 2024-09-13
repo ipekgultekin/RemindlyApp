@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
+    implementation (libs.lottie)
     implementation(libs.lottie.compose)
 
     // For ViewModels
