@@ -24,8 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,12 +46,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.noRoleLottie
+import com.yazilimxyz.remindly.saveRoleCredentials
 import com.yazilimxyz.remindly.screens.AvatarImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
 fun AdminPanel(navController: NavController) {
+
+    var theEmail by remember { mutableStateOf("") }
+    var thePassword by remember { mutableStateOf("") }
 
     var currentEmail by remember { mutableStateOf("") }
     var currentPassword by remember { mutableStateOf("") }
@@ -216,54 +218,34 @@ fun AdminPanel(navController: NavController) {
 
             } else {
 
-                TextField(value = currentEmail,
-                    onValueChange = {
-                        currentEmail = it
-                    },
-                    label = {
-                        Text(
-                            "Email", style = TextStyle(
-                                color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
-                            )
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-                        focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-                        unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-                        cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
-                    ),
+                Text(
+                    text = "Email",
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+                Text(
+                    text = currentEmail,
+                    style = TextStyle(fontSize = 15.sp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp) // Adjust height for better appearance
-                        .padding(horizontal = 8.dp),
-                    shape = MaterialTheme.shapes.medium // Add rounded corners
+                        .height(60.dp)
+                        .padding(horizontal = 8.dp)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TextField(value = currentPassword,
-                    onValueChange = {
-                        currentPassword = it
-                    },
-                    label = {
-                        Text(
-                            "Password", style = TextStyle(
-                                color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
-                            )
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-                        focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-                        unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-                        cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
-                    ),
+                Text(
+                    text = "Password",
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+                Text(
+                    text = currentPassword,
+                    style = TextStyle(fontSize = 15.sp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp) // Adjust height for better appearance
-                        .padding(horizontal = 8.dp),
-                    shape = MaterialTheme.shapes.medium // Add rounded corners
+                        .height(60.dp)
+                        .padding(horizontal = 8.dp)
                 )
             }
 
@@ -323,9 +305,14 @@ fun AdminPanel(navController: NavController) {
         }
     }
     if (showRoleDialog) {
+
+//        var dialogEmail by remember { mutableStateOf(currentEmail) }
+//        var dialogPassword by remember { mutableStateOf(currentPassword) }
+
+
         AlertDialog(onDismissRequest = { showRoleDialog = false }, properties = DialogProperties(
-            dismissOnBackPress = true, // Dismiss dialog on back press
-            dismissOnClickOutside = true // Dismiss dialog on outside tap
+            dismissOnBackPress = false, // Dismiss dialog on back press
+            dismissOnClickOutside = false // Dismiss dialog on outside tap
         ), title = {
             Text(
                 text = if (showAddButton) "Add a role" else "Edit role", style = TextStyle(
@@ -410,7 +397,9 @@ fun AdminPanel(navController: NavController) {
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
                 OutlinedTextField(
-                    value = currentEmail, onValueChange = {}, shape = MaterialTheme.shapes.small
+                    value = currentEmail,
+                    onValueChange = { newValue -> currentEmail = newValue },
+                    shape = MaterialTheme.shapes.small
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Text(
@@ -420,7 +409,7 @@ fun AdminPanel(navController: NavController) {
                 )
                 OutlinedTextField(
                     value = currentPassword,
-                    onValueChange = {},
+                    onValueChange = { newValue -> currentPassword = newValue },
                     shape = MaterialTheme.shapes.small
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -430,6 +419,42 @@ fun AdminPanel(navController: NavController) {
                 contentColor = Color.White,
                 containerColor = Color.Red.copy(alpha = 0.5f),
             ), onClick = {
+
+//                currentEmail = dialogEmail
+//                currentPassword = dialogPassword
+                when (selectedAvatarIndex) {
+                    0 -> {
+                        saveRoleCredentials(
+                            "admin_credentials", currentEmail, currentPassword
+
+                            )
+                    }
+
+                    1 -> {
+                        saveRoleCredentials(
+                            "asistan_credentials", currentEmail, currentPassword
+                        )
+                    }
+
+                    2 -> {
+                        saveRoleCredentials(
+                            "ekip_lideri_credentials", currentEmail, currentPassword
+                        )
+                    }
+
+                    3 -> {
+                        saveRoleCredentials(
+                            "yonetim_kurulu_credentials", currentEmail, currentPassword
+                        )
+                    }
+
+                    4 -> {
+                        saveRoleCredentials(
+                            "calisan_credentials", currentEmail, currentPassword
+                        )
+                    }
+                }
+                showRoleDialog = false
 
             }) {
                 Text("Confirm")
@@ -467,6 +492,7 @@ fun DeleteRoleButton(selectedAvatarIndex: Int) {
         )
     }
     if (showDialog) {
+
         AlertDialog(onDismissRequest = { showDialog = false }, title = {
             Text(
                 "Confirm Delete", style = TextStyle(

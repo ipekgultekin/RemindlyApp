@@ -21,6 +21,10 @@ object RoleCredentialsRepository {
     var calisanEmail: String by mutableStateOf("")
     var calisanPassword: String by mutableStateOf("")
 
+    fun loadRoles() {
+
+    }
+
     init {
         listenToRoleChanges()
     }

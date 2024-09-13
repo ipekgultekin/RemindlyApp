@@ -22,17 +22,43 @@ data class RoleCredentials(
 )
 
 fun saveRoleCredentials(role: String, email: String, password: String) {
+    // Validate email and password
+    if (!isValidEmail(email)) {
+        println("mesaj: Invalid email format.")
+        return
+    }
+
+    if (!isValidPassword(password)) {
+        println("mesaj: Password does not meet the requirements.")
+        return
+    }
+
     val db = FirebaseFirestore.getInstance()
     val roleCredentials = RoleCredentials(email, password)
 
-    db.collection("credentials").document(role).set(roleCredentials).addOnSuccessListener {
-        // Handle success
-        println("Credentials saved successfully!")
-    }.addOnFailureListener { e ->
-        // Handle failure
-        println("Error saving credentials: $e")
-    }
+    db.collection("credentials").document(role).set(roleCredentials)
+        .addOnSuccessListener {
+            // Handle success
+            println("mesaj: Credentials saved successfully!")
+        }
+        .addOnFailureListener { e ->
+            // Handle failure
+            println("mesaj: Error saving credentials: $e")
+        }
 }
+
+fun isValidEmail(email: String): Boolean {
+    // Regex pattern for valid email format
+    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)\$".toRegex()
+    return emailRegex.matches(email)
+}
+
+fun isValidPassword(password: String): Boolean {
+    // Example: Password must be at least 6 characters long
+    // Adjust according to your needs (e.g., minimum length, must contain digits, etc.)
+    return password.length >= 6
+}
+
 
 fun getRoleCredentials(
     documentCredentials: String, roleEmail: String, onSuccess: (String) -> Unit
