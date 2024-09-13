@@ -78,9 +78,12 @@ fun addField(
     title: String,
     fieldTitle: String,
     description: String?,
-    textState: MutableState<String>, // Added textState parameter to control TextField
+    textState: MutableState<String>,
     onValueChange: (String) -> Unit
 ) {
+    val textColor = MaterialTheme.colorScheme.onBackground // Yazı rengi
+    val fieldTitleColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f) // Label rengi
+
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -92,8 +95,11 @@ fun addField(
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = title, style = MaterialTheme.typography.labelMedium.copy(
-                    color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
+                text = title,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    color = textColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
             )
         }
@@ -102,36 +108,41 @@ fun addField(
         spacer2()
         spacer2()
 
-        TextField(value = textState.value, // Controlled by textState
+        TextField(
+            value = textState.value,
             onValueChange = {
-                textState.value = it // Update the state
-                onValueChange(it) // Call the onValueChange lambda
+                textState.value = it
+                onValueChange(it)
             },
             label = {
                 Text(
-                    fieldTitle, style = TextStyle(
-                        color = Color(0xDD191919).copy(alpha = 0.4f), fontSize = 15.sp
+                    fieldTitle,
+                    style = TextStyle(
+                        color = fieldTitleColor,
+                        fontSize = 15.sp
                     )
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.LightGray.copy(alpha = 0.3f), // Light gray background
-                focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-                unfocusedIndicatorColor = Color.Transparent, // Removes the underline when not focused
-                cursorColor = MaterialTheme.colorScheme.primary // Customize cursor color
+                containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.3f), // Background color
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorScheme.primary
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp) // Adjust height for better appearance
+                .height(60.dp)
                 .padding(horizontal = 8.dp),
-            shape = MaterialTheme.shapes.medium // Add rounded corners
+            shape = MaterialTheme.shapes.medium
         )
         spacer1()
     }
 }
 
+
 @Composable
 fun AddPage(context: Context) {
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
     var selectedDateTime by remember { mutableStateOf("") }
@@ -161,8 +172,11 @@ fun AddPage(context: Context) {
     ) {
         item {
             Text(
-                text = "Create\nNew Meeting", style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.SemiBold, fontSize = 40.sp
+                text = "Create\nNew Meeting",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 40.sp,
+                    color = textColor // Yazı rengi
                 )
             )
             spacer1()
@@ -194,19 +208,23 @@ fun AddPage(context: Context) {
             }
         }
 
+
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.date),
                     contentDescription = "date icon",
                     modifier = Modifier
-                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
-                        .aspectRatio(1f) // Ensures the image remains square
+                        .fillMaxWidth(0.1f)
+                        .aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(
-                    text = "Date & Time", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    text = "Date & Time",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
                 )
             }
@@ -215,7 +233,7 @@ fun AddPage(context: Context) {
             spacer2()
             spacer2()
 
-            CustomButton(title = dateTimeText, color = Color(0xDD191919)) {
+            CustomButton(title = dateTimeText, color = textColor) { // Buton rengi
                 DatePickerDialog(
                     context,
                     { _, year, month, dayOfMonth ->
@@ -231,9 +249,6 @@ fun AddPage(context: Context) {
 
                                 selectedDateTime =
                                     "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
-
-
-
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE),
@@ -244,9 +259,7 @@ fun AddPage(context: Context) {
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).apply {
-                    // Disable previous dates by setting the minimum date
-                    datePicker.minDate =
-                        System.currentTimeMillis() // Sets the minimum date to today
+                    datePicker.minDate = System.currentTimeMillis()
                 }.show()
             }
 
@@ -263,19 +276,22 @@ fun AddPage(context: Context) {
                     painter = painterResource(id = R.drawable.priority),
                     contentDescription = "priority icon",
                     modifier = Modifier
-                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
-                        .aspectRatio(1f) // Ensures the image remains square
+                        .fillMaxWidth(0.1f)
+                        .aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(
-                    text = "Priority", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    text = "Priority",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            PriorityBar(LocalContext.current, selectedPriority)
+            PriorityBar(context, selectedPriority)
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -369,7 +385,7 @@ fun AvatarImage(
                 .clip(CircleShape)
                 .border(
                     width = 6.dp,
-                    color = if (isSelected) Color(0xDD191919).copy(alpha = 0.8f) else Color.Transparent,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else Color.Transparent,
                     shape = CircleShape
                 ), contentAlignment = Alignment.Center
         ) {
@@ -380,14 +396,12 @@ fun AvatarImage(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        spacer2()
-        spacer2()
-        spacer2()
+        Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = content,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = Color(0xFF191919)
+                color = MaterialTheme.colorScheme.onBackground // Use theme color for text
             )
         )
     }
