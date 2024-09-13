@@ -11,13 +11,12 @@ import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.CalisanPro
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.EkipLideriProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.YonetimKuruluProfilePage
 
-
 @Composable
 fun ProfilePage(navController: NavController) {
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
     LaunchedEffect(Unit) {
-        RoleCredentialsRepository.loadRoleEmails()
+//        RoleCredentialsRepository.loadRoleEmails()
     }
 
     when (userEmail) {

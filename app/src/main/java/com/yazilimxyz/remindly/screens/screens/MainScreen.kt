@@ -67,7 +67,7 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
                     }
                 })
             NavigationBarItem(
-                icon = { Icon(Icons.Filled.Search, contentDescription = "Settings") },
+                icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") },
                 label = { Text("Settings") },
                 selected = currentRoute == "settings",
                 onClick = {
