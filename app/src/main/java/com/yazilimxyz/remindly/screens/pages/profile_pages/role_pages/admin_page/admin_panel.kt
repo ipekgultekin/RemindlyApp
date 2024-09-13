@@ -1,6 +1,8 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,12 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,8 +45,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.yazilimxyz.remindly.AdminViewModel
+import com.yazilimxyz.remindly.AuthViewModel
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.noRoleLottie
@@ -63,6 +71,19 @@ fun AdminPanel(navController: NavController) {
     var showRoleDialog by remember { mutableStateOf(false) }
     var showAddButton by remember { mutableStateOf(false) }
     var showEditButton by remember { mutableStateOf(false) }
+
+    val scope = rememberCoroutineScope()
+    val authViewModel: AuthViewModel = viewModel()
+
+    val adminViewModel: AdminViewModel = viewModel()
+
+    LaunchedEffect(Unit) {
+        adminViewModel.loadAdminCredentials()
+    }
+
+    val adminEmail = adminViewModel.email.value
+    val adminPassword = adminViewModel.password.value
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -217,38 +238,12 @@ fun AdminPanel(navController: NavController) {
 
             } else {
 
-                Text(
-                    text = "Email",
-                    style = TextStyle(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(bottom = 5.dp)
-                )
-                Text(
-                    text = currentEmail,
-                    style = TextStyle(fontSize = 15.sp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(horizontal = 8.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Password",
-                    style = TextStyle(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(bottom = 5.dp)
-                )
-                Text(
-                    text = currentPassword,
-                    style = TextStyle(fontSize = 15.sp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(horizontal = 8.dp)
+                CredentialsDisplay(
+                    currentEmail = currentEmail,
+                    currentPassword = currentPassword
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
 
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 56.dp),
@@ -304,10 +299,6 @@ fun AdminPanel(navController: NavController) {
         }
     }
     if (showRoleDialog) {
-
-//        var dialogEmail by remember { mutableStateOf(currentEmail) }
-//        var dialogPassword by remember { mutableStateOf(currentPassword) }
-
 
         AlertDialog(onDismissRequest = { showRoleDialog = false }, properties = DialogProperties(
             dismissOnBackPress = false, // Dismiss dialog on back press
@@ -419,6 +410,20 @@ fun AdminPanel(navController: NavController) {
                 containerColor = Color.Red.copy(alpha = 0.5f),
             ), onClick = {
 
+                scope.launch {
+                    try {
+                        authViewModel.signUp(currentEmail, currentPassword)
+                        FirebaseAuth.getInstance().signOut()
+                        if (adminEmail != null && adminPassword != null) {
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                                adminEmail, adminPassword
+                            ).await()
+                        }
+                    } catch (e: Exception) {
+                        Log.d("mesaj", "hata: ${e.message}")
+                    }
+                }
+
                 when (selectedAvatarIndex) {
                     0 -> {
                         saveRoleCredentials(
@@ -428,6 +433,7 @@ fun AdminPanel(navController: NavController) {
                     }
 
                     1 -> {
+
                         saveRoleCredentials(
                             "asistan_credentials", currentEmail, currentPassword
                         )
@@ -464,6 +470,90 @@ fun AdminPanel(navController: NavController) {
                 Text("Cancel")
             }
         })
+    }
+}
+
+
+@Composable
+fun CredentialsDisplay(
+    currentEmail: String,
+    currentPassword: String
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Email Section
+        Text(
+            text = "Email",
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            ),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(bottom = 16.dp),
+//            elevation = 4.dp,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray)
+                    .padding(horizontal = 12.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = currentEmail,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        color = Color.Black
+                    )
+                )
+            }
+        }
+
+        // Password Section
+        Text(
+            text = "Password",
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            ),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
+//            elevation = 4.dp,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray)
+                    .padding(horizontal = 12.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = currentPassword,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        color = Color.Black
+                    )
+                )
+            }
+        }
     }
 }
 

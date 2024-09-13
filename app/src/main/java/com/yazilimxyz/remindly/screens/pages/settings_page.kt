@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
+import com.yazilimxyz.remindly.AdminViewModel
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.RoleCredentialsRepository.adminEmail
+import com.yazilimxyz.remindly.RoleCredentialsRepository.adminPassword
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
 
@@ -53,6 +56,11 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
     val textColor = Color(0xFFFFFFFF)
 
     val scrollState = rememberScrollState()
+
+    /**----------------------*/
+
+
+    /**----------------------*/
 
     var isThemeExpanded by remember { mutableStateOf(false) }
     var isLanguageExpanded by remember { mutableStateOf(false) }
@@ -85,8 +93,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            SettingsBar(
-                title = "Theme",
+            SettingsBar(title = "Theme",
                 color = themeColor,
                 options = listOf("Dark Theme", "Light Theme"),
                 isExpanded = isThemeExpanded,
@@ -95,8 +102,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 textColor = textColor,
                 onOptionSelected = { selectedOption ->
                     themeViewModel.isDarkTheme = selectedOption == "Dark Theme"
-                }
-            )
+                })
             SettingsBar(
                 title = "Language",
                 color = themeColor,
@@ -107,9 +113,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 textColor = textColor
             )
             NotificationSettingsBar(
-                title = "Notification Settings",
-                color = themeColor,
-                textColor = textColor
+                title = "Notification Settings", color = themeColor, textColor = textColor
             )
         }
 
@@ -117,10 +121,10 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
 
         Button(
             onClick = {
-                FirebaseAuth.getInstance().signOut()
-                navController.navigate("LoginScreen") {
-                    popUpTo("SettingsPage") { inclusive = true }
-                }
+
+//                Log.d("mesaj", "admin email: ${adminEmail}")
+//                Log.d("mesaj", "admin password: ${adminPassword}")
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -131,14 +135,9 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Sign Out",
-                style = TextStyle(
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                ),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                text = "Sign Out", style = TextStyle(
+                    color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp
+                ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
             )
         }
     }
@@ -165,11 +164,8 @@ fun SettingsBar(
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                text = title,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = textColor
+                text = title, style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = textColor
                 )
             )
         }
@@ -183,16 +179,11 @@ fun SettingsBar(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 options.forEach { option ->
-                    Text(
-                        text = option,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            color = textColor
-                        ),
-                        modifier = Modifier.clickable {
-                            onOptionSelected(option)
-                        }
-                    )
+                    Text(text = option, style = TextStyle(
+                        fontSize = 16.sp, color = textColor
+                    ), modifier = Modifier.clickable {
+                        onOptionSelected(option)
+                    })
                 }
             }
         }
@@ -215,7 +206,6 @@ fun NotificationSettingsBar(title: String, color: Color, textColor: Color) {
                 fontSize = 18.sp, fontWeight = FontWeight.Bold, color = textColor
             )
         )
-        Switch(checked = false,
-            onCheckedChange = { /* Handle switch state change */ })
+        Switch(checked = false, onCheckedChange = { /* Handle switch state change */ })
     }
 }
