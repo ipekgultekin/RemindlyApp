@@ -44,7 +44,6 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
-import com.yazilimxyz.remindly.deleteFirestoreDocument
 import com.yazilimxyz.remindly.getRoleCredentials
 import com.yazilimxyz.remindly.screens.AvatarImage
 import kotlinx.coroutines.launch
@@ -57,6 +56,8 @@ fun AdminPanel(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var selectedAvatarIndex by remember { mutableIntStateOf(0) }
     var showRoleDialog by remember { mutableStateOf(false) }
+
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -178,6 +179,15 @@ fun AdminPanel(navController: NavController) {
                 else -> ""
             }
 
+            val currentPassword = when (selectedAvatarIndex) {
+                0 -> RoleCredentialsRepository.adminPassword
+                1 -> RoleCredentialsRepository.asistanPassword
+                2 -> RoleCredentialsRepository.ekipLideriPassword
+                3 -> RoleCredentialsRepository.yonetimKuruluPassword
+                4 -> RoleCredentialsRepository.calisanPassword
+                else -> ""
+            }
+
             if (currentEmail.isNullOrEmpty()) {
                 Text(
                     text = "No role assigned for this user",
@@ -189,14 +199,7 @@ fun AdminPanel(navController: NavController) {
             } else {
 
                 TextField(
-                    value = when (selectedAvatarIndex) {
-                        0 -> RoleCredentialsRepository.adminEmail
-                        1 -> RoleCredentialsRepository.asistanEmail
-                        2 -> RoleCredentialsRepository.ekipLideriEmail
-                        3 -> RoleCredentialsRepository.yonetimKuruluEmail
-                        4 -> RoleCredentialsRepository.calisanEmail
-                        else -> ""
-                    },
+                    value = currentEmail,
                     onValueChange = {
                         email = it
                     },
@@ -223,14 +226,7 @@ fun AdminPanel(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextField(
-                    value = when (selectedAvatarIndex) {
-                        0 -> RoleCredentialsRepository.adminPassword
-                        1 -> RoleCredentialsRepository.asistanPassword
-                        2 -> RoleCredentialsRepository.ekipLideriPassword
-                        3 -> RoleCredentialsRepository.yonetimKuruluPassword
-                        4 -> RoleCredentialsRepository.calisanPassword
-                        else -> ""
-                    },
+                    value = currentPassword,
                     onValueChange = {
                         password = it
                     },
@@ -317,19 +313,6 @@ fun DeleteRoleButton(selectedAvatarIndex: Int) {
     }
 }
 
-
-/*@Composable
-fun DeleteRole(avatarIndex: Int) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    when (avatarIndex) {
-
-    }
-    RoleCredentialsRepository.loadRoleEmails()
-}*/
-
-// Moved out from Composable context, handle logic here
 suspend fun deleteRole(avatarIndex: Int) {
     when (avatarIndex) {
         0 -> {
@@ -340,9 +323,8 @@ suspend fun deleteRole(avatarIndex: Int) {
         3 -> deleteRoleAndHandleResult("yonetim_kurulu_credentials")
         4 -> deleteRoleAndHandleResult("calisan_credentials")
     }
-    RoleCredentialsRepository.loadRoleEmails()
+//    RoleCredentialsRepository.loadRoleEmails()
 }
-
 
 suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
     val db = FirebaseFirestore.getInstance()

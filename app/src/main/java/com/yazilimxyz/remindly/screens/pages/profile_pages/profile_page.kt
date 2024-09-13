@@ -16,7 +16,7 @@ fun ProfilePage(navController: NavController) {
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
     LaunchedEffect(Unit) {
-        RoleCredentialsRepository.loadRoleEmails()
+//        RoleCredentialsRepository.loadRoleEmails()
     }
 
     when (userEmail) {

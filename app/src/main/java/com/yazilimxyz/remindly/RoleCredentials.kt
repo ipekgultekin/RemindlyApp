@@ -52,8 +52,7 @@ fun getRoleCredentials(
         }
 }
 
-
-// Deleting the Firestore document and returning success/failure as a Boolean
+/*
 suspend fun deleteFirestoreDocument(collection: String, documentId: String): Boolean {
     return try {
         FirebaseFirestore.getInstance().collection(collection).document(documentId).delete().await()
@@ -62,8 +61,7 @@ suspend fun deleteFirestoreDocument(collection: String, documentId: String): Boo
         false
     }
 }
-
-
+*/
 
 @Composable
 fun AddCredentialsScreen() {
