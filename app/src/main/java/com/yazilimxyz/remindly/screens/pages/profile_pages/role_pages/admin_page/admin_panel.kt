@@ -54,8 +54,7 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun AdminPanel(navController: NavController) {
 
-    var theEmail by remember { mutableStateOf("") }
-    var thePassword by remember { mutableStateOf("") }
+    //asd
 
     var currentEmail by remember { mutableStateOf("") }
     var currentPassword by remember { mutableStateOf("") }
@@ -420,14 +419,12 @@ fun AdminPanel(navController: NavController) {
                 containerColor = Color.Red.copy(alpha = 0.5f),
             ), onClick = {
 
-//                currentEmail = dialogEmail
-//                currentPassword = dialogPassword
                 when (selectedAvatarIndex) {
                     0 -> {
                         saveRoleCredentials(
                             "admin_credentials", currentEmail, currentPassword
 
-                            )
+                        )
                     }
 
                     1 -> {
@@ -541,6 +538,7 @@ suspend fun deleteRole(avatarIndex: Int) {
         4 -> deleteRoleAndHandleResult("calisan_credentials")
     }
 }
+
 
 suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
     val db = FirebaseFirestore.getInstance()
