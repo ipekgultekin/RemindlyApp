@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,7 +47,7 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
-import com.yazilimxyz.remindly.editDialogueLottie
+import com.yazilimxyz.remindly.noRoleLottie
 import com.yazilimxyz.remindly.screens.AvatarImage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -199,25 +201,24 @@ fun AdminPanel(navController: NavController) {
 
             if (currentEmail.isEmpty()) {
 
-//                showAddButton = true
-//                showEditButton = false
-
-                Text(
-                    text = "No such role.",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "No such role.",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                        modifier = Modifier
+                            .padding(start = 60.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                    noRoleLottie()
+                }
 
             } else {
 
-//                showEditButton = true
-//                showAddButton = false
-
                 TextField(value = currentEmail,
                     onValueChange = {
-//                        email = it
+                        currentEmail = it
                     },
                     label = {
                         Text(
@@ -243,7 +244,7 @@ fun AdminPanel(navController: NavController) {
 
                 TextField(value = currentPassword,
                     onValueChange = {
-//                        password = it
+                        currentPassword = it
                     },
                     label = {
                         Text(
@@ -334,16 +335,82 @@ fun AdminPanel(navController: NavController) {
             )
         }, text = {
             Column {
-                editDialogueLottie()
+                when (selectedAvatarIndex) {
+                    0 -> {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar2),
+                            contentDescription = "Admin",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(120.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+
+                    1 -> {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar1),
+                            contentDescription = "Asistan",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(120.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+
+                    2 -> {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar3),
+                            contentDescription = "Ekip Lideri",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(120.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+
+                    3 -> {
+                        Image(
+                            painter = painterResource(id = R.drawable.avatar4),
+                            contentDescription = "Yönetim Kurulu",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(120.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+
+                    4 -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.avatar5),
+                                contentDescription = "Çalışan",
+                                modifier = Modifier
+                                    .width(120.dp)
+                                    .height(120.dp)
+                                    .align(Alignment.CenterHorizontally)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                "Çalışan", style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp,
+                                )
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = "Email",
                     style = TextStyle(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
                 OutlinedTextField(
-                    value = currentEmail,
-                    onValueChange = {},
-                    shape = MaterialTheme.shapes.small
+                    value = currentEmail, onValueChange = {}, shape = MaterialTheme.shapes.small
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Text(

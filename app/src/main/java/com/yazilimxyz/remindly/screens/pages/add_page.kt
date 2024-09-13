@@ -82,7 +82,7 @@ fun addField(
     onValueChange: (String) -> Unit
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground // Yazı rengi
-    val fieldTitleColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f) // Label rengi
+    val fieldTitleColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) // Label rengi
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -124,7 +124,7 @@ fun addField(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.3f), // Background color
+                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), // Background color
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = MaterialTheme.colorScheme.primary
