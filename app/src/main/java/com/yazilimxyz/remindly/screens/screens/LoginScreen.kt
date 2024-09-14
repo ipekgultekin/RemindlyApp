@@ -40,7 +40,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -147,16 +146,7 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
 
             Button(
                 onClick = {
-                    signinFirebase(
-                        email = email.trim(), password = password.trim(),
-                        onSuccess = {
-                            navController.navigate("main") {
-                                popUpTo("login") { inclusive = true }
-                            }
-                        },
-                        onError = { errorMessage ->
-                        },
-                    )
+
                 },
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
@@ -188,38 +178,3 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
     }
 }
 
-
-fun signinFirebase(
-    email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit
-) {
-    if (email.isEmpty()) {
-        onError("Email is required")
-        return
-    }
-
-    if (password.isEmpty()) {
-        onError("Password is required")
-        return
-    }
-
-    CoroutineScope(Dispatchers.IO).launch {
-        try {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
-
-            // Switch to the main thread to update UI
-            withContext(Dispatchers.Main) {
-                onSuccess()
-            }
-        } catch (e: Exception) {
-            // Switch to the main thread to update UI
-            withContext(Dispatchers.Main) {
-                val errorMessage = when (e) {
-                    is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> "Invalid credentials. Please check your email and password."
-                    is com.google.firebase.auth.FirebaseAuthInvalidUserException -> "User not found. Please register."
-                    else -> e.message ?: "An unknown error occurred"
-                }
-                onError(errorMessage)
-            }
-        }
-    }
-}

@@ -1,31 +1,9 @@
 package com.yazilimxyz.remindly
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.yazilimxyz.remindly.screens.signinFirebase
-import kotlinx.coroutines.tasks.await
-
-
-class AuthViewModel : ViewModel() {
-    private val auth = FirebaseAuth.getInstance()
-
-    suspend fun signUp(email: String, password: String) {
-        try {
-            auth.createUserWithEmailAndPassword(email, password).await()
-
-            Log.d("mesaj", "autha kaydedildi")
-        } catch (e: Exception) {
-            Log.d("mesaj", e.message.toString())
-            throw e
-        }
-    }
-}
-
 
 object RoleCredentialsRepository {
     var adminEmail: String by mutableStateOf("")
@@ -43,12 +21,21 @@ object RoleCredentialsRepository {
     var calisanEmail: String by mutableStateOf("")
     var calisanPassword: String by mutableStateOf("")
 
+    var currentUser:String by mutableStateOf("")
+
     init {
         listenToRoleChanges()
     }
 
     private fun listenToRoleChanges() {
         val db = FirebaseFirestore.getInstance()
+
+        db.collection("credentials").document("current_user")
+            .addSnapshotListener { snapshot, _ ->
+                snapshot?.let {
+                    currentUser = it.getString("current_user") ?: ""
+                }
+            }
 
         db.collection("credentials").document("admin_credentials")
             .addSnapshotListener { snapshot, _ ->

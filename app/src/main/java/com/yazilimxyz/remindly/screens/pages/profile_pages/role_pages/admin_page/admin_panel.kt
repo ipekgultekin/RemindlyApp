@@ -50,7 +50,6 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.AdminViewModel
-import com.yazilimxyz.remindly.AuthViewModel
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.noRoleLottie
@@ -71,7 +70,6 @@ fun AdminPanel(navController: NavController) {
     var showEditButton by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    val authViewModel: AuthViewModel = viewModel()
 
     val adminViewModel: AdminViewModel = viewModel()
 
@@ -237,8 +235,7 @@ fun AdminPanel(navController: NavController) {
             } else {
 
                 CredentialsDisplay(
-                    currentEmail = currentEmail,
-                    currentPassword = currentPassword
+                    currentEmail = currentEmail, currentPassword = currentPassword
                 )
             }
 
@@ -410,13 +407,7 @@ fun AdminPanel(navController: NavController) {
 
                 scope.launch {
                     try {
-                        authViewModel.signUp(currentEmail, currentPassword)
-                        FirebaseAuth.getInstance().signOut()
-                        if (adminEmail != null && adminPassword != null) {
-                            FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                                adminEmail, adminPassword
-                            ).await()
-                        }
+
                     } catch (e: Exception) {
                         Log.d("mesaj", "hata: ${e.message}")
                     }
@@ -474,8 +465,7 @@ fun AdminPanel(navController: NavController) {
 
 @Composable
 fun CredentialsDisplay(
-    currentEmail: String,
-    currentPassword: String
+    currentEmail: String, currentPassword: String
 ) {
     Column(
         modifier = Modifier
@@ -483,13 +473,9 @@ fun CredentialsDisplay(
             .padding(16.dp)
     ) {
         Text(
-            text = "Email",
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            ),
-            modifier = Modifier.padding(bottom = 8.dp)
+            text = "Email", style = TextStyle(
+                fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black
+            ), modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Card(
@@ -503,14 +489,11 @@ fun CredentialsDisplay(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.LightGray)
-                    .padding(horizontal = 12.dp),
-                contentAlignment = Alignment.CenterStart
+                    .padding(horizontal = 12.dp), contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = currentEmail,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        color = Color.Black
+                    text = currentEmail, style = TextStyle(
+                        fontSize = 15.sp, color = Color.Black
                     )
                 )
             }
@@ -518,13 +501,9 @@ fun CredentialsDisplay(
 
         // Password Section
         Text(
-            text = "Password",
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            ),
-            modifier = Modifier.padding(bottom = 8.dp)
+            text = "Password", style = TextStyle(
+                fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black
+            ), modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Card(
@@ -538,14 +517,11 @@ fun CredentialsDisplay(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.LightGray)
-                    .padding(horizontal = 12.dp),
-                contentAlignment = Alignment.CenterStart
+                    .padding(horizontal = 12.dp), contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = currentPassword,
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        color = Color.Black
+                    text = currentPassword, style = TextStyle(
+                        fontSize = 15.sp, color = Color.Black
                     )
                 )
             }

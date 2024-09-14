@@ -54,11 +54,6 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
 
     val scrollState = rememberScrollState()
 
-    /**----------------------*/
-
-
-    /**----------------------*/
-
     var isThemeExpanded by remember { mutableStateOf(false) }
     var isLanguageExpanded by remember { mutableStateOf(false) }
 
@@ -119,8 +114,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
         Button(
             onClick = {
 
-                FirebaseAuth.getInstance().signOut()
-                restartApp(navController.context)
+
 
             },
             modifier = Modifier

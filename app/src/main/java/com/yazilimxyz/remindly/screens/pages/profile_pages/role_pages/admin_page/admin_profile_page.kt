@@ -51,11 +51,10 @@ fun AdminProfilePage(navController: NavController) {
             )
         }
 
-
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
-            text = "Welcome, Admin!", 
+            text = "Welcome, Admin!",
             style = TextStyle(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
@@ -84,7 +83,6 @@ fun AdminProfilePage(navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
     }
 }
