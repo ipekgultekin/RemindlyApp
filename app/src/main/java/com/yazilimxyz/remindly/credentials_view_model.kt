@@ -18,8 +18,6 @@ class AuthViewModel : ViewModel() {
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
 
-
-
             Log.d("mesaj", "autha kaydedildi")
         } catch (e: Exception) {
             Log.d("mesaj", e.message.toString())
