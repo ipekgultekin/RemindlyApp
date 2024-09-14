@@ -57,7 +57,7 @@ fun EkipLideriProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "aa", // Displays the fetched email or "Loading..." initially
+                text = "Welcome, Ekip Lideri.", // Displays the fetched email or "Loading..." initially
                 style = TextStyle(
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,

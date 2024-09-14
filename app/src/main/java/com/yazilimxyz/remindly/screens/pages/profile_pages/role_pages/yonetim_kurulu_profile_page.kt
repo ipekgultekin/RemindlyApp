@@ -57,7 +57,7 @@ fun YonetimKuruluProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "yonetim kurulu profile page", // Displays the fetched email or "Loading..." initially
+                text = "Welcome, Yönetim Kurulu.", // Displays the fetched email or "Loading..." initially
                 style = TextStyle(
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,

@@ -55,8 +55,6 @@ fun isValidPassword(password: String): Boolean {
     return password.length >= 6
 }
 
-
-
 class AdminViewModel : ViewModel() {
 
     // Observable state variables

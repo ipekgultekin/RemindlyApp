@@ -2,7 +2,6 @@ package com.yazilimxyz.remindly.screens.pages.profile_pages
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.AsistanProfilePage
 import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.CalisanProfilePage
@@ -12,26 +11,26 @@ import com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages.admin_page
 
 @Composable
 fun ProfilePage(navController: NavController) {
-    val userEmail = FirebaseAuth.getInstance().currentUser?.email
+    val currentUser = RoleCredentialsRepository.currentUser
 
-    when (userEmail) {
-        RoleCredentialsRepository.adminEmail -> {
+    when (currentUser) {
+        "admin" -> {
             AdminProfilePage(navController)
         }
 
-        RoleCredentialsRepository.asistanEmail -> {
+        "asistan" -> {
             AsistanProfilePage()
         }
 
-        RoleCredentialsRepository.ekipLideriEmail -> {
+        "ekipLideri" -> {
             EkipLideriProfilePage()
         }
 
-        RoleCredentialsRepository.yonetimKuruluEmail -> {
+        "yonetimKurulu" -> {
             YonetimKuruluProfilePage()
         }
 
-        RoleCredentialsRepository.calisanEmail -> {
+        "calisan" -> {
             CalisanProfilePage()
         }
     }

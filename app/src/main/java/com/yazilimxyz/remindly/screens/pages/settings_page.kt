@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
 
@@ -113,7 +114,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
         Button(
             onClick = {
 
-
+                RoleCredentialsRepository.setUser("")
 
             },
             modifier = Modifier

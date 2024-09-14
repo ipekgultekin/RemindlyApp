@@ -57,7 +57,7 @@ fun AsistanProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "aa", // Displays the fetched email or "Loading..." initially
+                text = "Welcome, Asistan.", // Displays the fetched email or "Loading..." initially
                 style = TextStyle(
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,

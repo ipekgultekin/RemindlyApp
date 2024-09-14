@@ -57,7 +57,7 @@ fun CalisanProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "calisan profile page", // Displays the fetched email or "Loading..." initially
+                text = "Welcome, Çalışan.", // Displays the fetched email or "Loading..." initially
                 style = TextStyle(
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,

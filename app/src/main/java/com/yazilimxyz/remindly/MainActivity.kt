@@ -59,15 +59,19 @@ class MainActivity : ComponentActivity() {
         var isLoading by remember { mutableStateOf(true) }
         var currentUser by remember { mutableStateOf<String?>(null) }
 
-        LaunchedEffect(Unit) {
+        // Observe the currentUser from RoleCredentialsRepository
+        LaunchedEffect(RoleCredentialsRepository.currentUser) {
             currentUser = RoleCredentialsRepository.currentUser
+            if (currentUser.isNullOrEmpty()){
+                Log.d("mesaj", "yes, currentUser: $currentUser is null or empty.")
+            }
             isLoading = false
         }
 
         if (isLoading) {
             LoadingScreen()
         } else {
-            val startDestination = if (currentUser.isNullOrEmpty() || currentUser == "empty") {
+            val startDestination = if (currentUser.isNullOrEmpty()) {
                 "login"
             } else {
                 "main"

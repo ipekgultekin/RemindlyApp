@@ -40,41 +40,50 @@ object RoleCredentialsRepository {
         db.collection("credentials").document("admin_credentials")
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.let {
-                    adminEmail = it.getString("email") ?: ""
-                    adminPassword = it.getString("password") ?: ""
+                    adminEmail = it.getString("email") ?: "yok"
+                    adminPassword = it.getString("password") ?: "yok"
                 }
             }
 
         db.collection("credentials").document("yonetim_kurulu_credentials")
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.let {
-                    yonetimKuruluEmail = it.getString("email") ?: ""
-                    yonetimKuruluPassword = it.getString("password") ?: ""
+                    yonetimKuruluEmail = it.getString("email") ?: "yok"
+                    yonetimKuruluPassword = it.getString("password") ?: "yok"
                 }
             }
 
         db.collection("credentials").document("ekip_lideri_credentials")
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.let {
-                    ekipLideriEmail = it.getString("email") ?: ""
-                    ekipLideriPassword = it.getString("password") ?: ""
+                    ekipLideriEmail = it.getString("email") ?: "yok"
+                    ekipLideriPassword = it.getString("password") ?: "yok"
                 }
             }
 
         db.collection("credentials").document("asistan_credentials")
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.let {
-                    asistanEmail = it.getString("email") ?: ""
-                    asistanPassword = it.getString("password") ?: ""
+                    asistanEmail = it.getString("email") ?: "yok"
+                    asistanPassword = it.getString("password") ?: "yok"
                 }
             }
 
         db.collection("credentials").document("calisan_credentials")
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.let {
-                    calisanEmail = it.getString("email") ?: ""
-                    calisanPassword = it.getString("password") ?: ""
+                    calisanEmail = it.getString("email") ?: "yok"
+                    calisanPassword = it.getString("password") ?: "yok"
                 }
+            }
+    }
+
+    fun setUser(user: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("credentials").document("current_user")
+            .set(mapOf("current_user" to user))
+            .addOnSuccessListener {
+                currentUser = user
             }
     }
 }

@@ -1,5 +1,6 @@
 package com.yazilimxyz.remindly.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,12 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
@@ -147,6 +144,8 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
             Button(
                 onClick = {
 
+                    signInFirestore(email, password, navController)
+
                 },
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
@@ -177,4 +176,69 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
         }
     }
 }
+
+fun signInFirestore(email: String, password: String, navController: NavController) {
+    when (email) {
+
+        RoleCredentialsRepository.adminEmail -> {
+            if (password == RoleCredentialsRepository.adminPassword) {
+                Log.d("mesaj", "Admin giriş yaptı")
+                RoleCredentialsRepository.setUser("admin")
+                navController.navigate("main")
+            } else {
+                Log.d("mesaj", "Admin şifresi yanlış")
+            }
+        }
+
+        RoleCredentialsRepository.ekipLideriEmail -> {
+            if (password == RoleCredentialsRepository.ekipLideriPassword) {
+                Log.d("mesaj", "Ekip Lideri giriş yaptı")
+                RoleCredentialsRepository.setUser("ekipLideri")
+                navController.navigate("main")
+            } else {
+                Log.d("mesaj", "Ekip Lideri şifresi yanlış")
+            }
+        }
+
+        RoleCredentialsRepository.yonetimKuruluEmail -> {
+            if (password == RoleCredentialsRepository.yonetimKuruluPassword) {
+                Log.d("mesaj", "Yönetim Kurulu giriş yaptı")
+                RoleCredentialsRepository.setUser("yonetimKurulu")
+                navController.navigate("main")
+            } else {
+                Log.d("mesaj", "Yönetim Kurulu şifresi yanlış")
+            }
+        }
+
+        RoleCredentialsRepository.asistanEmail -> {
+            if (password == RoleCredentialsRepository.asistanPassword) {
+                Log.d("mesaj", "Asistan giriş yaptı")
+                RoleCredentialsRepository.setUser("asistan")
+                navController.navigate("main")
+            } else {
+                Log.d("mesaj", "Asistan şifresi yanlış")
+            }
+        }
+
+        RoleCredentialsRepository.calisanEmail -> {
+            if (password == RoleCredentialsRepository.calisanPassword) {
+                Log.d(
+                    "mesaj",
+                    "Çalışan giriş yaptı: ${RoleCredentialsRepository.calisanEmail} ve ${RoleCredentialsRepository.calisanPassword}",
+                )
+                RoleCredentialsRepository.setUser("calisan")
+                navController.navigate("main")
+            } else {
+                Log.d("mesaj", "Çalışan şifresi yanlış")
+            }
+        }
+
+        else -> {
+            Log.d("mesaj", "Kullanıcı email bulunamadi")
+        }
+
+
+    }
+}
+
 
