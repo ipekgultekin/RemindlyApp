@@ -40,13 +40,13 @@ fun AdminProfilePage(navController: NavController) {
 
         Surface(
             modifier = Modifier.size(130.dp),
-            shape = CircleShape,              // Apply CircleShape to the Surface
-            elevation = 8.dp                  // Set elevation for shadow effect
+            shape = CircleShape,
+            elevation = 8.dp
         ) {
             Image(
                 painter = painterResource(id = R.drawable.avatar2),
                 contentDescription = null,
-                modifier = Modifier.clip(CircleShape), // Apply clipping inside the surface
+                modifier = Modifier.clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
         }
@@ -55,7 +55,7 @@ fun AdminProfilePage(navController: NavController) {
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
-            text = "Welcome, Admin!", // Displays the fetched email or "Loading..." initially
+            text = "Welcome, Admin!", 
             style = TextStyle(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,

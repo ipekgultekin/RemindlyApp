@@ -62,8 +62,6 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun AdminPanel(navController: NavController) {
 
-    //asd
-
     var currentEmail by remember { mutableStateOf("") }
     var currentPassword by remember { mutableStateOf("") }
 

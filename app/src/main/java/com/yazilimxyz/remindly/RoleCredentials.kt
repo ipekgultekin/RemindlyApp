@@ -65,7 +65,6 @@ class AdminViewModel : ViewModel() {
     var password = mutableStateOf<String?>(null)
         public set
 
-    // Function to fetch admin credentials
     fun loadAdminCredentials() {
         viewModelScope.launch {
             val db = FirebaseFirestore.getInstance()
