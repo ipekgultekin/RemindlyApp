@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">remindly</string>
-    <string name="new_meeting">Create\nNew Meeting</string>
+    <string name="language">Language</string>
+    <string name="create_new_meeting">Create\nNew Meeting</string>
+    <string name="meeting_title">Meeting Title</string>
+    <string name="enter_meeting_title">Enter a title for your meeting</string>
+    <string name="description">Description</string>
+    <string name="enter_description">Enter a description for your meeting</string>
+    <string name="date_time">Date and Time</string>
+    <string name="priority">Priority</string>
+    <string name="assigned_for">Assigned For</string>
+    <string name="create_meeting">Create Meeting</string>
+    <string name="clear_fields">Clear Fields</string>
+    <string name="select_date_time">Select Date and Time</string>
+    <string name="please_fill_required_fields">Please fill in all required fields..</string>
 </resources>
