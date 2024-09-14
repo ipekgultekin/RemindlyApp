@@ -1,0 +1,15 @@
+<resources>
+    <string name="language">Dil</string>
+    <string name="create_new_meeting">Yeni Toplantı Oluştur</string>
+    <string name="meeting_title">Toplantı Başlığı</string>
+    <string name="enter_meeting_title">Toplantınız için bir başlık girin</string>
+    <string name="description">Açıklama</string>
+    <string name="enter_description">Toplantınız için bir açıklama girin</string>
+    <string name="date_time">Tarih ve Saat</string>
+    <string name="priority">Öncelik</string>
+    <string name="assigned_for">Atanan</string>
+    <string name="create_meeting">Toplantıyı Oluştur</string>
+    <string name="clear_fields">Alanları Temizle</string>
+    <string name="select_date_time">Tarih ve Saat Seçin</string>
+    <string name="please_fill_required_fields">Lütfen tüm gerekli alanları doldurun..</string>
+</resources>

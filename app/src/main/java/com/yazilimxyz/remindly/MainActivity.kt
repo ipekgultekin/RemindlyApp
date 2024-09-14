@@ -56,11 +56,9 @@ class MainActivity : ComponentActivity() {
     fun RemindlyApp(themeViewModel: ThemeViewModel) {
         val navController = rememberNavController()
 
-        // Define a state to handle loading
         var isLoading by remember { mutableStateOf(true) }
         var currentUser by remember { mutableStateOf<String?>(null) }
 
-        // Fetch currentUser asynchronously
         LaunchedEffect(Unit) {
             currentUser = RoleCredentialsRepository.currentUser
             isLoading = false

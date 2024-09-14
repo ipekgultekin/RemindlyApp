@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 
