@@ -46,7 +46,6 @@ import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 import com.yazilimxyz.remindly.ui.theme.setAppLocal
 
-
 @Composable
 fun SettingsPage(
     navController: NavController,
@@ -75,7 +74,7 @@ fun SettingsPage(
         // Profil görüntüsü
         Image(
             painter = painterResource(id = R.drawable.settings),
-            contentDescription = "Profile Image",
+            contentDescription = "Ayarlar Görüntüsü",
             modifier = Modifier
                 .size(200.dp)
                 .padding(bottom = 32.dp)
@@ -93,21 +92,21 @@ fun SettingsPage(
         ) {
             // Tema ayarları
             SettingsBar(
-                title = "Theme",
+                title = "Tema",
                 color = themeColor,
-                options = listOf("Dark Theme", "Light Theme"),
+                options = listOf("Koyu Tema", "Açık Tema"),
                 isExpanded = isThemeExpanded,
                 onClick = { isThemeExpanded = !isThemeExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
                 textColor = textColor,
                 onOptionSelected = { selectedOption ->
-                    themeViewModel.isDarkTheme = selectedOption == "Dark Theme"
+                    themeViewModel.isDarkTheme = selectedOption == "Koyu Tema"
                 }
             )
 
             // Dil ayarları
             SettingsBar(
-                title = "Language",
+                title = "Dil",
                 color = themeColor,
                 options = listOf("Türkçe", "English"),
                 isExpanded = isLanguageExpanded,
@@ -123,7 +122,7 @@ fun SettingsPage(
 
             // Bildirim ayarları (eklemek isterseniz)
             NotificationSettingsBar(
-                title = "Notification Settings", color = themeColor, textColor = textColor
+                title = "Bildirim Ayarları", color = themeColor, textColor = textColor
             )
         }
 
@@ -143,15 +142,13 @@ fun SettingsPage(
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Sign Out", style = TextStyle(
+                text = "Oturumu Kapat", style = TextStyle(
                     color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp
                 ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
             )
         }
     }
 }
-
-
 
 @Composable
 fun SettingsBar(
@@ -205,7 +202,6 @@ fun restartApp(context: Context) {
     intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     context.startActivity(intent)
 }
-
 
 @Composable
 fun NotificationSettingsBar(title: String, color: Color, textColor: Color) {

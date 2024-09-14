@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -68,7 +69,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Header Image",
+            contentDescription = stringResource(id = R.string.app_name), // Updated
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
@@ -77,7 +78,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Metin
-        Text(text = "Search & Sort", style = TextStyle(fontSize = 20.sp, color = Color.Gray))
+        Text(text = stringResource(id = R.string.searchandsort), style = TextStyle(fontSize = 20.sp, color = Color.Gray))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
@@ -94,7 +95,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
 
             Icon(
                 imageVector = Icons.Sharp.Menu,
-                contentDescription = "Filter Icon",
+                contentDescription = stringResource(id = R.string.search), // Updated
                 modifier = Modifier
                     .clickable { expanded = true }
                     .padding(8.dp)
@@ -108,13 +109,13 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Tarihe Göre") },
+                    text = { Text(stringResource(id = R.string.accdate)) },
                     onClick = {
                         expanded = false
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("Renge Göre") },
+                    text = { Text(stringResource(id = R.string.acccolor)) },
                     onClick = {
                         expanded = false
                     }
@@ -125,14 +126,14 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Kategori seçim
-        Text(text = "Choose a Category", style = TextStyle(fontSize = 20.sp, color = Color.Gray))
+        Text(text = stringResource(id = R.string.choose), style = TextStyle(fontSize = 20.sp, color = Color.Gray))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             CategoryButton("All", selectedCategory, Color.Gray) { selectedCategory = "All" }
-            CategoryButton("Red", selectedCategory, Color(0xFFa40000)) { selectedCategory = "Red" }
-            CategoryButton("Green", selectedCategory, Color(0xFF008b00)) { selectedCategory = "Green" }
-            CategoryButton("Blue", selectedCategory, Color(0xFF0961B6)) { selectedCategory = "Blue" }
+            CategoryButton(stringResource(id = R.string.red), selectedCategory, Color(0xFFa40000)) { selectedCategory = "Red" }
+            CategoryButton(stringResource(id = R.string.green), selectedCategory, Color(0xFF008b00)) { selectedCategory = "Green" }
+            CategoryButton(stringResource(id = R.string.blue), selectedCategory, Color(0xFF0961B6)) { selectedCategory = "Blue" }
         }
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -159,12 +160,19 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
         onValueChange = onSearchTextChanged,
         modifier = modifier.fillMaxWidth(),
         placeholder = {
-            Text(text = "Search...", fontSize = 16.sp, color = Color.Gray)
+            Text(
+                text = stringResource(id = R.string.search),
+                fontSize = 16.sp,
+                color = Color.Gray
+            ) // Updated
         },
         textStyle = TextStyle(fontSize = 16.sp),
         singleLine = true,
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = stringResource(id = R.string.search)
+            ) // Updated
         },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
@@ -172,6 +180,7 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
         )
     )
 }
+
 
 @Composable
 fun TaskCard(task: TaskItem) {
@@ -252,4 +261,3 @@ data class TaskItem(
     val colorName: String,
     val description: String // Yeni açıklama alanı
 )
-

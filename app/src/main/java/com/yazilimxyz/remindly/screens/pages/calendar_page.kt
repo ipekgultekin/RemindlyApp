@@ -22,9 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.yazilimxyz.remindly.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -58,7 +60,7 @@ fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
         )
         .padding(16.dp)) {
         Text(
-            text = month.format(DateTimeFormatter.ofPattern("MMMM yyyy")),
+            text = formatMonthYear(month),
             style = MaterialTheme.typography.titleLarge,
             color = colorScheme.onBackground,
             modifier = Modifier.fillMaxWidth(),
@@ -71,10 +73,40 @@ fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun formatMonthYear(month: LocalDate): String {
+    val monthNames = listOf(
+        stringResource(id = R.string.january),
+        stringResource(id = R.string.february),
+        stringResource(id = R.string.march),
+        stringResource(id = R.string.april),
+        stringResource(id = R.string.may),
+        stringResource(id = R.string.june),
+        stringResource(id = R.string.july),
+        stringResource(id = R.string.august),
+        stringResource(id = R.string.september),
+        stringResource(id = R.string.october),
+        stringResource(id = R.string.november),
+        stringResource(id = R.string.december)
+    )
+    val monthIndex = month.monthValue - 1
+    val monthName = monthNames[monthIndex]
+    return "$monthName ${month.year}"
+}
+
 
 @Composable
 fun DaysOfWeekHeader(colorScheme: ColorScheme) {
-    val daysOfWeek = listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+    val daysOfWeek = listOf(
+        stringResource(id = R.string.sunday),
+        stringResource(id = R.string.monday),
+        stringResource(id = R.string.tuesday),
+        stringResource(id = R.string.wednesday),
+        stringResource(id = R.string.thursday),
+        stringResource(id = R.string.friday),
+        stringResource(id = R.string.saturday)
+    )
     Row(modifier = Modifier.fillMaxWidth()) {
         daysOfWeek.forEach { day ->
             Box(

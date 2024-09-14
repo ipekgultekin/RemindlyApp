@@ -47,6 +47,16 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
                 onClick = { navController.navigate("calendar") }
             )
             NavigationBarItem(
+                icon = { Icon(Icons.Filled.AddCircle, contentDescription = "Add") },
+                label = { Text(stringResource(id = R.string.add_meeting)) },
+                selected = currentRoute == "add",
+                onClick = {
+                    navController.navigate("add") {
+                        popUpTo("add") { saveState = true }
+                    }
+                }
+            )
+            NavigationBarItem(
                 icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
                 label = { Text(stringResource(id = R.string.profile)) },
                 selected = currentRoute == "profile",

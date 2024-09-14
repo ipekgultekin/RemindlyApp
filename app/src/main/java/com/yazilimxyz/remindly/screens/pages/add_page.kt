@@ -3,24 +3,12 @@ package com.yazilimxyz.remindly.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -35,14 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,18 +43,18 @@ import com.yazilimxyz.remindly.saveMeetingToFirestore
 import java.util.Calendar
 
 @Composable
-fun spacer1() {
+fun Spacer1() {
     Spacer(modifier = Modifier.height(30.dp))
 }
 
 @Composable
-fun spacer2() {
+fun Spacer2() {
     Spacer(modifier = Modifier.height(5.dp))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun addField(
+fun AddField(
     icon: Int,
     title: String,
     fieldTitle: String,
@@ -81,8 +62,8 @@ fun addField(
     textState: MutableState<String>,
     onValueChange: (String) -> Unit
 ) {
-    val textColor = MaterialTheme.colorScheme.onBackground // Yazı rengi
-    val fieldTitleColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) // Label rengi
+    val textColor = MaterialTheme.colorScheme.onBackground
+    val fieldTitleColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -90,8 +71,8 @@ fun addField(
                 painter = painterResource(icon),
                 contentDescription = description,
                 modifier = Modifier
-                    .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
-                    .aspectRatio(1f) // Ensures the image remains square
+                    .fillMaxWidth(0.1f)
+                    .aspectRatio(1f)
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
@@ -104,9 +85,9 @@ fun addField(
             )
         }
 
-        spacer2()
-        spacer2()
-        spacer2()
+        Spacer2()
+        Spacer2()
+        Spacer2()
 
         TextField(
             value = textState.value,
@@ -124,7 +105,7 @@ fun addField(
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), // Background color
+                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = MaterialTheme.colorScheme.primary
@@ -135,22 +116,21 @@ fun addField(
                 .padding(horizontal = 8.dp),
             shape = MaterialTheme.shapes.medium
         )
-        spacer1()
+        Spacer1()
     }
 }
-
 
 @Composable
 fun AddPage(context: Context) {
     val textColor = MaterialTheme.colorScheme.onBackground
 
-    var selectedAvatarIndex by remember { mutableIntStateOf(0) }
+    var selectedAvatarIndex by remember { mutableStateOf(0) }
     var selectedDateTime by remember { mutableStateOf("") }
-    var dateTimeText by remember { mutableStateOf("Select Date & Time") }
+    var dateTimeText by remember { mutableStateOf(context.getString(R.string.select_date_time)) }
 
-    var selectedPriority = remember { mutableFloatStateOf(3f) } // Default rating value
-    var meetingTitleState = remember { mutableStateOf("") }
-    var meetingDescriptionState = remember { mutableStateOf("") }
+    var selectedPriority by remember { mutableStateOf(3f) }
+    var meetingTitleState by remember { mutableStateOf("") }
+    var meetingDescriptionState by remember { mutableStateOf("") }
 
     val avatars = listOf(
         R.drawable.avatar2,
@@ -160,7 +140,14 @@ fun AddPage(context: Context) {
         R.drawable.avatar5
     )
 
-    val avatarLabels = listOf("Admin", "Asistan", "Ekip Lideri", "Yönetim Kurulu", "Çalışan")
+    val avatarLabels = listOf(
+        context.getString(R.string.admin),
+        context.getString(R.string.assistant),
+        context.getString(R.string.teamleader),
+        context.getString(R.string.boardmember),
+        context.getString(R.string.employee)
+    )
+
 
     val calendar = Calendar.getInstance()
 
@@ -172,55 +159,54 @@ fun AddPage(context: Context) {
     ) {
         item {
             Text(
-                text = "Create\nNew Meeting",
+                text = context.getString(R.string.create_new_meeting),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 40.sp,
-                    color = textColor // Yazı rengi
+                    color = textColor
                 )
             )
-            spacer1()
+            Spacer1()
         }
 
         item {
-            addField(
+            AddField(
                 icon = R.drawable.title,
-                title = "Meeting Title",
-                fieldTitle = "Enter a title for your meeting",
+                title = context.getString(R.string.meeting_title),
+                fieldTitle = context.getString(R.string.enter_meeting_title),
                 description = "meeting",
-                textState = meetingTitleState
+                textState = mutableStateOf(meetingTitleState)
             ) { newValue ->
-                println("it is: $newValue")
-
+                meetingTitleState = newValue
+                println("Meeting Title: $newValue")
             }
         }
 
         item {
-            addField(
+            AddField(
                 icon = R.drawable.description,
-                title = "Description",
-                fieldTitle = "Enter a description for your meeting",
+                title = context.getString(R.string.description),
+                fieldTitle = context.getString(R.string.enter_description),
                 description = "description",
-                textState = meetingDescriptionState
+                textState = mutableStateOf(meetingDescriptionState)
             ) { newValue ->
-                println("it is: $newValue")
-
+                meetingDescriptionState = newValue
+                println("Description: $newValue")
             }
         }
-
 
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.date),
-                    contentDescription = "date icon",
+                    contentDescription = "Date icon",
                     modifier = Modifier
                         .fillMaxWidth(0.1f)
                         .aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(
-                    text = "Date & Time",
+                    text = context.getString(R.string.date_time),
                     style = MaterialTheme.typography.labelMedium.copy(
                         color = textColor,
                         fontWeight = FontWeight.Bold,
@@ -229,11 +215,11 @@ fun AddPage(context: Context) {
                 )
             }
 
-            spacer2()
-            spacer2()
-            spacer2()
+            Spacer2()
+            Spacer2()
+            Spacer2()
 
-            CustomButton(title = dateTimeText, color = textColor) { // Buton rengi
+            CustomButton(title = dateTimeText, color = textColor) {
                 DatePickerDialog(
                     context,
                     { _, year, month, dayOfMonth ->
@@ -247,8 +233,8 @@ fun AddPage(context: Context) {
                                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                                 calendar.set(Calendar.MINUTE, minute)
 
-                                selectedDateTime =
-                                    "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
+                                selectedDateTime = "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
+                                dateTimeText = selectedDateTime
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE),
@@ -263,10 +249,6 @@ fun AddPage(context: Context) {
                 }.show()
             }
 
-            if (selectedDateTime.isNotEmpty()) {
-                dateTimeText = selectedDateTime
-            }
-
             Spacer(modifier = Modifier.height(30.dp))
         }
 
@@ -274,14 +256,14 @@ fun AddPage(context: Context) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.priority),
-                    contentDescription = "priority icon",
+                    contentDescription = "Priority icon",
                     modifier = Modifier
                         .fillMaxWidth(0.1f)
                         .aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(
-                    text = "Priority",
+                    text = context.getString(R.string.priority),
                     style = MaterialTheme.typography.labelMedium.copy(
                         color = textColor,
                         fontWeight = FontWeight.Bold,
@@ -291,7 +273,7 @@ fun AddPage(context: Context) {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            PriorityBar(context, selectedPriority)
+            PriorityBar(selectedPriority = mutableStateOf(selectedPriority))
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -300,34 +282,37 @@ fun AddPage(context: Context) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.assigned),
-                    contentDescription = "assigned icon",
+                    contentDescription = "Assigned icon",
                     modifier = Modifier
-                        .fillMaxWidth(0.1f) // Image takes 10% of the parent's width
-                        .aspectRatio(1f) // Ensures the image remains square
+                        .fillMaxWidth(0.1f)
+                        .aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(
-                    text = "Assigned For", style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color(0xDD191919), fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    text = context.getString(R.string.assigned_for),
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = Color(0xDD191919),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
                 )
             }
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState())
-            ) {
+            Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                 avatars.forEachIndexed { index, avatar ->
-                    AvatarImage(avatar = avatar,
+                    AvatarImage(
+                        avatar = avatar,
                         content = avatarLabels[index],
                         isSelected = selectedAvatarIndex == index,
                         onClick = {
-                            selectedAvatarIndex = index // Update the selected avatar
-                        })
+                            selectedAvatarIndex = index
+                        }
+                    )
                 }
             }
-            spacer1()
+            Spacer1()
         }
 
         item {
@@ -340,35 +325,38 @@ fun AddPage(context: Context) {
         }
 
         item {
-
-            CustomButton(title = "Create Meeting", color = Color(0xDD191919)) {
+            CustomButton(title = context.getString(R.string.create_meeting), color = Color(0xDD191919)) {
                 val meetingModel = MeetingModel(
-                    meetingTitle = meetingTitleState.value,
-                    meetingDescription = meetingDescriptionState.value,
+                    meetingTitle = meetingTitleState,
+                    meetingDescription = meetingDescriptionState,
                     meetingDateTime = selectedDateTime,
-                    priority = selectedPriority.value,
-                    assignedIndex = selectedAvatarIndex
+                    priority = selectedPriority,
+                    assignedIndex = selectedAvatarIndex // Use the correct parameter name
                 )
 
-                if (meetingModel.meetingTitle.isNotEmpty() && meetingModel.meetingDateTime.isNotEmpty()) {
+                if (meetingModel.meetingTitle.isNotEmpty() &&
+                    meetingModel.meetingDescription.isNotEmpty() &&
+                    meetingModel.meetingDateTime.isNotEmpty()) {
                     saveMeetingToFirestore(meetingModel, context)
                 } else {
-                    Toast.makeText(
-                        context, "Please fill in all required fields..", Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
-            CustomButton(title = "Clear Fields", color = Color(0xFFF2B1B1)) {
+            CustomButton(title = context.getString(R.string.clear_fields), color = Color(0xFFF2B1B1)) {
                 selectedAvatarIndex = 0
                 selectedDateTime = ""
-                dateTimeText = "Select Date & Time"
-                selectedPriority.value = 0f
+                dateTimeText = context.getString(R.string.select_date_time)
+                selectedPriority = 0f
+                meetingTitleState = ""
+                meetingDescriptionState = ""
             }
         }
     }
 }
+
+
 
 @Composable
 fun AvatarImage(
@@ -377,8 +365,8 @@ fun AvatarImage(
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClick() }) {
-        // Box containing the image with border
+            .clickable { onClick() }
+    ) {
         Box(
             modifier = Modifier
                 .size(90.dp)
@@ -387,7 +375,8 @@ fun AvatarImage(
                     width = 6.dp,
                     color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else Color.Transparent,
                     shape = CircleShape
-                ), contentAlignment = Alignment.Center
+                ),
+            contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = avatar),
@@ -401,7 +390,7 @@ fun AvatarImage(
             text = content,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onBackground // Use theme color for text
+                color = MaterialTheme.colorScheme.onBackground
             )
         )
     }
@@ -420,10 +409,9 @@ fun StarRatingBar(
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating
-            val icon = if (isSelected) Icons.Rounded.Star else Icons.Rounded.Star
             val iconTintColor = if (isSelected) Color(0xFFF2B1B1) else Color(0x44191919)
             Icon(
-                imageVector = icon,
+                imageVector = Icons.Rounded.Star,
                 contentDescription = null,
                 tint = iconTintColor,
                 modifier = Modifier
@@ -442,9 +430,8 @@ fun StarRatingBar(
 }
 
 @Composable
-fun PriorityBar(context: Context, selectedPriority: MutableState<Float>) {
+fun PriorityBar(selectedPriority: MutableState<Float>) {
     StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
         selectedPriority.value = it
-
     })
 }
