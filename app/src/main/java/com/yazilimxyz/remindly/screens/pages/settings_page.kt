@@ -44,10 +44,15 @@ import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
+import com.yazilimxyz.remindly.ui.theme.setAppLocal
 
 
 @Composable
-fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
+fun SettingsPage(
+    navController: NavController,
+    themeViewModel: ThemeViewModel,
+    onLanguageChanged: (String) -> Unit // Dil değiştirme fonksiyonu
+) {
     val themeColor = Color(0xFFF2B1B1)
     val expandedBackgroundColor = Color(0xFFB0BEC5)
     val textColor = Color(0xFFFFFFFF)
@@ -67,6 +72,7 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
     ) {
         Spacer(modifier = Modifier.height(100.dp))
 
+        // Profil görüntüsü
         Image(
             painter = painterResource(id = R.drawable.settings),
             contentDescription = "Profile Image",
@@ -85,7 +91,9 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            SettingsBar(title = "Theme",
+            // Tema ayarları
+            SettingsBar(
+                title = "Theme",
                 color = themeColor,
                 options = listOf("Dark Theme", "Light Theme"),
                 isExpanded = isThemeExpanded,
@@ -94,7 +102,10 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 textColor = textColor,
                 onOptionSelected = { selectedOption ->
                     themeViewModel.isDarkTheme = selectedOption == "Dark Theme"
-                })
+                }
+            )
+
+            // Dil ayarları
             SettingsBar(
                 title = "Language",
                 color = themeColor,
@@ -102,8 +113,15 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
                 isExpanded = isLanguageExpanded,
                 onClick = { isLanguageExpanded = !isLanguageExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
-                textColor = textColor
+                textColor = textColor,
+                onOptionSelected = { selectedOption ->
+                    // Dil seçildiğinde, onLanguageChanged fonksiyonu çağrılır
+                    val languageCode = if (selectedOption == "Türkçe") "tr" else "en"
+                    onLanguageChanged(languageCode) // Dil kodunu gönderiyoruz
+                }
             )
+
+            // Bildirim ayarları (eklemek isterseniz)
             NotificationSettingsBar(
                 title = "Notification Settings", color = themeColor, textColor = textColor
             )
@@ -111,11 +129,10 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
 
         Spacer(modifier = Modifier.weight(1f))
 
+        // Çıkış butonu
         Button(
             onClick = {
-
-                RoleCredentialsRepository.setUser("")
-
+                RoleCredentialsRepository.setUser("") // Kullanıcı oturumu kapatılır
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,6 +150,8 @@ fun SettingsPage(navController: NavController, themeViewModel: ThemeViewModel) {
         }
     }
 }
+
+
 
 @Composable
 fun SettingsBar(
@@ -183,11 +202,8 @@ fun SettingsBar(
 
 fun restartApp(context: Context) {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    intent?.let {
-        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(it)
-        Runtime.getRuntime().exit(0)
-    }
+    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    context.startActivity(intent)
 }
 
 

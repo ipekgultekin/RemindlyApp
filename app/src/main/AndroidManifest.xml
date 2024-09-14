@@ -12,16 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Remindly"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Remindly">
+            android:theme="@style/Theme.Remindly"
+            android:configChanges="locale|orientation|screenSize"> <!-- Buraya ekliyoruz -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
