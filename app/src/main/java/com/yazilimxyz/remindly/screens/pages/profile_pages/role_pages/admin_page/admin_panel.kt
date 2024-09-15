@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yazilimxyz.remindly.AdminViewModel
 import com.yazilimxyz.remindly.R
@@ -125,7 +124,7 @@ fun AdminPanel(navController: NavController) {
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 AvatarImage(
-                    avatar = if (!RoleCredentialsRepository.adminEmail.isNullOrEmpty()) {
+                    avatar = if (RoleCredentialsRepository.adminEmail != "yok") {
                         R.drawable.avatar2
                     } else {
                         R.drawable.avatar22
@@ -136,7 +135,7 @@ fun AdminPanel(navController: NavController) {
                     selectedAvatarIndex = 0
                 }
                 AvatarImage(
-                    avatar = if (!RoleCredentialsRepository.asistanEmail.isNullOrEmpty()) {
+                    avatar = if (RoleCredentialsRepository.asistanEmail != "yok") {
                         R.drawable.avatar1
                     } else {
                         R.drawable.avatar11
@@ -147,7 +146,7 @@ fun AdminPanel(navController: NavController) {
                     selectedAvatarIndex = 1
                 }
                 AvatarImage(
-                    avatar = if (!RoleCredentialsRepository.ekipLideriEmail.isNullOrEmpty()) {
+                    avatar = if (RoleCredentialsRepository.ekipLideriEmail != "yok") {
                         R.drawable.avatar3
                     } else {
                         R.drawable.avatar33
@@ -166,7 +165,7 @@ fun AdminPanel(navController: NavController) {
                     .align(Alignment.CenterHorizontally)
             ) {
                 AvatarImage(
-                    avatar = if (!RoleCredentialsRepository.yonetimKuruluEmail.isNullOrEmpty()) {
+                    avatar = if (RoleCredentialsRepository.yonetimKuruluEmail != "yok") {
                         R.drawable.avatar4
                     } else {
                         R.drawable.avatar44
@@ -177,7 +176,7 @@ fun AdminPanel(navController: NavController) {
                     selectedAvatarIndex = 3
                 }
                 AvatarImage(
-                    avatar = if (!RoleCredentialsRepository.calisanEmail.isNullOrEmpty()) {
+                    avatar = if (RoleCredentialsRepository.calisanEmail != "yok") {
                         R.drawable.avatar5
                     } else {
                         R.drawable.avatar55
@@ -510,7 +509,6 @@ fun CredentialsDisplay(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
-//            elevation = 4.dp,
             shape = RoundedCornerShape(8.dp)
         ) {
             Box(
@@ -528,7 +526,6 @@ fun CredentialsDisplay(
         }
     }
 }
-
 
 @Composable
 fun DeleteRoleButton(selectedAvatarIndex: Int) {
@@ -591,16 +588,34 @@ fun DeleteRoleButton(selectedAvatarIndex: Int) {
 suspend fun deleteRole(avatarIndex: Int) {
     when (avatarIndex) {
         0 -> {
-            println("You cannot delete admin.")
+            println("You cannot delete admin..")
         }
 
-        1 -> deleteRoleAndHandleResult("asistan_credentials")
-        2 -> deleteRoleAndHandleResult("ekip_lideri_credentials")
-        3 -> deleteRoleAndHandleResult("yonetim_kurulu_credentials")
-        4 -> deleteRoleAndHandleResult("calisan_credentials")
+        1 -> {
+            deleteRoleAndHandleResult("asistan_credentials")
+            RoleCredentialsRepository.asistanEmail = "yok"
+            RoleCredentialsRepository.asistanPassword = "yok"
+        }
+
+        2 -> {
+            deleteRoleAndHandleResult("ekip_lideri_credentials")
+            RoleCredentialsRepository.ekipLideriEmail = "yok"
+            RoleCredentialsRepository.ekipLideriPassword = "yok"
+        }
+
+        3 -> {
+            deleteRoleAndHandleResult("yonetim_kurulu_credentials")
+            RoleCredentialsRepository.yonetimKuruluEmail = "yok"
+            RoleCredentialsRepository.yonetimKuruluPassword = "yok"
+        }
+
+        4 -> {
+            deleteRoleAndHandleResult("calisan_credentials")
+            RoleCredentialsRepository.calisanEmail = "yok"
+            RoleCredentialsRepository.calisanPassword = "yok"
+        }
     }
 }
-
 
 suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
     val db = FirebaseFirestore.getInstance()
@@ -618,4 +633,3 @@ suspend fun deleteRoleAndHandleResult(documentCredentials: String) {
         println("Error deleting role: ${e.message}")
     }
 }
-
