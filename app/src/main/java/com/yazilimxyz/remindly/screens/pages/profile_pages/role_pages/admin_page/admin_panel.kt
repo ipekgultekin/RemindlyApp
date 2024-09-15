@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,11 +55,12 @@ import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.noRoleLottie
 import com.yazilimxyz.remindly.saveRoleCredentials
 import com.yazilimxyz.remindly.screens.AvatarImage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun AdminPanel(navController: NavController) {
+fun AdminPanel(navController: NavController, snackbarHostState: SnackbarHostState) {
 
     var currentEmail by remember { mutableStateOf("") }
     var currentPassword by remember { mutableStateOf("") }
@@ -75,10 +77,6 @@ fun AdminPanel(navController: NavController) {
     LaunchedEffect(Unit) {
         adminViewModel.loadAdminCredentials()
     }
-
-    val adminEmail = adminViewModel.email.value
-    val adminPassword = adminViewModel.password.value
-
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -289,7 +287,7 @@ fun AdminPanel(navController: NavController) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            DeleteRoleButton(selectedAvatarIndex)
+            DeleteRoleButton(selectedAvatarIndex, snackbarHostState)
         }
     }
     if (showRoleDialog) {
@@ -508,8 +506,7 @@ fun CredentialsDisplay(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
-            shape = RoundedCornerShape(8.dp)
+                .height(60.dp), shape = RoundedCornerShape(8.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -528,9 +525,10 @@ fun CredentialsDisplay(
 }
 
 @Composable
-fun DeleteRoleButton(selectedAvatarIndex: Int) {
+fun DeleteRoleButton(selectedAvatarIndex: Int, snackbarHostState: SnackbarHostState) {
     val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
+
 
     Button(
         modifier = Modifier
@@ -568,7 +566,7 @@ fun DeleteRoleButton(selectedAvatarIndex: Int) {
                 containerColor = Color.Red.copy(alpha = 0.5f),
             ), onClick = {
                 scope.launch {
-                    deleteRole(selectedAvatarIndex)
+                    deleteRole(selectedAvatarIndex, snackbarHostState, scope)
                     showDialog = false
                 }
             }) {
@@ -585,34 +583,53 @@ fun DeleteRoleButton(selectedAvatarIndex: Int) {
     }
 }
 
-suspend fun deleteRole(avatarIndex: Int) {
+suspend fun deleteRole(
+    avatarIndex: Int,
+    snackbarHostState: SnackbarHostState,
+    scope: CoroutineScope
+) {
     when (avatarIndex) {
         0 -> {
             println("You cannot delete admin..")
+            scope.launch {
+                snackbarHostState.showSnackbar("You cannot delete admin.")
+            }
         }
 
         1 -> {
             deleteRoleAndHandleResult("asistan_credentials")
             RoleCredentialsRepository.asistanEmail = "yok"
             RoleCredentialsRepository.asistanPassword = "yok"
+            scope.launch {
+                snackbarHostState.showSnackbar("You deleted asistant.")
+            }
         }
 
         2 -> {
             deleteRoleAndHandleResult("ekip_lideri_credentials")
             RoleCredentialsRepository.ekipLideriEmail = "yok"
             RoleCredentialsRepository.ekipLideriPassword = "yok"
+            scope.launch {
+                snackbarHostState.showSnackbar("You deleted ekip lideri.")
+            }
         }
 
         3 -> {
             deleteRoleAndHandleResult("yonetim_kurulu_credentials")
             RoleCredentialsRepository.yonetimKuruluEmail = "yok"
             RoleCredentialsRepository.yonetimKuruluPassword = "yok"
+            scope.launch {
+                snackbarHostState.showSnackbar("You deleted yönetim kurulu.")
+            }
         }
 
         4 -> {
             deleteRoleAndHandleResult("calisan_credentials")
             RoleCredentialsRepository.calisanEmail = "yok"
             RoleCredentialsRepository.calisanPassword = "yok"
+            scope.launch {
+                snackbarHostState.showSnackbar("You deleted çalışan.")
+            }
         }
     }
 }

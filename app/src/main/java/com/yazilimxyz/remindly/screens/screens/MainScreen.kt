@@ -23,7 +23,6 @@ import com.yazilimxyz.remindly.ui.theme.setAppLocal
 import androidx.compose.ui.res.stringResource
 import com.yazilimxyz.remindly.R
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(themeViewModel: ThemeViewModel) {
@@ -31,8 +30,11 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route ?: "home"
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold(bottomBar = {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        bottomBar = {
         NavigationBar {
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
@@ -50,11 +52,7 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
                 icon = { Icon(Icons.Filled.AddCircle, contentDescription = "Add") },
                 label = { Text(stringResource(id = R.string.add_meeting)) },
                 selected = currentRoute == "add",
-                onClick = {
-                    navController.navigate("add") {
-                        popUpTo("add") { saveState = true }
-                    }
-                }
+                onClick = { navController.navigate("add") }
             )
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
@@ -78,7 +76,7 @@ fun MainScreen(themeViewModel: ThemeViewModel) {
             composable("home") { HomePage() }
             composable("calendar") { CalendarPage() }
             composable("adminProfilePage") { AdminProfilePage(navController) }
-            composable("adminPanel") { AdminPanel(navController) }
+            composable("adminPanel") { AdminPanel(navController, snackbarHostState) }
             composable("add") { AddPage(LocalContext.current) }
             composable("profile") { ProfilePage(navController) }
             composable("settings") {
