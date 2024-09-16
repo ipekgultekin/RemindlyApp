@@ -16,12 +16,14 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,13 +44,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
+import com.yazilimxyz.remindly.R.drawable
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
+import androidx.compose.ui.res.stringResource as stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
 
-    val backgroundImage: Painter = painterResource(id = R.drawable.arkaplan)
+    val backgroundImage: Painter = painterResource(id = drawable.arkaplan)
+    val darkbackgroundImage: Painter = painterResource(id= drawable.darkarkaplan)
+
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -88,13 +95,14 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
                 shape = MaterialTheme.shapes.large,
                 leadingIcon = {
                     Icon(
-                        Icons.Outlined.Email, contentDescription = "Email Icon"
+                        Icons.Outlined.Email, contentDescription = "Email Icon",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 trailingIcon = {
                     if (!isEmailValid && email.isNotEmpty()) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_warning_amber_24),
+                            painter = painterResource(id = drawable.baseline_warning_amber_24),
                             contentDescription = "Invalid Email Icon",
                             tint = Color.Red
                         )
@@ -102,7 +110,16 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
                 },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                isError = !isEmailValid && email.isNotEmpty()
+                isError = !isEmailValid && email.isNotEmpty(),
+                textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface, // Metin rengi dark theme ile uyumlu
+                        fontSize = 16.sp
+            ),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary, // Odaklanıldığında sınır rengi
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface, // Odak dışındayken sınır rengi
+                    cursorColor = MaterialTheme.colorScheme.primary // İmleç rengi
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,25 +131,36 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
                 shape = MaterialTheme.shapes.large,
                 leadingIcon = {
                     Icon(
-                        Icons.Default.Lock, contentDescription = "Password Icon"
+                        Icons.Default.Lock, contentDescription = "Password Icon" ,
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 trailingIcon = {
                     val image = if (passwordVisible) {
-                        painterResource(id = R.drawable.baseline_visibility_24)
+                        painterResource(id = drawable.baseline_visibility_24)
                     } else {
-                        painterResource(id = R.drawable.baseline_visibility_off_24)
+                        painterResource(id = drawable.baseline_visibility_off_24)
                     }
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             painter = image,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 singleLine = true, // Şifreyi tek satırda tut
                 modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 16.sp
+                ),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 ),
@@ -157,7 +185,7 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
 
                 Text(
                     text = "Log In", style = TextStyle(
-                        color = Color.Black, fontSize = 20.sp
+                        color = MaterialTheme.colorScheme.onSurface, fontSize = 20.sp
                     )
                 )
             }
@@ -172,7 +200,7 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = "Remindly plans your week!")
+            Text(text = stringResource(id = R.string.remindlyPlans), color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }

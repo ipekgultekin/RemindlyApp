@@ -30,6 +30,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -66,10 +67,11 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
-            contentDescription = stringResource(id = R.string.app_name), // Updated
+            contentDescription = stringResource(id = R.string.app_name),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
@@ -78,7 +80,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Metin
-        Text(text = stringResource(id = R.string.searchandsort), style = TextStyle(fontSize = 20.sp, color = Color.Gray))
+        Text(text = stringResource(id = R.string.searchandsort), style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground ))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
@@ -95,12 +97,12 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
 
             Icon(
                 imageVector = Icons.Sharp.Menu,
-                contentDescription = stringResource(id = R.string.search), // Updated
+                contentDescription = stringResource(id = R.string.search),
                 modifier = Modifier
                     .clickable { expanded = true }
                     .padding(8.dp)
                     .size(42.dp),
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onBackground
             )
 
             // DropdownMenu
@@ -109,7 +111,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.accdate)) },
+                    text = { Text(stringResource(id = R.string.accdate))  },
                     onClick = {
                         expanded = false
                     }
@@ -126,11 +128,11 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Kategori seçim
-        Text(text = stringResource(id = R.string.choose), style = TextStyle(fontSize = 20.sp, color = Color.Gray))
+        Text(text = stringResource(id = R.string.choose), style = TextStyle(fontSize = 20.sp,  color = MaterialTheme.colorScheme.onBackground))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            CategoryButton("All", selectedCategory, Color.Gray) { selectedCategory = "All" }
+            CategoryButton(stringResource(id = R.string.all), selectedCategory, Color.Gray) { selectedCategory = "All" }
             CategoryButton(stringResource(id = R.string.red), selectedCategory, Color(0xFFa40000)) { selectedCategory = "Red" }
             CategoryButton(stringResource(id = R.string.green), selectedCategory, Color(0xFF008b00)) { selectedCategory = "Green" }
             CategoryButton(stringResource(id = R.string.blue), selectedCategory, Color(0xFF0961B6)) { selectedCategory = "Blue" }
@@ -187,10 +189,10 @@ fun TaskCard(task: TaskItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 100.dp) // Minimum yüksekliği artırarak açıklama alanı ekliyoruz
-            .padding(8.dp), // Kartın etrafına biraz boşluk ekliyoruz
+            .heightIn(min = 100.dp)
+            .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), // Surface color from theme
         border = BorderStroke(1.dp, task.color)
     ) {
         Column(
@@ -215,17 +217,21 @@ fun TaskCard(task: TaskItem) {
                             .background(task.color)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = task.title, fontSize = 16.sp, color = Color.Black)
+                    Text(
+                        text = task.title,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface // Text color from theme
+                    )
                 }
-                Text(text = task.timeLeft, color = Color.Gray)
+                Text(text = task.timeLeft, color = MaterialTheme.colorScheme.onSurfaceVariant) // Adjust for readability
             }
-            Spacer(modifier = Modifier.height(4.dp)) // Başlık ve açıklama arasında boşluk
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = task.description,
                 fontSize = 14.sp,
-                color = Color.DarkGray,
-                maxLines = 2, // Açıklamanın fazla uzun olmaması için sınır koyabiliriz
-                overflow = TextOverflow.Ellipsis // Uzun açıklamalar için kesme işareti
+                color = MaterialTheme.colorScheme.onSurfaceVariant, // Adjust for readability
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

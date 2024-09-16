@@ -291,7 +291,7 @@ fun AddPage(context: Context) {
                 Text(
                     text = context.getString(R.string.assigned_for),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color(0xDD191919),
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )

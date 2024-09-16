@@ -67,10 +67,11 @@ dependencies {
     implementation(libs.androidx.hilt.lifecycle.viewmodel)
     kapt(libs.androidx.hilt.compiler)
 
-    implementation ("androidx.compose.ui:ui:1.7.1") // Check for the latest version
+    implementation ("androidx.compose.ui:ui:1.7.1")
     implementation ("androidx.compose.material:material:1.7.1") // For Material Design components
     implementation ("androidx.compose.ui:ui-tooling-preview:1.7.1") // For Preview
     implementation ("androidx.navigation:navigation-compose:2.8.0") // For navigation in Compose
+    implementation ("androidx.compose.material3:material3:1.1.0")
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

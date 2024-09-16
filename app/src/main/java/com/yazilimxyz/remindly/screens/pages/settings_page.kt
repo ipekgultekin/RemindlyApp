@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +51,7 @@ import com.yazilimxyz.remindly.ui.theme.setAppLocal
 fun SettingsPage(
     navController: NavController,
     themeViewModel: ThemeViewModel,
-    onLanguageChanged: (String) -> Unit // Dil değiştirme fonksiyonu
+    onLanguageChanged: (String) -> Unit
 ) {
     val themeColor = Color(0xFFF2B1B1)
     val expandedBackgroundColor = Color(0xFFB0BEC5)
@@ -60,6 +61,12 @@ fun SettingsPage(
 
     var isThemeExpanded by remember { mutableStateOf(false) }
     var isLanguageExpanded by remember { mutableStateOf(false) }
+
+    // Store string resources in variables
+    val turkish = stringResource(id = R.string.turkish)
+    val english = stringResource(id = R.string.english)
+    val darkTheme = stringResource(id = R.string.dark)
+    val lightTheme = stringResource(id = R.string.light)
 
     Column(
         modifier = Modifier
@@ -71,10 +78,9 @@ fun SettingsPage(
     ) {
         Spacer(modifier = Modifier.height(100.dp))
 
-        // Profil görüntüsü
         Image(
             painter = painterResource(id = R.drawable.settings),
-            contentDescription = "Ayarlar Görüntüsü",
+            contentDescription = stringResource(id = R.string.settings),
             modifier = Modifier
                 .size(200.dp)
                 .padding(bottom = 32.dp)
@@ -90,45 +96,40 @@ fun SettingsPage(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Tema ayarları
             SettingsBar(
-                title = "Tema",
+                title = stringResource(id = R.string.theme),
                 color = themeColor,
-                options = listOf("Koyu Tema", "Açık Tema"),
+                options = listOf(darkTheme, lightTheme),
                 isExpanded = isThemeExpanded,
                 onClick = { isThemeExpanded = !isThemeExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
                 textColor = textColor,
                 onOptionSelected = { selectedOption ->
-                    themeViewModel.isDarkTheme = selectedOption == "Koyu Tema"
+                    themeViewModel.isDarkTheme = selectedOption == darkTheme
                 }
             )
 
-            // Dil ayarları
             SettingsBar(
-                title = "Dil",
+                title = stringResource(id = R.string.language),
                 color = themeColor,
-                options = listOf("Türkçe", "English"),
+                options = listOf(turkish, english),
                 isExpanded = isLanguageExpanded,
                 onClick = { isLanguageExpanded = !isLanguageExpanded },
                 expandedBackgroundColor = expandedBackgroundColor,
                 textColor = textColor,
                 onOptionSelected = { selectedOption ->
-                    // Dil seçildiğinde, onLanguageChanged fonksiyonu çağrılır
-                    val languageCode = if (selectedOption == "Türkçe") "tr" else "en"
-                    onLanguageChanged(languageCode) // Dil kodunu gönderiyoruz
+                    val languageCode = if (selectedOption == turkish) "tr" else "en"
+                    onLanguageChanged(languageCode)
                 }
             )
 
-            // Bildirim ayarları (eklemek isterseniz)
             NotificationSettingsBar(
-                title = "Bildirim Ayarları", color = themeColor, textColor = textColor
+                title = stringResource(id = R.string.notification), color = themeColor, textColor = textColor
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Çıkış butonu
         Button(
             onClick = {
                 RoleCredentialsRepository.setUser("") // Kullanıcı oturumu kapatılır
@@ -142,13 +143,14 @@ fun SettingsPage(
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Oturumu Kapat", style = TextStyle(
+                text = stringResource(id = R.string.sign_out), style = TextStyle(
                     color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp
                 ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
             )
         }
     }
 }
+
 
 @Composable
 fun SettingsBar(

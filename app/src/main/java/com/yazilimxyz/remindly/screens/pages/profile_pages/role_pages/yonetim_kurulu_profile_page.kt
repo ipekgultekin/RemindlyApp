@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,9 +58,9 @@ fun YonetimKuruluProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Welcome, Yönetim Kurulu.", // Displays the fetched email or "Loading..." initially
+                text = stringResource(id = R.string.welcome_boardmember), // Displays the fetched email or "Loading..." initially
                 style = TextStyle(
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
