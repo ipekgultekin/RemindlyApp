@@ -70,4 +70,8 @@
     <string name="october">Ekim</string>
     <string name="november">Kasım</string>
     <string name="december">Aralık</string>
+    <string name="notification_channel_id">remindly_channel</string>
+    <string name="notification_channel_name">Remindly Notifications</string>
+    <string name="notification_channel_description">This channel is used for Remindly notifications</string>
+
 </resources>

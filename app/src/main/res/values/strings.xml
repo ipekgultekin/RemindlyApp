@@ -70,5 +70,8 @@
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
+    <string name="notification_channel_id">remindly_channel</string>
+    <string name="notification_channel_name">Remindly Notifications</string>
+    <string name="notification_channel_description">This channel is used for Remindly notifications</string>
 
 </resources>

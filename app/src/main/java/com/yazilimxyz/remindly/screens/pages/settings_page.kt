@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -41,11 +42,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.RoleCredentialsRepository
 import com.yazilimxyz.remindly.ui.theme.ThemeViewModel
 import com.yazilimxyz.remindly.ui.theme.setAppLocal
+import com.yazilimxyz.remindly.screens.pages.sendNotification
+import com.yazilimxyz.remindly.screens.pages.checkNotificationPermission
+
 
 @Composable
 fun SettingsPage(
@@ -53,6 +58,8 @@ fun SettingsPage(
     themeViewModel: ThemeViewModel,
     onLanguageChanged: (String) -> Unit
 ) {
+
+
     val themeColor = Color(0xFFF2B1B1)
     val expandedBackgroundColor = Color(0xFFB0BEC5)
     val textColor = Color(0xFFFFFFFF)
@@ -61,6 +68,8 @@ fun SettingsPage(
 
     var isThemeExpanded by remember { mutableStateOf(false) }
     var isLanguageExpanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var switchState by remember { mutableStateOf(false) }
 
     // Store string resources in variables
     val turkish = stringResource(id = R.string.turkish)
@@ -124,7 +133,29 @@ fun SettingsPage(
             )
 
             NotificationSettingsBar(
-                title = stringResource(id = R.string.notification), color = themeColor, textColor = textColor
+                title = stringResource(id = R.string.notification),
+                color = themeColor, // Tema rengine uygun renk
+                textColor = Color.White,
+                isChecked = switchState, // Switch durumunu geçir
+                onCheckedChange = { isChecked ->
+                    // Switch durumunu değiştir
+                    switchState = isChecked
+
+                    // Bildirim iznini kontrol et ve izni yoksa talep et
+                    if (isChecked) {
+                        if (checkNotificationPermission(context)) {
+                            // Bildirim izni varsa, bildirim gönder
+                            sendNotification(context, "Toplantı ve planlarını kaçırma!", "Gelecek toplantıların seni bekliyor.")
+                        } else {
+                            // İzin verilmemişse, kullanıcıyı bilgilendirin veya izni talep edin
+                            println("Bildirim izni verilmedi.")
+                        }
+                    }
+                },
+                onClick = {
+                    // Tıklama olayını işlemek için kod
+                    println("Notification settings bar clicked")
+                }
             )
         }
 
@@ -206,20 +237,36 @@ fun restartApp(context: Context) {
 }
 
 @Composable
-fun NotificationSettingsBar(title: String, color: Color, textColor: Color) {
+fun NotificationSettingsBar(
+    title: String,
+    color: Color,
+    textColor: Color,
+    isChecked: Boolean, // Switch'in durumunu göstermek için bir parametre
+    onCheckedChange: (Boolean) -> Unit, // Switch durumunu değiştiren bir lambda fonksiyonu
+    onClick: () -> Unit // Row'un tıklama olayını işlemek için bir lambda fonksiyonu
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = color, shape = MaterialTheme.shapes.medium)
-            .padding(vertical = 12.dp, horizontal = 16.dp),
+            .padding(vertical = 12.dp, horizontal = 16.dp)
+            .clickable(onClick = onClick) // Row'un tıklanabilirliğini sağlar
+        ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = title, style = TextStyle(
-                fontSize = 18.sp, fontWeight = FontWeight.Bold, color = textColor
+            text = title,
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = textColor
             )
         )
-        Switch(checked = false, onCheckedChange = { /* Handle switch state change */ })
+        Switch(
+            checked = isChecked, // Switch'in durumunu gösterir
+            onCheckedChange = onCheckedChange // Switch'in durumunu değiştiren olay işleyici
+        )
     }
+
 }

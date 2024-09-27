@@ -12,6 +12,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(libs.google.services) // Ensure you have this line for the google-services plugin
+        classpath(libs.google.services.v4315)
     }
 }

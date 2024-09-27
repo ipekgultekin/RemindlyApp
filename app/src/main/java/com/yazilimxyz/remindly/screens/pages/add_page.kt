@@ -401,7 +401,7 @@ fun StarRatingBar(
     maxStars: Int = 5, rating: Float, onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (30f * density).dp
+    val starSize = (20f * density).dp
     val starSpacing = (0.1f * density).dp
 
     Row(

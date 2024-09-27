@@ -5,6 +5,7 @@ firebaseBom = "33.2.0"
 firebaseBomVersion = "32.0.0"
 firebaseFirestoreKtx = "25.1.0"
 googleServices = "4.4.2"
+googleServicesVersion = "4.3.15"
 hiltAndroid = "2.48"
 hiltCompiler = "2.48"
 hiltCompilerVersion = "1.2.0"
@@ -38,6 +39,7 @@ firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 google-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+google-services-v4315 = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
