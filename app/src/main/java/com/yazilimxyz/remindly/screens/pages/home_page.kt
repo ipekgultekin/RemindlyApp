@@ -1,21 +1,11 @@
 package com.yazilimxyz.remindly.screens.pages
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,12 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,10 +34,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yazilimxyz.remindly.R
-
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.models.HomeViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
@@ -62,6 +47,8 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
 
     // ViewModel'deki görev listesine erişiyoruz
     val taskList by homeViewModel.meetings.collectAsState()
+
+    val context = LocalContext.current // Context'i burada alıyoruz
 
     Column(
         modifier = Modifier
@@ -80,7 +67,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Metin
-        Text(text = stringResource(id = R.string.searchandsort), style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground ))
+        Text(text = stringResource(id = R.string.searchandsort), style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
@@ -99,7 +86,10 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
                 imageVector = Icons.Sharp.Menu,
                 contentDescription = stringResource(id = R.string.search),
                 modifier = Modifier
-                    .clickable { expanded = true }
+                    .clickable {
+                        // Arama butonuna tıklandığında gösterilecek Toast
+                        Toast.makeText(context, "Aranıyor: $searchText", Toast.LENGTH_SHORT).show()
+                    }
                     .padding(8.dp)
                     .size(42.dp),
                 tint = MaterialTheme.colorScheme.onBackground
@@ -111,7 +101,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.accdate))  },
+                    text = { Text(stringResource(id = R.string.accdate)) },
                     onClick = {
                         expanded = false
                     }
@@ -128,7 +118,7 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Kategori seçim
-        Text(text = stringResource(id = R.string.choose), style = TextStyle(fontSize = 20.sp,  color = MaterialTheme.colorScheme.onBackground))
+        Text(text = stringResource(id = R.string.choose), style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground))
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -143,7 +133,8 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         // Görev Liste
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             taskList.forEach { task ->
-                if (selectedCategory == "All" || selectedCategory == task.colorName) {
+                if ((selectedCategory == "All" || selectedCategory == task.colorName) &&
+                    (task.title.contains(searchText, ignoreCase = true) || task.description.contains(searchText, ignoreCase = true))) {
                     TaskCard(task)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -151,8 +142,6 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -166,7 +155,7 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
                 text = stringResource(id = R.string.search),
                 fontSize = 16.sp,
                 color = Color.Gray
-            ) // Updated
+            )
         },
         textStyle = TextStyle(fontSize = 16.sp),
         singleLine = true,
@@ -174,7 +163,7 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = stringResource(id = R.string.search)
-            ) // Updated
+            )
         },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
@@ -182,7 +171,6 @@ fun SearchBar(searchText: String, onSearchTextChanged: (String) -> Unit, modifie
         )
     )
 }
-
 
 @Composable
 fun TaskCard(task: TaskItem) {
@@ -192,7 +180,7 @@ fun TaskCard(task: TaskItem) {
             .heightIn(min = 100.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), // Surface color from theme
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, task.color)
     ) {
         Column(
@@ -220,23 +208,22 @@ fun TaskCard(task: TaskItem) {
                     Text(
                         text = task.title,
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface // Text color from theme
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-                Text(text = task.timeLeft, color = MaterialTheme.colorScheme.onSurfaceVariant) // Adjust for readability
+                Text(text = task.timeLeft, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = task.description,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, // Adjust for readability
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
         }
     }
 }
-
 
 // Kategori
 @Composable
@@ -254,9 +241,7 @@ fun CategoryButton(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.padding(4.dp)
     ) {
-        Text(text = category,
-            color = Color.White,
-            fontSize = 18.sp)
+        Text(text = category, color = Color.White, fontSize = 18.sp)
     }
 }
 

@@ -3,6 +3,7 @@ package com.yazilimxyz.remindly.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -415,6 +416,7 @@ fun StarRatingBar(
                 modifier = Modifier
                     .selectable(selected = isSelected, onClick = {
                         onRatingChanged(i.toFloat())
+                        Log.d("StarRatingBar", "User selected priority: $i") // Log priority selection
                     })
                     .width(starSize)
                     .height(starSize)
@@ -431,5 +433,7 @@ fun StarRatingBar(
 fun PriorityBar(selectedPriority: MutableState<Float>) {
     StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
         selectedPriority.value = it
+        println("Priority Selected: $it")
+        Log.d("PriorityBar", "Seçilen öncelik: $it")
     })
 }
