@@ -8,6 +8,12 @@ Remindly is a robust calendar and task management app designed to help users man
 
 Inspired by the design principles of Google Calendar, Remindly introduces enhanced collaboration features. For example, assistants can schedule meetings on behalf of their supervisors, and managers can add meetings to their employees' calendars.
 
+
+
+![WhatsApp Görsel 2024-09-28 saat 16 34 47_f03159f2](https://github.com/user-attachments/assets/98d2427f-f6ee-4225-8dd2-6f3f7c4bcc8f)
+
+
+
 ## Key Features
 
 - **Role-Based Access:** The application supports five distinct roles:
@@ -30,12 +36,6 @@ Inspired by the design principles of Google Calendar, Remindly introduces enhanc
 
 
 
-
-Uploading WhatsApp Video 2024-09-28 saat 18.43.44_0d0352a6.mp4…
-
-
-
-
 ## Project Workflow
 
 - **Design Phase (Figma):** We began by creating user experience and interface designs in Figma, focusing on a user-friendly and intuitive layout.
@@ -45,6 +45,8 @@ Uploading WhatsApp Video 2024-09-28 saat 18.43.44_0d0352a6.mp4…
 - **Development Phase (Coding):** The application was developed using **Kotlin with Jetpack Compose**, following the MVVM architectural pattern for a clean and maintainable codebase.
 
 - **Testing:** Thorough testing was conducted to ensure all features function as expected and to provide a seamless user experience.
+
+
 
 ## Core Technologies
 
@@ -56,7 +58,8 @@ Uploading WhatsApp Video 2024-09-28 saat 18.43.44_0d0352a6.mp4…
 
 
 
-![WhatsApp Görsel 2024-09-28 saat 16 34 47_f03159f2](https://github.com/user-attachments/assets/98d2427f-f6ee-4225-8dd2-6f3f7c4bcc8f)
+![Untitled design](https://github.com/user-attachments/assets/a815d17f-a2f0-45fd-9f8c-dcbcc807a135)
+
 
 
 
