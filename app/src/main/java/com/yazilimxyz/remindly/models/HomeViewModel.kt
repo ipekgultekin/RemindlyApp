@@ -1,6 +1,7 @@
 package com.yazilimxyz.remindly.models
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,7 +27,10 @@ class HomeViewModel : ViewModel() {
     // Firestore'dan toplantıları yükleyen fonksiyon
     private fun loadMeetings() {
         viewModelScope.launch {
+            Log.d("HomeViewModel", "Toplantılar yükleniyor...") // Loglama
             val meetingList = getMeetingsFromFirestore().map { meeting ->
+                Log.d("HomeViewModel", "Toplantı: ${meeting.meetingTitle}, Öncelik: ${meeting.priority}")
+
                 TaskItem(
                     title = meeting.meetingTitle,
                     timeLeft = meeting.meetingDateTime, // Zamanı buradan çekiyoruz bunu daha estetik yaz
@@ -57,13 +61,12 @@ class HomeViewModel : ViewModel() {
         return meetingList
     }
 
-    // Önceliğe göre sabit renkler belirleyen yardımcı fonksiyonlar
     private fun getPriorityColor(priority: Float): Color {
         return when (priority) {
-            1f -> Color(0xFFa40000)
-            2f -> Color(0xFF008b00)
-            3f -> Color(0xFF0961B6)
-            else -> Color.Gray
+            1f -> Color(0xFFa40000) // Kırmızı
+            2f -> Color(0xFF008b00) // Yeşil
+            3f -> Color(0xFF0961B6) // Mavi
+            else -> Color.Gray // Varsayılan gri
         }
     }
 
@@ -75,4 +78,5 @@ class HomeViewModel : ViewModel() {
             else -> "Gray"
         }
     }
+
 }
