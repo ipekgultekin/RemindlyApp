@@ -356,8 +356,6 @@ fun AddPage(context: Context) {
     }
 }
 
-
-
 @Composable
 fun AvatarImage(
     avatar: Int, content: String, isSelected: Boolean, onClick: () -> Unit
