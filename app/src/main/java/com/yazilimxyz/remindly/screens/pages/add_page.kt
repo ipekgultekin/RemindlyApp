@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -129,6 +128,7 @@ fun AddPage(context: Context) {
     var selectedDateTime by remember { mutableStateOf("") }
     var dateTimeText by remember { mutableStateOf(context.getString(R.string.select_date_time)) }
 
+    // Direct mutable state for priority
     var selectedPriority by remember { mutableStateOf(3f) }
     var meetingTitleState by remember { mutableStateOf("") }
     var meetingDescriptionState by remember { mutableStateOf("") }
@@ -148,7 +148,6 @@ fun AddPage(context: Context) {
         context.getString(R.string.boardmember),
         context.getString(R.string.employee)
     )
-
 
     val calendar = Calendar.getInstance()
 
@@ -274,7 +273,9 @@ fun AddPage(context: Context) {
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            PriorityBar(selectedPriority = mutableStateOf(selectedPriority))
+            PriorityBar(selectedPriority = selectedPriority) { newPriority ->
+                selectedPriority = newPriority // Update state directly
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -430,10 +431,7 @@ fun StarRatingBar(
 }
 
 @Composable
-fun PriorityBar(selectedPriority: MutableState<Float>) {
-    StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
-        selectedPriority.value = it
-        println("Priority Selected: $it")
-        Log.d("PriorityBar", "Seçilen öncelik: $it")
-    })
+fun PriorityBar(selectedPriority: Float, onPriorityChange: (Float) -> Unit) {
+    // Priority Bar implementation
+    StarRatingBar(rating = selectedPriority, onRatingChanged = onPriorityChange)
 }

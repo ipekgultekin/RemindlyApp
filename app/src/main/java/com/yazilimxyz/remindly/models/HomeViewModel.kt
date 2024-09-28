@@ -63,9 +63,11 @@ class HomeViewModel : ViewModel() {
 
     private fun getPriorityColor(priority: Float): Color {
         return when (priority) {
-            1f -> Color(0xFFa40000) // Kırmızı
-            2f -> Color(0xFF008b00) // Yeşil
+            5f -> Color(0xFFa40000) // Kırmızı
+            4f -> Color(0xFF0961B6) // Yeşil
             3f -> Color(0xFF0961B6) // Mavi
+            2f -> Color(0xFF008b00) // Mavi
+            1f -> Color.Gray // Mavi
             else -> Color.Gray // Varsayılan gri
         }
     }

@@ -119,11 +119,10 @@ fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
         DaysOfWeekHeader(colorScheme)
         CalendarGrid(month, colorScheme)
 
-        taskList.forEach { task ->
-            TaskItemView(task)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
+//        taskList.forEach { task ->
+//            TaskItemView(task)
+//            Spacer(modifier = Modifier.height(8.dp))
+//        }
 
     }
 }
