@@ -55,7 +55,7 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
 
     val backgroundImage: Painter = painterResource(id = drawable.arkaplan)
     val darkbackgroundImage: Painter = painterResource(id= drawable.darkarkaplan)
-
+//dddddd
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
