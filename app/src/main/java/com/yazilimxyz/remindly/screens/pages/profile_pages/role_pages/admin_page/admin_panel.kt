@@ -215,7 +215,6 @@ fun AdminPanel(navController: NavController, snackbarHostState: SnackbarHostStat
 
 
             if (currentEmail.isEmpty()) {
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

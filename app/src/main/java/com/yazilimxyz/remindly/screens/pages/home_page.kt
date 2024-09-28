@@ -45,7 +45,6 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf("All") }
 
-    // ViewModel'deki görev listesine erişiyoruz
     val taskList by homeViewModel.meetings.collectAsState()
 
     val context = LocalContext.current // Context'i burada alıyoruz
@@ -87,15 +86,13 @@ fun HomePage(homeViewModel: HomeViewModel = viewModel()) {
                 contentDescription = stringResource(id = R.string.search),
                 modifier = Modifier
                     .clickable {
-                        // Arama butonuna tıklandığında gösterilecek Toast
-                        Toast.makeText(context, "Aranıyor: $searchText", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
                     }
                     .padding(8.dp)
                     .size(42.dp),
                 tint = MaterialTheme.colorScheme.onBackground
             )
 
-            // DropdownMenu
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
@@ -221,6 +218,15 @@ fun TaskCard(task: TaskItem) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = task.assignedIndex.toString(),
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
         }
     }
 }
@@ -247,8 +253,9 @@ fun CategoryButton(
 
 data class TaskItem(
     val title: String,
+    val description: String,
     val timeLeft: String,
     val color: Color,
     val colorName: String,
-    val description: String // Yeni açıklama alanı
+    val assignedIndex: Int,
 )

@@ -19,19 +19,19 @@ fun ProfilePage(navController: NavController) {
         }
 
         "asistan" -> {
-            AsistanProfilePage()
+            AsistanProfilePage(navController)
         }
 
         "ekipLideri" -> {
-            EkipLideriProfilePage()
+            EkipLideriProfilePage(navController)
         }
 
         "yonetimKurulu" -> {
-            YonetimKuruluProfilePage()
+            YonetimKuruluProfilePage(navController)
         }
 
         "calisan" -> {
-            CalisanProfilePage()
+            CalisanProfilePage(navController)
         }
     }
 }

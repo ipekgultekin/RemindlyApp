@@ -33,10 +33,11 @@ class HomeViewModel : ViewModel() {
 
                 TaskItem(
                     title = meeting.meetingTitle,
+                    description = meeting.meetingDescription,
                     timeLeft = meeting.meetingDateTime, // Zamanı buradan çekiyoruz bunu daha estetik yaz
                     color = getPriorityColor(meeting.priority), // Sabit renk belirleme
                     colorName = getPriorityColorName(meeting.priority), // Sabit renk adı
-                    description = meeting.meetingDescription
+                    assignedIndex = meeting.assignedIndex // Atanan index
                 )
             }
             _meetings.value = meetingList

@@ -1,5 +1,8 @@
+
+
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages
 
+import android.os.Build.VERSION_CODES.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +30,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.yazilimxyz.remindly.R
-
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun YonetimKuruluProfilePage() {
+fun YonetimKuruluProfilePage(navController: NavController) {
+
 
     Box(
         modifier = Modifier
@@ -47,7 +54,7 @@ fun YonetimKuruluProfilePage() {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.avatar3),
+                painter = painterResource(id = com.yazilimxyz.remindly.R.drawable.avatar5),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp)
@@ -55,10 +62,10 @@ fun YonetimKuruluProfilePage() {
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
-                text = stringResource(id = R.string.welcome_boardmember), // Displays the fetched email or "Loading..." initially
+                text = stringResource(id = com.yazilimxyz.remindly.R.string.welcome_boardmember),
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
@@ -66,7 +73,29 @@ fun YonetimKuruluProfilePage() {
                 )
             )
 
+
+            Spacer(modifier = Modifier.height(100.dp))
+
+            Button(
+                modifier = Modifier.width(300.dp),
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
+                onClick = {
+                    navController.navigate("toplantilarPage")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF2B1B1)
+                ),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = stringResource(id = com.yazilimxyz.remindly.R.string.meetings),
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
         }
+
     }
 }

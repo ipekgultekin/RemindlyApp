@@ -1,3 +1,4 @@
+
 package com.yazilimxyz.remindly.screens.pages.profile_pages.role_pages
 
 import androidx.compose.foundation.Image
@@ -10,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +28,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun EkipLideriProfilePage() {
+fun EkipLideriProfilePage(navController: NavController) {
 
     Box(
         modifier = Modifier
@@ -47,7 +53,7 @@ fun EkipLideriProfilePage() {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.avatar3),
+                painter = painterResource(id = R.drawable.avatar4),
                 contentDescription = null,
                 modifier = Modifier
                     .size(128.dp)
@@ -58,7 +64,7 @@ fun EkipLideriProfilePage() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(id = R.string.welcome_teamleader), // Displays the fetched email or "Loading..." initially
+                text = stringResource(id = R.string.welcome_teamleader),
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
@@ -66,7 +72,71 @@ fun EkipLideriProfilePage() {
                 )
             )
 
+
+            Spacer(modifier = Modifier.height(100.dp))
+
+
+            Button(
+                modifier = Modifier.width(300.dp),
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
+                onClick = {
+                    navController.navigate("ekipuyeleriPage")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF2B1B1)
+                ),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = stringResource(id = R.string.team_members),
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
+
+
+            Button(
+                modifier = Modifier.width(300.dp),
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
+                onClick = {
+                    navController.navigate("asistanPage")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF2B1B1)
+                ),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = stringResource(id = R.string.assistant),
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                modifier = Modifier.width(300.dp),
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
+                onClick = {
+                    navController.navigate("toplantilarPage")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF2B1B1)
+                ),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = stringResource(id = R.string.meetings),
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
         }
     }
 }

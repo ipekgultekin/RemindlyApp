@@ -1,5 +1,4 @@
-<resources>
-    <string name="app_name">Remindly</string>
+<resources>   <string name="app_name">Remindly</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -25,9 +24,10 @@
     <string name="employee">Employee</string>
     <string name="welcome_employee">Welcome Employee!</string>
     <string name="editrole">Edit Role</string>
+    <string name="addrole">Add Role</string>
     <string name="deleterole">Delete Role</string>
     <string name="home">Home</string>
-   <string name="profile">Profile</string>
+    <string name="profile">Profile</string>
     <string name="settings">Settings</string>
     <string name="calendar">Calendar</string>
     <string name="add_meeting">Add</string>
@@ -70,8 +70,8 @@
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
-    <string name="notification_channel_id">remindly_channel</string>
-    <string name="notification_channel_name">Remindly Notifications</string>
-    <string name="notification_channel_description">This channel is used for Remindly notifications</string>
+    <string name="authorized_users">Authorized Users</string>
+    <string name="meetings">Meetings</string>
+    <string name="team_members">Team Members</string>
 
 </resources>

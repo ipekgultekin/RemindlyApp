@@ -25,6 +25,7 @@
     <string name="employee">Çalışan</string>
     <string name="welcome_employee">Hoş Geldiniz Çalışan!</string>
     <string name="editrole">Rolü Düzenle</string>
+    <string name="addrole">Rol Ekle</string>
     <string name="deleterole">Rolü Sil</string>
     <string name="home">Ana Sayfa</string>
     <string name="profile">Profil</string>
@@ -70,8 +71,7 @@
     <string name="october">Ekim</string>
     <string name="november">Kasım</string>
     <string name="december">Aralık</string>
-    <string name="notification_channel_id">remindly_channel</string>
-    <string name="notification_channel_name">Remindly Notifications</string>
-    <string name="notification_channel_description">This channel is used for Remindly notifications</string>
-
+    <string name="authorized_users">Yetkilendirilen Kullanıcılar</string>
+    <string name="meetings">Toplantılar</string>
+    <string name="team_members">Ekip Üyeleri</string>
 </resources>

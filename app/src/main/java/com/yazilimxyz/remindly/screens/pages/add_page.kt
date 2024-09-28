@@ -9,7 +9,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -24,7 +35,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,11 +92,8 @@ fun AddField(
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = textColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                text = title, style = MaterialTheme.typography.labelMedium.copy(
+                    color = textColor, fontWeight = FontWeight.Bold, fontSize = 20.sp
                 )
             )
         }
@@ -89,18 +102,15 @@ fun AddField(
         Spacer2()
         Spacer2()
 
-        TextField(
-            value = textState.value,
+        TextField(value = textState.value,
             onValueChange = {
                 textState.value = it
                 onValueChange(it)
             },
             label = {
                 Text(
-                    fieldTitle,
-                    style = TextStyle(
-                        color = fieldTitleColor,
-                        fontSize = 15.sp
+                    fieldTitle, style = TextStyle(
+                        color = fieldTitleColor, fontSize = 15.sp
                     )
                 )
             },
@@ -129,7 +139,7 @@ fun AddPage(context: Context) {
     var dateTimeText by remember { mutableStateOf(context.getString(R.string.select_date_time)) }
 
     // Direct mutable state for priority
-    var selectedPriority by remember { mutableStateOf(3f) }
+    var selectedPriority by remember { mutableStateOf(0f) }
     var meetingTitleState by remember { mutableStateOf("") }
     var meetingDescriptionState by remember { mutableStateOf("") }
 
@@ -161,9 +171,7 @@ fun AddPage(context: Context) {
             Text(
                 text = context.getString(R.string.create_new_meeting),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 40.sp,
-                    color = textColor
+                    fontWeight = FontWeight.SemiBold, fontSize = 40.sp, color = textColor
                 )
             )
             Spacer1()
@@ -208,9 +216,7 @@ fun AddPage(context: Context) {
                 Text(
                     text = context.getString(R.string.date_time),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        color = textColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        color = textColor, fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
@@ -233,7 +239,8 @@ fun AddPage(context: Context) {
                                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                                 calendar.set(Calendar.MINUTE, minute)
 
-                                selectedDateTime = "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
+                                selectedDateTime =
+                                    "${dayOfMonth}-${month + 1}-$year $hourOfDay:$minute"
                                 dateTimeText = selectedDateTime
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
@@ -265,9 +272,7 @@ fun AddPage(context: Context) {
                 Text(
                     text = context.getString(R.string.priority),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        color = textColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        color = textColor, fontWeight = FontWeight.Bold, fontSize = 20.sp
                     )
                 )
             }
@@ -304,14 +309,12 @@ fun AddPage(context: Context) {
 
             Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                 avatars.forEachIndexed { index, avatar ->
-                    AvatarImage(
-                        avatar = avatar,
+                    AvatarImage(avatar = avatar,
                         content = avatarLabels[index],
                         isSelected = selectedAvatarIndex == index,
                         onClick = {
                             selectedAvatarIndex = index
-                        }
-                    )
+                        })
                 }
             }
             Spacer1()
@@ -327,7 +330,10 @@ fun AddPage(context: Context) {
         }
 
         item {
-            CustomButton(title = context.getString(R.string.create_meeting), color = Color(0xDD191919)) {
+            CustomButton(
+                title = context.getString(R.string.create_meeting),
+                color = Color(0xDD191919)
+            ) {
                 val meetingModel = MeetingModel(
                     meetingTitle = meetingTitleState,
                     meetingDescription = meetingDescriptionState,
@@ -336,17 +342,22 @@ fun AddPage(context: Context) {
                     assignedIndex = selectedAvatarIndex // Use the correct parameter name
                 )
 
-                if (meetingModel.meetingTitle.isNotEmpty() &&
-                    meetingModel.meetingDescription.isNotEmpty() &&
-                    meetingModel.meetingDateTime.isNotEmpty()) {
+                if (meetingModel.meetingTitle.isNotEmpty() && meetingModel.meetingDescription.isNotEmpty() && meetingModel.meetingDateTime.isNotEmpty()) {
                     saveMeetingToFirestore(meetingModel, context)
                 } else {
-                    Toast.makeText(context, "Please fill in all required fields.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Please fill in all required fields.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
-            CustomButton(title = context.getString(R.string.clear_fields), color = Color(0xFFF2B1B1)) {
+            CustomButton(
+                title = context.getString(R.string.clear_fields),
+                color = Color(0xFFF2B1B1)
+            ) {
                 selectedAvatarIndex = 0
                 selectedDateTime = ""
                 dateTimeText = context.getString(R.string.select_date_time)
@@ -365,8 +376,7 @@ fun AvatarImage(
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClick() }
-    ) {
+            .clickable { onClick() }) {
         Box(
             modifier = Modifier
                 .size(90.dp)
@@ -375,8 +385,7 @@ fun AvatarImage(
                     width = 6.dp,
                     color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else Color.Transparent,
                     shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+                ), contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = avatar),
@@ -387,8 +396,7 @@ fun AvatarImage(
         }
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            text = content,
-            style = MaterialTheme.typography.labelLarge.copy(
+            text = content, style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -401,11 +409,13 @@ fun StarRatingBar(
     maxStars: Int = 5, rating: Float, onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (30f * density).dp
+    val starSize = (25f * density).dp
     val starSpacing = (0.1f * density).dp
 
     Row(
-        modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.selectableGroup(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(starSpacing)
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating
@@ -417,7 +427,9 @@ fun StarRatingBar(
                 modifier = Modifier
                     .selectable(selected = isSelected, onClick = {
                         onRatingChanged(i.toFloat())
-                        Log.d("StarRatingBar", "User selected priority: $i") // Log priority selection
+                        Log.d(
+                            "StarRatingBar", "User selected priority: $i"
+                        ) // Log priority selection
                     })
                     .width(starSize)
                     .height(starSize)

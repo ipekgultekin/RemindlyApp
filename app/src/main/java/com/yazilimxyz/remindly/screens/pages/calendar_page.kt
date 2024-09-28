@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -35,15 +34,20 @@ import com.yazilimxyz.remindly.R
 import com.yazilimxyz.remindly.models.HomeViewModel
 import com.yazilimxyz.remindly.screens.pages.TaskItem
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
-val buttonColor = Color(0xFFFFB8B8)
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarPage() {
     val months = remember { generateMonths() }
     val colorScheme = MaterialTheme.colorScheme
+
+    val homeViewModel: HomeViewModel = viewModel()
+    val taskList by homeViewModel.meetings.collectAsState()
+    Log.d("mesajj", taskList.toString())
+
+    taskList.forEach { task ->
+        Log.d("mesaj2", task.toString())
+    }
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -54,13 +58,6 @@ fun CalendarPage() {
         }
     }
 }
-
-/*
-* 2024-09-28 00:16:51.643 16365-16365 mesajj                  com.yazilimxyz.remindly              D  [TaskItem(title=renk, timeLeft=26-9-2024 14:54, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=renk), TaskItem(title=yazilim.xyz, timeLeft=27-9-2024 23:40, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=123deneme), TaskItem(title=deneme2, timeLeft=18-9-2024 16:20, color=Color(0.53333336, 0.53333336, 0.53333336, 1.0, sRGB IEC61966-2.1), colorName=Gray, description=merhaba), TaskItem(title=deneme, timeLeft=18-9-2024 4:10, color=Color(0.0, 0.54509807, 0.0, 1.0, sRGB IEC61966-2.1), colorName=Green, description=deneme123), TaskItem(title=sgsg, timeLeft=22-9-2024 9:14, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=sdgdg), TaskItem(title=xyz, timeLeft=25-9-2024 15:18, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=remindly), TaskItem(title=., timeLeft=24-9-2024 15:1, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=.), TaskItem(title=wef, timeLeft=22-9-2024 10:52, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=wefe), TaskItem(title=renkdeneme, timeLeft=22-9-2024 17:30, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=fmdikici), TaskItem(title=yazilim.xyz, timeLeft=28-9-2024 20:25, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=ddadasdasdas), TaskItem(title=saaa, timeLeft=9-9-2024 6:42, color=Color(0.53333336, 0.53333336, 0.53333336, 1.0, sRGB IEC61966-2.1), colorName=Gray, description=sbbb), TaskItem(title=fmd, timeLeft=22-9-2024 17:31, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=fmd), TaskItem(title=xxx, timeLeft=12-9-2024 23:58, color=Color(0.6431373, 0.0, 0.0, 1.0, sRGB IEC61966-2.1), colorName=Red, description=xxx), TaskItem(title=merhaba dunya, timeLeft=19-9-2024 16:55, color=Color(0.53333336, 0.53333336, 0.53333336, 1.0, sRGB IEC61966-2.1), colorName=Gray, description=merhaba merhaba merhaba merhaba merhaba merhaba merhaba merhaba merhaba merhaba  ), TaskItem(title=dxfv<sd, timeLeft=22-9-2024 22:53, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=dsvv), TaskItem(title=toplanti, timeLeft=13-9-2024 15:20, color=Color(0.0, 0.54509807, 0.0, 1.0, sRGB IEC61966-2.1), colorName=Green, description=deneme), TaskItem(title=merhaba, timeLeft=13-9-2024 14:15, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=bu bir denemedir.), TaskItem(title=fmd2, timeLeft=23-9-2024 14:30, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=renkdeneme), TaskItem(title=rertey, timeLeft=22-9-2024 10:50, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=reyer), TaskItem(title=hh, timeLeft=9-9-2024 12:1, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=), TaskItem(title=deneme3, timeLeft=19-9-2024 5:24, color=Color(0.53333336, 0.53333336, 0.53333336, 1.0, sRGB IEC61966-2.1), colorName=Gray, description=123), TaskItem(title=yazilim.xyz, timeLeft=14-9-2024 18:36, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=deneme deneme 123), TaskItem(title=fdd, timeLeft=8-9-2024 21:16, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=), TaskItem(title=xyz, timeLeft=25-9-2024 15:48, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=remindly), TaskItem(title=fmd2, timeLeft=23-9-2024 14:30, color=Color(0.03529412, 0.38039216, 0.7137255, 1.0, sRGB IEC61966-2.1), colorName=Blue, description=renkdeneme), TaskItem(title=fff, timeLeft=11-9-2024 23:45, color=Color(0.53333336,
-
-*
-* */
-
 
 @Composable
 fun TaskItemView(task: TaskItem) {
@@ -90,14 +87,10 @@ fun TaskItemView(task: TaskItem) {
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
 
-    val homeViewModel: HomeViewModel = viewModel()
-    val taskList by homeViewModel.meetings.collectAsState()
-    Log.d("mesajj", taskList.toString())
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -119,10 +112,7 @@ fun MonthView(month: LocalDate, colorScheme: ColorScheme) {
         DaysOfWeekHeader(colorScheme)
         CalendarGrid(month, colorScheme)
 
-//        taskList.forEach { task ->
-//            TaskItemView(task)
-//            Spacer(modifier = Modifier.height(8.dp))
-//        }
+
 
     }
 }

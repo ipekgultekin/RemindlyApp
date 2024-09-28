@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.yazilimxyz.remindly.R
 
 
 @Composable
-fun CalisanProfilePage() {
+fun CalisanProfilePage(navController: NavController) {
 
     Box(
         modifier = Modifier
@@ -55,16 +60,36 @@ fun CalisanProfilePage() {
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
-                text = stringResource(id = R.string.welcome_employee), // Displays the fetched email or "Loading..." initially
-                style = TextStyle(
+                text = stringResource(id = R.string.welcome_employee), style = TextStyle(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
             )
+
+
+            Spacer(modifier = Modifier.height(100.dp))
+
+            Button(
+                modifier = Modifier.width(300.dp),
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
+                onClick = {
+                    navController.navigate("toplantilarPage")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF2B1B1)
+                ),
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = stringResource(id = R.string.meetings),
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
         }
