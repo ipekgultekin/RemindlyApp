@@ -401,7 +401,7 @@ fun StarRatingBar(
     maxStars: Int = 5, rating: Float, onRatingChanged: (Float) -> Unit
 ) {
     val density = LocalDensity.current.density
-    val starSize = (30f * density).dp
+    val starSize = (24f * density).dp
     val starSpacing = (0.1f * density).dp
 
     Row(
@@ -431,7 +431,7 @@ fun StarRatingBar(
 
 @Composable
 fun PriorityBar(selectedPriority: MutableState<Float>) {
-    StarRatingBar(maxStars = 5, rating = selectedPriority.value, onRatingChanged = {
+    StarRatingBar(maxStars = 4, rating = selectedPriority.value, onRatingChanged = {
         selectedPriority.value = it
     })
 }
