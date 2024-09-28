@@ -45,10 +45,6 @@ fun CalendarPage() {
     val taskList by homeViewModel.meetings.collectAsState()
     Log.d("mesajj", taskList.toString())
 
-    taskList.forEach { task ->
-        Log.d("mesaj2", task.toString())
-    }
-
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)) {
@@ -56,34 +52,6 @@ fun CalendarPage() {
             MonthView(month = month, colorScheme = colorScheme)
             Spacer(modifier = Modifier.height(20.dp))
         }
-    }
-}
-
-@Composable
-fun TaskItemView(task: TaskItem) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .background(task.color)
-            .padding(16.dp)
-    ) {
-        Text(
-            text = task.title,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = task.description,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.White
-        )
-        Text(
-            text = task.timeLeft.toString(),  // Format time as needed
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.White
-        )
     }
 }
 
@@ -259,3 +227,4 @@ fun generateCalendarWeeks(startDayOfWeek: Int, daysInMonth: Int): List<List<Int?
 
     return weeks
 }
+

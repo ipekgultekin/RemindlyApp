@@ -82,8 +82,9 @@ fun LoginScreen(navController: NavController, themeViewModel: ThemeViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
-                text = "REMINDLY", style = TextStyle(
+                text = "ℝ\uD835\uDD56\uD835\uDD5E\uD835\uDD5A\uD835\uDD5F\uD835\uDD55\uD835\uDD5D\uD835\uDD6A\n", style = TextStyle(
                     color = Color(0xFFB5AA36), fontSize = 48.sp, fontFamily = FontFamily.Cursive
                 ), modifier = Modifier.padding(bottom = 32.dp)
             )

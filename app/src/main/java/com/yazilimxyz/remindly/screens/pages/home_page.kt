@@ -220,7 +220,14 @@ fun TaskCard(task: TaskItem) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = task.assignedIndex.toString(),
+                text = when (task.assignedIndex) {
+                    0 -> "Assigned to: Admin"
+                    1 -> "Assigned to: Asistan"
+                    2 -> "Assigned to: Ekip Lideri"
+                    3 -> "Assigned to: Yönetim Kurulu"
+                    4 -> "Assigned to: Çalışan"
+                    else -> "Assigned to: none"
+                },
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,

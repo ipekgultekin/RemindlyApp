@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
         var isLoading by remember { mutableStateOf(true) }
         var currentUser by remember { mutableStateOf<String?>(null) }
 
-        // Observe the currentUser from RoleCredentialsRepository
         LaunchedEffect(RoleCredentialsRepository.currentUser) {
             currentUser = RoleCredentialsRepository.currentUser
             if (currentUser.isNullOrEmpty()){
