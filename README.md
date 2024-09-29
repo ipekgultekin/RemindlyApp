@@ -51,9 +51,13 @@ Inspired by the design principles of Google Calendar, Remindly introduces enhanc
 ## Core Technologies
 
 - **Kotlin with Jetpack Compose:** Leveraged for modern, declarative UI development and improved performance.
+  
 - **MVVM Architecture:** For better separation of concerns and easier testing of individual components.
+  
 - **Firebase Firestore:** Used for real-time data storage, allowing instant access to tasks and meetings.
+  
 - **Android Navigation Component:** Provides smooth transitions between screens for an intuitive navigation experience.
+  
 - **Responsive Design:** Adapts to different screen sizes and resolutions, ensuring usability across various devices.
 
 
